@@ -1,1 +1,1 @@
-# Material-Backend
+# Material-Backend [![Build Status](https://travis-ci.org/mophos/mmis-material-backend.svg?branch=develop)](https://travis-ci.org/mophos/mmis-material-backend) [![Build status](https://ci.appveyor.com/api/projects/status/q5lf6j6udbxkgr7u?svg=true)](https://ci.appveyor.com/project/siteslave/mmis-material-backend)
