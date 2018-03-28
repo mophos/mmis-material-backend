@@ -7,14 +7,14 @@ export class GenericsModel {
     if (typeId) {
       return knex('mm_generics')
         .select(knex.raw('count(*) as total'))
-        .where('generic_type_id', typeId);
+        .whereIn('generic_type_id', typeId);
     } else {
       return knex('mm_generics')
         .select(knex.raw('count(*) as total'))
     }
   }
 
-  searchTotal(knex: Knex, query: any) {
+  searchTotal(knex: Knex, query: any,groupId: any) {
     let _query = `%${query}%`;
 
     return knex('mm_generics')
@@ -22,7 +22,8 @@ export class GenericsModel {
       .where(w => {
         w.orWhere('generic_name', 'like', _query)
           .orWhere('working_code', query)
-      });
+      })
+      .whereIn('generic_type_id', groupId);
   }
 
   search(knex: Knex, limit: number, offset: any, query: any, groupId: any) {
@@ -37,7 +38,7 @@ export class GenericsModel {
       .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
       .leftJoin('mm_units as u', 'u.unit_id', 'mg.primary_unit_id')
       .where('mg.mark_deleted', '<>', 'Y')
-      .where('mg.generic_type_id', groupId)
+      .whereIn('mg.generic_type_id', groupId)
       .where(w => {
         w.orWhere('mg.generic_name', 'like', _query)
           .orWhere('mg.working_code', query)
@@ -69,21 +70,6 @@ export class GenericsModel {
   getListByType(knex: Knex, limit: number, offset: number, typeId: any) {
     let sql = null;
     if (typeId) {
-      // sql = `
-      // select mg.*, g.group_name, ac.account_name, d.dosage_name, t.generic_type_name,
-      // u.unit_name as primary_unit_name
-      // from mm_generics as mg
-      // left join mm_generic_groups as g on g.group_id=mg.group_id
-      // left join mm_generic_accounts as ac on ac.account_id=mg.account_id
-      // left join mm_generic_dosages as d on d.dosage_id=mg.dosage_id
-      // left join mm_generic_types as t on t.generic_type_id=mg.generic_type_id
-      // left join mm_units as u on u.unit_id=mg.primary_unit_id
-      // where mg.mark_deleted<>'Y'
-      // and mg.generic_type_id=?
-      // order by mg.generic_name
-      // limit ? offset ?
-      // `;
-
       return knex('mm_generics as mg')
         .select('mg.*', 'g.group_name', 'ac.account_name', 'd.dosage_name',
           't.generic_type_name', 'u.unit_name as primary_unit_name')
@@ -93,28 +79,12 @@ export class GenericsModel {
         .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
         .leftJoin('mm_units as u', 'u.unit_id', 'mg.primary_unit_id')
         .where('mg.mark_deleted', '<>', 'Y')
-        .where('mg.generic_type_id', typeId)
+        .whereIn('mg.generic_type_id', typeId)
         .orderBy('mg.generic_name')
         .limit(limit)
         .offset(offset);
-      // return knex.raw(sql, [typeId, limit, offset]);
 
     } else {
-      // sql = `
-      // select mg.*, g.group_name, ac.account_name, d.dosage_name, t.generic_type_name,
-      // u.unit_name as primary_unit_name
-      // from mm_generics as mg
-      // left join mm_generic_groups as g on g.group_id=mg.group_id
-      // left join mm_generic_accounts as ac on ac.account_id=mg.account_id
-      // left join mm_generic_dosages as d on d.dosage_id=mg.dosage_id
-      // left join mm_generic_types as t on t.generic_type_id=mg.generic_type_id
-      // left join mm_units as u on u.unit_id=mg.primary_unit_id
-      // where mg.mark_deleted<>'Y'
-      // order by mg.generic_name
-      // limit ? offset ?
-      // `;
-
-      // return knex.raw(sql, [limit, offset]);
       return knex('mm_generics as mg')
         .select('mg.*', 'g.group_name', 'ac.account_name', 'd.dosage_name',
           't.generic_type_name', 'u.unit_name as primary_unit_name')
@@ -124,7 +94,6 @@ export class GenericsModel {
         .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
         .leftJoin('mm_units as u', 'u.unit_id', 'mg.primary_unit_id')
         .where('mg.mark_deleted', '<>', 'Y')
-        // .where('mg.generic_type_id', typeId)
         .orderBy('mg.generic_name')
         .limit(limit)
         .offset(offset);

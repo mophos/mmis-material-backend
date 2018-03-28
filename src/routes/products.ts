@@ -12,13 +12,14 @@ const router = express.Router();
 const productModel = new ProductModel();
 const serialModel = new SerialModel();
 
-router.get('/', warp(async (req, res, next) => {
+router.post('/', warp(async (req, res, next) => {
 
   let db = req.db;
-  let limit = +req.query.limit || 15;
-  let offset = +req.query.offset || 0;
-  let groupId = +req.query.groupId;
-  // console.log(groupId);
+  let limit = +req.body.limit || 15;
+  let offset = +req.body.offset || 0;
+  let groupId = req.body.groupId;
+  console.log(groupId);
+  console.log('******************');
   try {
     if (groupId) {
       let rsTotal = await productModel.totalProducts(db, groupId);
@@ -38,13 +39,13 @@ router.get('/', warp(async (req, res, next) => {
 
 }));
 
-router.get('/search', warp(async (req, res, next) => {
+router.post('/search', warp(async (req, res, next) => {
 
   let db = req.db;
-  const query = req.query.query;
-  const limit = +req.query.limit || 15;
-  const offset = +req.query.offset || 0;
-  const groupId = +req.query.groupId;
+  const query = req.body.query;
+  const limit = +req.body.limit || 15;
+  const offset = +req.body.offset || 0;
+  const groupId = req.body.groupId;
 
   try {
     if (groupId) {

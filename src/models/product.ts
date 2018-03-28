@@ -4,13 +4,13 @@ export class ProductModel {
   list(knex: Knex, limit: number, offset: number, groupId: any) {
     return knex('mm_products as p')
       .select('p.*', 'g.working_code as generic_working_code', 'g.generic_name', 'lm.labeler_name as m_labeler',
-      'lv.labeler_name as v_labeler', 'u.unit_name as primary_unit_name')
+        'lv.labeler_name as v_labeler', 'u.unit_name as primary_unit_name')
       .leftJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
       .leftJoin('mm_labelers as lm', 'lm.labeler_id', 'p.m_labeler_id')
       .leftJoin('mm_labelers as lv', 'lv.labeler_id', 'p.v_labeler_id')
       .leftJoin('mm_units as u', 'u.unit_id', 'p.primary_unit_id')
       .where('p.mark_deleted', 'N')
-      .where('product_group_id', groupId)
+      .whereIn('g.generic_type_id', groupId)
       .orderBy('p.product_name')
       .limit(limit)
       .offset(offset);
@@ -19,7 +19,7 @@ export class ProductModel {
   listAll(knex: Knex, limit: number, offset: number) {
     return knex('mm_products as p')
       .select('p.*', 'g.working_code as generic_working_code', 'g.generic_name', 'lm.labeler_name as m_labeler',
-      'lv.labeler_name as v_labeler', 'u.unit_name as primary_unit_name')
+        'lv.labeler_name as v_labeler', 'u.unit_name as primary_unit_name')
       .leftJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
       .leftJoin('mm_labelers as lm', 'lm.labeler_id', 'p.m_labeler_id')
       .leftJoin('mm_labelers as lv', 'lv.labeler_id', 'p.v_labeler_id')
@@ -31,10 +31,11 @@ export class ProductModel {
   }
 
   totalProducts(knex: Knex, groupId: any) {
-    return knex('mm_products')
+    return knex('mm_products as p')
       .count('* as total')
-      .where('product_group_id', groupId)
-      .where('mark_deleted', 'N');
+      .leftJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
+      .whereIn('g.generic_type_id', groupId)
+      .where('p.mark_deleted', 'N');
   }
 
   totalAllProducts(knex: Knex) {
@@ -46,20 +47,20 @@ export class ProductModel {
   search(knex: Knex, query: any, limit: number, offset: number, groupId: any) {
     const _query = `%${query}%`;
     return knex('mm_products as p')
-      .select('p.*', 'g.generic_name', 'lm.labeler_name as m_labeler',
-      'lv.labeler_name as v_labeler', 'u.unit_name as primary_unit_name')
+      .select('p.*', 'g.generic_name', 'g.working_code as generic_working_code', 'lm.labeler_name as m_labeler',
+        'lv.labeler_name as v_labeler', 'u.unit_name as primary_unit_name')
       .innerJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
       .leftJoin('mm_labelers as lm', 'lm.labeler_id', 'p.m_labeler_id')
       .leftJoin('mm_labelers as lv', 'lv.labeler_id', 'p.v_labeler_id')
       .leftJoin('mm_units as u', 'u.unit_id', 'p.primary_unit_id')
-      .where(w => { 
+      .where(w => {
         w.where('p.product_name', 'like', _query)
           .orWhere('g.generic_name', 'like', _query)
           .orWhere('p.working_code', query)
           .orWhere('p.keywords', 'like', _query)
       })
       .where('p.mark_deleted', 'N')
-      .where('g.generic_type_id', groupId)
+      .whereIn('g.generic_type_id', groupId)
       .orderBy('p.product_name')
       .limit(limit)
       .offset(offset);
@@ -68,13 +69,13 @@ export class ProductModel {
   searchAll(knex: Knex, query: any, limit: number, offset: number) {
     const _query = `%${query}%`;
     return knex('mm_products as p')
-      .select('p.*', 'g.generic_name', 'lm.labeler_name as m_labeler',
-      'lv.labeler_name as v_labeler', 'u.unit_name as primary_unit_name')
+      .select('p.*', 'g.generic_name', 'g.working_code as generic_working_code', 'lm.labeler_name as m_labeler',
+        'lv.labeler_name as v_labeler', 'u.unit_name as primary_unit_name')
       .innerJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
       .leftJoin('mm_labelers as lm', 'lm.labeler_id', 'p.m_labeler_id')
       .leftJoin('mm_labelers as lv', 'lv.labeler_id', 'p.v_labeler_id')
       .leftJoin('mm_units as u', 'u.unit_id', 'p.primary_unit_id')
-      .where(w => { 
+      .where(w => {
         w.where('p.product_name', 'like', _query)
           .orWhere('g.generic_name', 'like', _query)
           .orWhere('p.keywords', 'like', _query)
@@ -94,10 +95,10 @@ export class ProductModel {
       .where(w => {
         w.where('p.product_name', 'like', _query)
           .orWhere('g.generic_name', 'like', _query)
-        .orWhere('p.working_code', query)
-        .orWhere('p.keywords', 'like', _query)
+          .orWhere('p.working_code', query)
+          .orWhere('p.keywords', 'like', _query)
       })
-      .where('product_group_id', groupId);
+      .whereIn('product_group_id', groupId);
   }
 
   searchAllTotal(knex: Knex, query: any) {
@@ -181,7 +182,7 @@ export class ProductModel {
   detail(knex: Knex, productId: string) {
     return knex('mm_products as p')
       .select('p.*', 'g.generic_name', 'lm.labeler_name as m_labeler',
-      'lv.labeler_name as v_labeler')
+        'lv.labeler_name as v_labeler')
       .leftJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
       .leftJoin('mm_labelers as lm', 'lm.labeler_id', 'p.m_labeler_id')
       .leftJoin('mm_labelers as lv', 'lv.labeler_id', 'p.v_labeler_id')
@@ -252,11 +253,11 @@ export class ProductModel {
       })
       .where('product_id', productId);
   }
-  getWorkingCode(knex: Knex,genericId: any){
+  getWorkingCode(knex: Knex, genericId: any) {
     return knex('mm_generics as mg').select('mg.working_code')
-    .select(knex.raw('count(*) as count'))
-    .join('mm_products as mp','mg.generic_id','mp.generic_id')
-    .where('mg.generic_id',genericId)
+      .select(knex.raw('count(*) as count'))
+      .join('mm_products as mp', 'mg.generic_id', 'mp.generic_id')
+      .where('mg.generic_id', genericId)
   }
 
 }
