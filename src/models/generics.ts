@@ -169,18 +169,58 @@ export class GenericsModel {
   }
 
   searchAutoComplete(knex: Knex, query: any, generic_type_id: any) {
-    let _query = `${query}%`;
-    let _queryAll = `%${query}%`;
-    return knex('mm_generics')
-      .where(w => {
-        w.where('generic_name', 'like', _query)
-          .orWhere('working_code', query)
-          .orWhere('keywords', 'like', _queryAll)
-      })
-      .whereIn('generic_type_id', generic_type_id)
-      .where('is_active','Y')
-      .where('mark_deleted','N')
-      .limit(10);
+    let q_ = `${query}%`;
+    let _q_ = `%${query}%`;
+    let sql =`SELECT
+    DISTINCT *
+      FROM
+      (
+        SELECT
+          *
+        FROM
+          (
+            SELECT
+              *
+            FROM
+              mm_generics
+            WHERE
+              working_code = '${query}'
+              and generic_type_id = '${generic_type_id}'
+          ) AS s
+        UNION ALL
+          SELECT
+            *
+          FROM
+            (
+              SELECT
+                *
+              FROM
+                mm_generics
+              WHERE
+                generic_name LIKE '${q_}'
+                and generic_type_id = '${generic_type_id}'
+              LIMIT 5
+            ) AS s
+          UNION ALL
+            SELECT
+              *
+            FROM
+              (
+                SELECT
+                  *
+                FROM
+                  mm_generics
+                WHERE
+                 (generic_name LIKE '${_q_}'
+                  OR keywords LIKE '${_q_}'
+                  )
+              and generic_type_id = '${generic_type_id}'
+                ORDER BY
+                  generic_name
+                LIMIT 10
+              ) AS s
+      ) AS a`
+    return knex.raw(sql);
   }
 
 }
