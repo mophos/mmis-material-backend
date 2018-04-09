@@ -92,6 +92,7 @@ router.post('/', async (req, res, next) => {
 
   let donatorsData: any = {
     donator_name: labeler.labelerName,
+    short_code: labeler.labelerShortCode,
     donator_address: labeler.labelerAddress,
     donator_telephone: labeler.labelerPhone,
   }
