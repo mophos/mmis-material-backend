@@ -136,7 +136,8 @@ router.post('/', async (req, res, next) => {
       await genericModel.save(db, datas);
       res.send({ ok: true, generic_id: genericId });
     } catch (error) {
-      res.send({ ok: false, error: error })
+      throw error;
+      // res.send({ ok: false, error: error })
     } finally {
       db.destroy();
     }
