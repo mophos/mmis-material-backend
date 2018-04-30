@@ -16,7 +16,7 @@ router.post('/list-type', co(async (req, res, next) => {
   let db = req.db;
   let limit = req.body.limit;
   let offset = req.body.offset;
-  let typeId = +req.body.typeId;
+  let typeId = req.body.typeId;
 
   try {
 
@@ -37,13 +37,13 @@ router.post('/search', co(async (req, res, next) => {
   let limit = req.body.limit;
   let offset = req.body.offset;
   let query = req.body.query;
-  let groupId = +req.body.groupId;
+  let groupId = req.body.groupId;
 
   console.log(req.body);
 
   try {
       let rs = await genericModel.search(db, limit, offset, query, groupId);
-      let rsTotal = await genericModel.searchTotal(db, query);
+      let rsTotal = await genericModel.searchTotal(db, query, groupId);
       res.send({ ok: true, rows: rs, total: rsTotal[0].total });
   } catch (error) {
     console.log(error);
@@ -394,8 +394,8 @@ router.get('/search-autocomplete', async (req, res, next) => {
 
   try {
     let rs: any = await genericModel.searchAutoComplete(db, query, gids);
-    if (rs.length) {
-      res.send(rs);
+    if (rs[0].length) {
+      res.send(rs[0]);
     } else {
       res.send([])
     }
