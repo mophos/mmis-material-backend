@@ -141,10 +141,19 @@ app.use((req, res, next) => {
   next(err);
 });
 
+
 app.use((err: Error, req, res, next) => {
-  res.status(err['status'] || 500);
-  res.send({ ok: false, error: err });
   console.log(err);
+  let errorMessage;
+  switch (err['code']) {
+    case 'ER_DUP_ENTRY':
+      errorMessage = 'ข้อมูลซ้ำ';
+      break;
+    default:
+      errorMessage = err;
+      res.status(err['status'] || 500);
+  }
+  res.send({ ok: false, error: errorMessage });
 });
 
 export default app;
