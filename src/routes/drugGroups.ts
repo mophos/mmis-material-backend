@@ -26,17 +26,19 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   let groupName = req.body.groupName;
+  let groupCode = req.body.groupCode;
 
   let db = req.db;
 
   if (groupName) {
     let datas: any = {
-      group_name: groupName
+      group_name: groupName,
+      group_code: groupCode
     }
 
     groupModel.save(db, datas)
       .then((results: any) => {
-        res.send({ ok: true })
+        res.send({ ok: true, rows: results })
       })
       .catch(error => {
         res.send({ ok: false, error: error })
@@ -52,12 +54,15 @@ router.post('/', (req, res, next) => {
 router.put('/:groupId', (req, res, next) => {
   let groupId = req.params.groupId;
   let groupName = req.body.groupName;
-
+  let groupCode = req.body.groupCode;
+  console.log(groupCode);
+  
   let db = req.db;
 
   if (groupId) {
     let datas: any = {
-      group_name: groupName
+      group_name: groupName,
+      group_code: groupCode
     }
 
     groupModel.update(db, groupId, datas)

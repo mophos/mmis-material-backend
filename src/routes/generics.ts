@@ -136,8 +136,12 @@ router.post('/', async (req, res, next) => {
       await genericModel.save(db, datas);
       res.send({ ok: true, generic_id: genericId });
     } catch (error) {
-      throw error;
-      // res.send({ ok: false, error: error })
+      if(error.code === 'ER_DUP_ENTRY')
+      {
+        res.send({ ok: false, error: 'ข้อมูลซ้ำ' })
+      } else {
+        res.send({ ok: false, error: error })
+      }
     } finally {
       db.destroy();
     }

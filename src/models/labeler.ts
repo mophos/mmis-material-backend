@@ -12,6 +12,10 @@ export class LabelerModel {
       .orderBy('l.labeler_id');
   }
 
+  getBank(knex: Knex, labelerId) {
+    return knex('mm_labeler_bank')
+      .where('labeler_id', labelerId)
+  }
   search(knex: Knex, query: string) {
     let _query = `%${query}%`;
 
@@ -90,4 +94,20 @@ export class LabelerModel {
       .del();
   }
 
+  saveBank(knex: Knex, data: any) {
+    return knex('mm_labeler_bank')
+      .insert(data);
+  }
+
+  updateBank(knex: Knex, bankId: string, data: any) {
+    return knex('mm_labeler_bank')
+      .where('bank_id', bankId)
+      .update(data);
+  }
+
+  removeBank(knex: Knex, bankId: string) {
+    return knex('mm_labeler_bank')
+      .where('bank_id', bankId)
+      .del();
+  }
 }
