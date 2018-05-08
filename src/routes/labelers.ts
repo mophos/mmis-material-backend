@@ -27,6 +27,70 @@ router.get('/', (req, res, next) => {
     });
 });
 
+router.get('/bank', (req, res, next) => {
+  let db = req.db;
+  let labelerId = req.query.labelerId;
+
+  labelerModel.getBank(db, labelerId)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error.message })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.post('/bank', (req, res, next) => {
+  let db = req.db;
+  let data = req.body.data;
+
+  labelerModel.saveBank(db, data)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error.message })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.put('/bank', (req, res, next) => {
+  let db = req.db;
+  let bankId = req.query.bankId;
+  let data = req.body.data;
+
+  labelerModel.updateBank(db, bankId, data)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error.message })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.delete('/bank', (req, res, next) => {
+  let db = req.db;
+  let bankId = req.query.bankId;
+  labelerModel.removeBank(db, bankId)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error.message })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
 router.get('/search', warp(async (req, res, next) => {
   let db = req.db;
   const query = req.query.query;
@@ -136,7 +200,7 @@ router.put('/', async (req, res, next) => {
     zipcode: labeler.labelerZipCode,
     phone: labeler.labelerPhone,
     url: labeler.labelerUrl,
-    org_no: labeler.orgNo ,
+    org_no: labeler.orgNo,
     country_code: labeler.orgCountry,
     fda_no: labeler.orgFADNumber,
     latitude: labeler.orgLatitude,
@@ -186,7 +250,7 @@ router.get('/:labelerId/info', async (req, res, next) => {
       db.destroy();
     }
   } else {
-    res.send({ok: false, error: 'ไม่พบรหัส Labeler'})
+    res.send({ ok: false, error: 'ไม่พบรหัส Labeler' })
   }
 
 });
