@@ -206,7 +206,9 @@ router.put('/', async (req, res, next) => {
     latitude: labeler.orgLatitude,
     longitude: labeler.orgLongitude,
     year_established: labeler.orgYearEstablished,
-    year_register: labeler.orgYearRegister
+    year_register: labeler.orgYearRegister,
+    is_vendor: labeler.isVendor,
+    is_manufacturer: labeler.isManufacturer
   }
 
   let donatorsData: any = {
