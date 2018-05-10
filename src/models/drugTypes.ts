@@ -4,6 +4,7 @@ import * as moment from 'moment';
 export class DrugTypeModel {
   list(knex: Knex) {
     return knex('mm_generic_accounts')
+    .update('is_deleted','N')
   }
 
   save(knex: Knex, datas: any) {
@@ -25,7 +26,7 @@ export class DrugTypeModel {
   remove(knex: Knex, typeId: string) {
     return knex('mm_generic_accounts')
       .where('account_id', typeId)
-      .del();
+      .update('is_deleted','Y')
   }
 
 }

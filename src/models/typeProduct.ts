@@ -4,6 +4,7 @@ import * as moment from 'moment';
 export class typeProductModel {
   list(knex: Knex) {
     return knex('mm_generic_types')
+    .where('is_deleted','N')
   }
 
   save(knex: Knex, datas: any) {
@@ -25,7 +26,7 @@ export class typeProductModel {
   remove(knex: Knex, typeId: string) {
     return knex('mm_generic_types')
       .where('generic_type_id', typeId)
-      .del();
+      .update('is_deleted','Y')
   }
 
 }

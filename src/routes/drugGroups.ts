@@ -9,6 +9,21 @@ const router = express.Router();
 
 const groupModel = new DrugGroupModel();
 
+router.get('/all', (req, res, next) => {
+  let db = req.db;
+
+  groupModel.listAll(db)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
 router.get('/', (req, res, next) => {
   let db = req.db;
 
@@ -78,6 +93,22 @@ router.put('/:groupId', (req, res, next) => {
   } else {
     res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
   }
+});
+
+router.put('/active', (req, res, next) => {
+  let groupId = req.query.groupId;
+  let status = req.query.status;
+  let db = req.db;
+    groupModel.active(db, groupId, status)
+      .then((results: any) => {
+        res.send({ ok: true })
+      })
+      .catch(error => {
+        res.send({ ok: false, error: error })
+      })
+      .finally(() => {
+        db.destroy();
+      });
 });
 
 router.delete('/:groupId', (req, res, next) => {
