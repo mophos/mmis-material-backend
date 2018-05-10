@@ -90,6 +90,27 @@ router.put('/:dosageId', (req, res, next) => {
   }
 });
 
+router.post('/isactive', (req, res, next) => {
+  let db = req.db;
+  let id = req.body.id;
+  let isActive = req.body.isActive;
+  console.log(id,isActive,'55555');
+  
+  let is_active = {
+    is_active:isActive
+  }
+  dosageModel.isactive(db,id,is_active)
+    .then((results: any) => {
+      res.send({ ok: true });
+    })
+    .catch(error => {
+      res.send({ ok: false })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
 router.delete('/:dosageId', (req, res, next) => {
   let dosageId = req.params.dosageId;
   let db = req.db;
