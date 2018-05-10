@@ -80,6 +80,22 @@ router.put('/:groupId', (req, res, next) => {
   }
 });
 
+router.put('/active', (req, res, next) => {
+  let groupId = req.query.groupId;
+  let status = req.query.status;
+  let db = req.db;
+    groupModel.active(db, groupId, status)
+      .then((results: any) => {
+        res.send({ ok: true })
+      })
+      .catch(error => {
+        res.send({ ok: false, error: error })
+      })
+      .finally(() => {
+        db.destroy();
+      });
+});
+
 router.delete('/:groupId', (req, res, next) => {
   let groupId = req.params.groupId;
   let db = req.db;
