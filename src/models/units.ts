@@ -132,7 +132,7 @@ export class UnitModel {
   removeConversion(knex: Knex, unitGenericId: any) {
     return knex('mm_unit_generics')
       .where('unit_generic_id', unitGenericId)
-      .del();
+      .update('is_deleted','Y');
   }
 
   getGenericPrimaryUnit(knex: Knex, genericId: any) {
