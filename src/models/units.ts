@@ -22,6 +22,14 @@ export class UnitModel {
       .orderBy('unit_name');
   }
 
+  search(knex: Knex,query) {
+    let q = `%${query}%`
+    return knex('mm_units')
+      .where('is_deleted', 'N')
+      .where('unit_name','like',q)
+      .orderBy('unit_name');
+  }
+
   listActive(knex: Knex) {
     return knex('mm_units')
       .where('is_active', 'Y')

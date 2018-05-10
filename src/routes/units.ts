@@ -22,6 +22,20 @@ router.get('/', co(async (req, res, next) => {
   }
 }));
 
+router.get('/search', co(async (req, res, next) => {
+  const db = req.db;
+  const query = req.query.query;
+
+  try {
+    const rows = await unitModel.search(db,query);
+    res.send({ ok: true, rows: rows });
+  } catch (error) {
+    res.send({ ok: false, error: error.message })
+  } finally {
+    db.destroy();
+  }
+}));
+
 router.get('/primary', co(async (req, res, next) => {
   const db = req.db;
 
