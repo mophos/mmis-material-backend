@@ -98,7 +98,8 @@ export class ProductModel {
           .orWhere('p.working_code', query)
           .orWhere('p.keywords', 'like', _query)
       })
-      .whereIn('product_group_id', groupId);
+      .whereIn('product_group_id', groupId)
+      .where('mark_deleted','N');
   }
 
   searchAllTotal(knex: Knex, query: any) {
@@ -111,7 +112,8 @@ export class ProductModel {
           .orWhere('g.generic_name', 'like', _query)
           .orWhere('p.working_code', query)
           .orWhere('p.keywords', 'like', _query)
-      });
+      })
+      .where('mark_deleted','N');
   }
 
   getProductGroups(knex: Knex, datas: any) {
@@ -192,7 +194,7 @@ export class ProductModel {
   remove(knex: Knex, productId: string) {
     return knex('mm_products')
       .where('product_id', productId)
-      .del();
+      .update('mark_deleted','Y')
   }
 
   searchGeneric(knex: Knex, query: string) {

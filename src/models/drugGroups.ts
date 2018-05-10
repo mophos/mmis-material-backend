@@ -4,6 +4,7 @@ import * as moment from 'moment';
 export class DrugGroupModel {
   list(knex: Knex) {
     return knex('mm_generic_groups')
+      .where('is_deleted', 'N')
       .orderBy('group_name');
   }
 
@@ -21,7 +22,7 @@ export class DrugGroupModel {
   remove(knex: Knex, groupId: string) {
     return knex('mm_generic_groups')
       .where('group_id', groupId)
-      .del();
+      .update('is_deleted', 'Y')
   }
 
 }
