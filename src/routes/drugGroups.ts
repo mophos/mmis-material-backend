@@ -70,7 +70,7 @@ router.put('/:groupId', (req, res, next) => {
   let groupId = req.params.groupId;
   let groupName = req.body.groupName;
   let groupCode = req.body.groupCode;
-  console.log(groupCode);
+  // console.log(groupCode);
   
   let db = req.db;
 
@@ -95,10 +95,11 @@ router.put('/:groupId', (req, res, next) => {
   }
 });
 
-router.put('/active', (req, res, next) => {
-  let groupId = req.query.groupId;
-  let status = req.query.status;
+router.put('/active/:groupId', (req, res, next) => {
   let db = req.db;
+  let groupId = req.params.groupId;
+  let status = req.body.status;
+  console.log('JSON.stringify(req)');
     groupModel.active(db, groupId, status)
       .then((results: any) => {
         res.send({ ok: true })

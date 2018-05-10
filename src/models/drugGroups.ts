@@ -27,6 +27,8 @@ export class DrugGroupModel {
   }
   
   active(knex: Knex, groupId: any,status) {
+    console.log(groupId,status,'5555555');
+    
     return knex('mm_generic_groups')
       .where('group_id', groupId)
       .update('is_active',status);
