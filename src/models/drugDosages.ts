@@ -5,6 +5,7 @@ export class DrugDosageModel {
   list(knex: Knex) {
     return knex('mm_generic_dosages')
       .where('is_deleted', 'N')
+      .where('is_active','Y')
       .orderBy('dosage_name');
   }
 
