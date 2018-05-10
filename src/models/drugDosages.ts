@@ -4,6 +4,7 @@ import * as moment from 'moment';
 export class DrugDosageModel {
   list(knex: Knex) {
     return knex('mm_generic_dosages')
+      .where('is_deleted', 'N')
       .orderBy('dosage_name');
   }
 
@@ -21,7 +22,7 @@ export class DrugDosageModel {
   remove(knex: Knex, dosageId: string) {
     return knex('mm_generic_dosages')
       .where('dosage_id', dosageId)
-      .del();
+      .update('is_deleted', 'Y')
   }
 
 }
