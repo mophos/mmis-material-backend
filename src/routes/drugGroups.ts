@@ -9,6 +9,21 @@ const router = express.Router();
 
 const groupModel = new DrugGroupModel();
 
+router.get('/all', (req, res, next) => {
+  let db = req.db;
+
+  groupModel.listAll(db)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
 router.get('/', (req, res, next) => {
   let db = req.db;
 
