@@ -42,7 +42,7 @@ export class StandardCodeModel {
 
   getGenericGroups(knex: Knex) {
     return knex('mm_generic_groups')
-      .orderBy('group_name');
+      .orderBy('group_code');
   }
 
   getGenericTypes(knex: Knex) {
