@@ -4,7 +4,7 @@ import * as moment from 'moment';
 export class StandardCodeModel {
   getCountries(knex: Knex) {
     return knex('l_country')
-    .orderBy('thai_name')
+      .orderBy('thai_name')
   }
 
   getTambon(knex: Knex, ampurCode: string, provinceCode: string) {
@@ -18,7 +18,7 @@ export class StandardCodeModel {
   }
 
   getAmpur(knex: Knex, province_code: string) {
-    return knex('l_ampur')  
+    return knex('l_ampur')
       .where({
         province_code: province_code
       })
@@ -40,10 +40,33 @@ export class StandardCodeModel {
       .orderBy('status_name');
   }
 
-  getGenericGroups(knex: Knex) {
-    return knex('mm_generic_groups')
-      .orderBy('group_code');
+  getGenericGroups1(knex: Knex) {
+    return knex('mm_generic_group_1')
+      .orderBy('group_code_1');
   }
+
+  getGenericGroups2(knex: Knex, groupCode1 = '') {
+    return knex('mm_generic_group_2')
+      .where('group_code_1', 'like', `%${groupCode1}%`)
+      .orderBy('group_code_2');
+  }
+
+  getGenericGroups3(knex: Knex, groupCode1 = '', groupCode2 = '') {
+    return knex('mm_generic_group_3')
+      .where('group_code_1', groupCode1)
+      .where('group_code_2', groupCode2)
+      .orderBy('group_code_3');
+  }
+
+  getGenericGroups4(knex: Knex, groupCode1 = '', groupCode2 = '', groupCode3 = '') {
+    return knex('mm_generic_group_4')
+      .where('group_code_1', groupCode1)
+      .where('group_code_2', groupCode2)
+      .where('group_code_3', groupCode3)
+      .orderBy('group_code_4');
+  }
+
+
 
   getGenericTypes(knex: Knex) {
     return knex('mm_generic_types')
@@ -63,20 +86,20 @@ export class StandardCodeModel {
     return knex('mm_generic_supplies_types')
       .orderBy('type_name');
   }
-  
+
   getWarehouseList(knex: Knex) {
     return knex('wm_warehouses')
       .orderBy('warehouse_name');
   }
-  
+
   getProductGroups(knex: Knex) {
     return knex('mm_generic_types');
   }
-  
+
   getGenericAccounts(knex: Knex) {
     return knex('mm_generic_accounts');
   }
-  
+
   getBitTypes(knex: Knex) {
     return knex('l_bid_type');
   }
