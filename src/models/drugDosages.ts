@@ -25,6 +25,11 @@ export class DrugDosageModel {
       .where('dosage_id', dosageId)
       .update(datas);
   }
+  isactive(knex: Knex, dosageId: string, isactive: any) {
+    return knex('mm_generic_dosages')
+      .where('dosage_id', dosageId)
+      .update(isactive);
+  }
 
   remove(knex: Knex, dosageId: string) {
     return knex('mm_generic_dosages')
