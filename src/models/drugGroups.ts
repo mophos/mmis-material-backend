@@ -131,9 +131,115 @@ export class DrugGroupModel {
       .update('is_actived', status);
   }
 
-  removeGroup2(knex: Knex, groupCode2: string) {
+  removeGroup2(knex: Knex, groupCode1: string, groupCode2: string) {
     return knex('mm_generic_group_2')
+      .where('group_code_1', groupCode1)
       .where('group_code_2', groupCode2)
+      .update('is_deleted', 'Y')
+  }
+  // ############## GROUP 3 #####################
+  group3(knex: Knex, isActived = 'Y') {
+    let sql = knex('mm_generic_group_3 as g3')
+      .select('g3.is_actived', 'g1.group_code_1', 'g2.group_code_2', 'g3.group_code_3', 'g1.group_name_1', 'g2.group_name_2', 'g3.group_name_3', knex.raw('concat(g1.group_name_1,g2.group_name_2,g3.group_name_3)  as full_name'), knex.raw('concat(g1.group_code_1,g2.group_code_2,g3.group_code_3)  as full_code'))
+      .joinRaw('join mm_generic_group_2 as g2 on g2.group_code_2=g3.group_code_2 and g3.group_code_1 = g2.group_code_1')
+      .join('mm_generic_group_1 as g1', 'g1.group_code_1', 'g2.group_code_1')
+      .where('g1.is_deleted', 'N')
+      .where('g2.is_deleted', 'N')
+      .where('g3.is_deleted', 'N')
+      .where('g1.is_actived', 'Y')
+      .where('g2.is_actived', 'Y')
+    if (isActived != 'A') {
+      sql.where('g3.is_actived', isActived)
+    }
+    sql.orderBy('g1.group_code_1');
+    sql.orderBy('g2.group_code_2');
+    sql.orderBy('g3.group_code_3');
+    return sql;
+  }
+
+  saveGroup3(knex: Knex, datas: any) {
+    return knex('mm_generic_group_3')
+      .insert(datas);
+  }
+
+  updateGroup3(knex: Knex, groupCode1: string, groupCode2: string, groupCode3: string, groupName3: string) {
+    return knex('mm_generic_group_3')
+      .where('group_code_1', groupCode1)
+      .where('group_code_2', groupCode2)
+      .where('group_code_3', groupCode3)
+      .update('group_name_3', groupName3);
+  }
+
+  activeGroup3(knex: Knex, groupCode1: string, groupCode2: string, groupCode3: string, status) {
+    return knex('mm_generic_group_3')
+      .where('group_code_1', groupCode1)
+      .where('group_code_2', groupCode2)
+      .where('group_code_3', groupCode3)
+      .update('is_actived', status);
+  }
+
+  removeGroup3(knex: Knex, groupCode1: string, groupCode2: string, groupCode3: string, ) {
+    return knex('mm_generic_group_3')
+      .where('group_code_1', groupCode1)
+      .where('group_code_2', groupCode2)
+      .where('group_code_3', groupCode3)
+      .update('is_deleted', 'Y')
+  }
+  // ############## GROUP 4 #####################
+  group4(knex: Knex, isActived = 'Y') {
+    let sql = knex('mm_generic_group_4 as g4')
+      .select('g4.is_actived', 'g1.group_code_1', 'g2.group_code_2', 'g3.group_code_3', 'g4.group_code_4', 'g1.group_name_1', 'g2.group_name_2', 'g3.group_name_3', 'g4.group_name_4', knex.raw('concat(g1.group_name_1,g2.group_name_2,g3.group_name_3,g4.group_name_4)  as full_name'), knex.raw('concat(g1.group_code_1,g2.group_code_2,g3.group_code_3,g4.group_code_4)  as full_code'))
+      .joinRaw('join mm_generic_group_3 as g3 on g4.group_code_3=g3.group_code_3 and g4.group_code_2=g3.group_code_2 and g3.group_code_1 = g4.group_code_1')
+      .joinRaw('join mm_generic_group_2 as g2 on g2.group_code_2=g4.group_code_2 and g4.group_code_1 = g2.group_code_1')
+      .join('mm_generic_group_1 as g1', 'g1.group_code_1', 'g2.group_code_1')
+      .where('g1.is_deleted', 'N')
+      .where('g2.is_deleted', 'N')
+      .where('g3.is_deleted', 'N')
+      .where('g4.is_deleted', 'N')
+      .where('g1.is_actived', 'Y')
+      .where('g2.is_actived', 'Y')
+      .where('g3.is_actived', 'Y')
+    if (isActived != 'A') {
+      sql.where('g4.is_actived', isActived)
+    }
+    sql.orderBy('g1.group_code_1');
+    sql.orderBy('g2.group_code_2');
+    sql.orderBy('g3.group_code_3');
+    sql.orderBy('g4.group_code_4');
+    console.log(sql.toString());
+    
+    return sql;
+  }
+
+  saveGroup4(knex: Knex, datas: any) {
+    return knex('mm_generic_group_4')
+      .insert(datas);
+  }
+
+  updateGroup4(knex: Knex, groupCode1: string, groupCode2: string, groupCode3: string, groupCode4: string, groupName4: string) {
+    return knex('mm_generic_group_4')
+      .where('group_code_1', groupCode1)
+      .where('group_code_2', groupCode2)
+      .where('group_code_3', groupCode3)
+      .where('group_code_4', groupCode4)
+      .update('group_name_4', groupName4);
+  }
+
+  activeGroup4(knex: Knex, groupCode1: string, groupCode2: string, groupCode3: string, groupCode4: string, status) {
+    return knex('mm_generic_group_4')
+      .where('group_code_1', groupCode1)
+      .where('group_code_2', groupCode2)
+      .where('group_code_3', groupCode3)
+      .where('group_code_4', groupCode4)
+      .update('is_actived', status);
+  }
+
+  removeGroup4(knex: Knex, groupCode1: string, groupCode2: string, groupCode3: string, groupCode4: string ) {
+    return knex('mm_generic_group_4')
+      .where('group_code_1', groupCode1)
+      .where('group_code_2', groupCode2)
+      .where('group_code_3', groupCode3)
+      .where('group_code_4', groupCode4)
       .update('is_deleted', 'Y')
   }
 }

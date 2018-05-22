@@ -215,10 +215,11 @@ router.put('/active/group2', (req, res, next) => {
 });
 
 router.delete('/group2', (req, res, next) => {
+  let groupCode1 = req.query.groupCode1;
   let groupCode2 = req.query.groupCode2;
   let db = req.db;
 
-  groupModel.removeGroup2(db, groupCode2)
+  groupModel.removeGroup2(db, groupCode1, groupCode2)
     .then((results: any) => {
       res.send({ ok: true })
     })
@@ -229,4 +230,216 @@ router.delete('/group2', (req, res, next) => {
       db.destroy();
     });
 });
+// ################################################
+// ############## GROUP 3 #####################
+router.get('/group/3', (req, res, next) => {
+  let db = req.db;
+  let isActived = req.query.isActived;
+  groupModel.group3(db, isActived)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.post('/group3', (req, res, next) => {
+  let groupName3 = req.body.groupName3;
+  let groupCode3 = req.body.groupCode3;
+  let groupCode2 = req.body.groupCode2;
+  let groupCode1 = req.body.groupCode1;
+
+  let db = req.db;
+
+  if (groupName3) {
+    let datas: any = {
+      group_name_3: groupName3,
+      group_code_3: groupCode3,
+      group_code_2: groupCode2,
+      group_code_1: groupCode1
+    }
+
+    groupModel.saveGroup3(db, datas)
+      .then((results: any) => {
+        res.send({ ok: true, rows: results })
+      })
+      .catch(error => {
+        res.send({ ok: false, error: error })
+      })
+      .finally(() => {
+        db.destroy();
+      });
+  } else {
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+  }
+});
+
+router.put('/group3', (req, res, next) => {
+  let groupCode1 = req.body.groupCode1;
+  let groupCode2 = req.body.groupCode2;
+  let groupCode3 = req.body.groupCode3;
+  let groupName3 = req.body.groupName3;
+
+  let db = req.db;
+
+  groupModel.updateGroup3(db, groupCode1, groupCode2, groupCode3, groupName3)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.put('/active/group3', (req, res, next) => {
+  let groupCode1 = req.query.groupCode1;
+  let groupCode2 = req.query.groupCode2;
+  let groupCode3 = req.query.groupCode3;
+  let status = req.body.status;
+  let db = req.db;
+  groupModel.activeGroup3(db, groupCode1, groupCode2, groupCode3, status)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.delete('/group3', (req, res, next) => {
+  let groupCode1 = req.query.groupCode1;
+  let groupCode2 = req.query.groupCode2;
+  let groupCode3 = req.query.groupCode3;
+  let db = req.db;
+
+  groupModel.removeGroup3(db, groupCode1, groupCode2, groupCode3)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+// ################################################
+// ############## GROUP 4 #####################
+router.get('/group/4', (req, res, next) => {
+  let db = req.db;
+  let isActived = req.query.isActived;
+  groupModel.group4(db, isActived)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.post('/group4', (req, res, next) => {
+  let groupName4 = req.body.groupName4;
+  let groupCode4 = req.body.groupCode4;
+  let groupCode3 = req.body.groupCode3;
+  let groupCode2 = req.body.groupCode2;
+  let groupCode1 = req.body.groupCode1;
+
+  let db = req.db;
+
+  if (groupName4) {
+    let datas: any = {
+      group_name_4: groupName4,
+      group_code_4: groupCode4,
+      group_code_3: groupCode3,
+      group_code_2: groupCode2,
+      group_code_1: groupCode1
+    }
+
+    groupModel.saveGroup4(db, datas)
+      .then((results: any) => {
+        res.send({ ok: true, rows: results })
+      })
+      .catch(error => {
+        res.send({ ok: false, error: error })
+      })
+      .finally(() => {
+        db.destroy();
+      });
+  } else {
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+  }
+});
+
+router.put('/group4', (req, res, next) => {
+  let groupCode1 = req.body.groupCode1;
+  let groupCode2 = req.body.groupCode2;
+  let groupCode3 = req.body.groupCode3;
+  let groupCode4 = req.body.groupCode4;
+  let groupName4 = req.body.groupName4;
+
+  let db = req.db;
+
+  groupModel.updateGroup4(db, groupCode1, groupCode2, groupCode3, groupCode4, groupName4)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.put('/active/group4', (req, res, next) => {
+  let groupCode1 = req.query.groupCode1;
+  let groupCode2 = req.query.groupCode2;
+  let groupCode3 = req.query.groupCode3;
+  let groupCode4 = req.query.groupCode4;
+  let status = req.body.status;
+  let db = req.db;
+  groupModel.activeGroup4(db, groupCode1, groupCode2, groupCode3, groupCode4, status)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.delete('/group4', (req, res, next) => {
+  let groupCode1 = req.query.groupCode1;
+  let groupCode2 = req.query.groupCode2;
+  let groupCode3 = req.query.groupCode3;
+  let groupCode4 = req.query.groupCode4;
+  let db = req.db;
+
+  groupModel.removeGroup4(db, groupCode1, groupCode2, groupCode3, groupCode4)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
 export default router;
