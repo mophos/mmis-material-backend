@@ -129,7 +129,9 @@ router.post('/', async (req, res, next) => {
   let org: any = req.body.organization;
 
   let labelerData: any = {
+    labeler_code: labeler.labelerCode,
     labeler_name: labeler.labelerName,
+    labeler_name_po: labeler.labelerNamePo,
     short_code: labeler.labelerShortCode,
     description: labeler.labelerDescription,
     nin: labeler.labelerNin,
@@ -187,6 +189,7 @@ router.put('/', async (req, res, next) => {
 
   let labelerData: any = {
     labeler_name: labeler.labelerName,
+    labeler_name_po: labeler.labelerNamePo,
     short_code: labeler.labelerShortCode,
     description: labeler.labelerDescription,
     nin: labeler.labelerNin,
