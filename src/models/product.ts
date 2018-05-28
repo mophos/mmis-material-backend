@@ -99,7 +99,7 @@ export class ProductModel {
           .orWhere('p.keywords', 'like', _query)
       })
       .whereIn('product_group_id', groupId)
-      .where('mark_deleted','N');
+      .where('p.mark_deleted','N');
   }
 
   searchAllTotal(knex: Knex, query: any) {
@@ -113,7 +113,7 @@ export class ProductModel {
           .orWhere('p.working_code', query)
           .orWhere('p.keywords', 'like', _query)
       })
-      .where('mark_deleted','N');
+      .where('p.mark_deleted','N');
   }
 
   getProductGroups(knex: Knex, datas: any) {

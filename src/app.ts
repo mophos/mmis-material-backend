@@ -1,8 +1,9 @@
 
-require('dotenv').config();
+import * as path from 'path';
+let envPath = path.join(__dirname, '../../mmis-config');
+require('dotenv').config(({ path: envPath }));
 
 import * as express from 'express';
-import * as path from 'path';
 import * as favicon from 'serve-favicon';
 import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
@@ -12,7 +13,7 @@ import * as _ from 'lodash';
 
 const protect = require('@risingstack/protect');
 
-import Knex = require('knex');
+import * as Knex from 'knex';
 import { MySqlConnectionConfig } from 'knex';
 
 import { Jwt } from './models/jwt';
@@ -36,6 +37,7 @@ import typeProduct from './routes/typeProduct';
 import unitRoute from './routes/units';
 import lotRoute from './routes/lots';
 import userRoute from './routes/users';
+import receivePlanningRoute from './routes/receivePlanning';
 
 import stdRoute from './routes/standardCode';
 
@@ -126,6 +128,7 @@ app.use('/drug-types', checkAuth, drugTypeRoute);
 app.use('/type-product', checkAuth, typeProduct);
 app.use('/drug-groups', checkAuth, drugGroupRoute);
 app.use('/drug-accounts', checkAuth, drugAccountRoute);
+app.use('/receive-planning', checkAuth, receivePlanningRoute);
 app.use('/supplies-types', checkAuth, suppliesTypeRoute);
 app.use('/std', checkAuth, stdRoute);
 app.use('/units', checkAuth, unitRoute);

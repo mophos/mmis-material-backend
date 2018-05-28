@@ -127,7 +127,7 @@ export class GenericsModel {
 
   getTypes(knex: Knex) {
     return knex('mm_generic_types')
-      .where('isactive', '1');
+      .where('is_actived', 'Y');
   }
 
   getGenericType(knex: Knex) {
