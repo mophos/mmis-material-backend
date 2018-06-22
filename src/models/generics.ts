@@ -127,7 +127,7 @@ export class GenericsModel {
 
   getTypes(knex: Knex) {
     return knex('mm_generic_types')
-      .where('isactive', '1');
+      .where('is_actived', 'Y');
   }
 
   getGenericType(knex: Knex) {
@@ -185,7 +185,7 @@ export class GenericsModel {
               mm_generics
             WHERE
               working_code = '${query}'
-              and generic_type_id = '${generic_type_id}'
+              and generic_type_id in (${generic_type_id})
           ) AS s
         UNION ALL
           SELECT
@@ -198,7 +198,7 @@ export class GenericsModel {
                 mm_generics
               WHERE
                 generic_name LIKE '${q_}'
-                and generic_type_id = '${generic_type_id}'
+                and generic_type_id in (${generic_type_id})
               LIMIT 5
             ) AS s
           UNION ALL
@@ -214,7 +214,7 @@ export class GenericsModel {
                  (generic_name LIKE '${_q_}'
                   OR keywords LIKE '${_q_}'
                   )
-              and generic_type_id = '${generic_type_id}'
+              and generic_type_id in (${generic_type_id})
                 ORDER BY
                   generic_name
                 LIMIT 10

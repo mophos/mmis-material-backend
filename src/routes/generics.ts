@@ -20,9 +20,9 @@ router.post('/list-type', co(async (req, res, next) => {
 
   try {
 
-      let rs = await genericModel.getListByType(db, limit, offset, typeId);
-      let rsTotal = await genericModel.getTotalByType(db, typeId);
-      res.send({ ok: true, rows: rs, total: rsTotal[0].total });
+    let rs = await genericModel.getListByType(db, limit, offset, typeId);
+    let rsTotal = await genericModel.getTotalByType(db, typeId);
+    res.send({ ok: true, rows: rs, total: rsTotal[0].total });
 
   } catch (error) {
     res.send({ ok: false, error: error });
@@ -42,9 +42,9 @@ router.post('/search', co(async (req, res, next) => {
   console.log(req.body);
 
   try {
-      let rs = await genericModel.search(db, limit, offset, query, groupId);
-      let rsTotal = await genericModel.searchTotal(db, query, groupId);
-      res.send({ ok: true, rows: rs, total: rsTotal[0].total });
+    let rs = await genericModel.search(db, limit, offset, query, groupId);
+    let rsTotal = await genericModel.searchTotal(db, query, groupId);
+    res.send({ ok: true, rows: rs, total: rsTotal[0].total });
   } catch (error) {
     console.log(error);
 
@@ -136,8 +136,7 @@ router.post('/', async (req, res, next) => {
       await genericModel.save(db, datas);
       res.send({ ok: true, generic_id: genericId });
     } catch (error) {
-      if(error.code === 'ER_DUP_ENTRY')
-      {
+      if (error.code === 'ER_DUP_ENTRY') {
         res.send({ ok: false, error: 'ข้อมูลซ้ำ' })
       } else {
         res.send({ ok: false, error: error })
@@ -161,7 +160,10 @@ router.put('/:genericId', co(async (req, res, next) => {
   let typeId = +generics.typeId;
   let typeOldId = +generics.typeOldId;
 
-  let groupId = generics.groupId;
+  let groupId1 = generics.groupId1;
+  let groupId2 = generics.groupId2;
+  let groupId3 = generics.groupId3;
+  let groupId4 = generics.groupId4;
   let dosageId = generics.dosageId;
   let pTypeId = generics.pTypeId;
   let description = generics.description;
@@ -211,7 +213,10 @@ router.put('/:genericId', co(async (req, res, next) => {
       working_code: workingCode,
       generic_name: genericName,
       generic_type_id: typeId,
-      group_id: groupId,
+      group_code_1: groupId1,
+      group_code_2: groupId2,
+      group_code_3: groupId3,
+      group_code_4: groupId4,
       dosage_id: dosageId,
       generic_hosp_id: pTypeId,
       description: description,

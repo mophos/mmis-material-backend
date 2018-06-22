@@ -125,7 +125,7 @@ router.get('/generic-types', (req, res, next) => {
     });
 });
 
-router.get('/type-product',async (req, res, next) => {
+router.get('/type-product', async (req, res, next) => {
 
   let db = req.db;
 
@@ -156,11 +156,62 @@ router.get('/generic-supplies-types', (req, res, next) => {
     });
 });
 
-router.get('/generic-groups', (req, res, next) => {
+router.get('/generic-groups/1', (req, res, next) => {
 
   let db = req.db;
 
-  stdCode.getGenericGroups(db)
+  stdCode.getGenericGroups1(db)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.get('/generic-groups/2', (req, res, next) => {
+
+  let db = req.db;
+  let groupCode1 = req.query.groupCode1;
+  stdCode.getGenericGroups2(db, groupCode1)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.get('/generic-groups/3', (req, res, next) => {
+
+  let db = req.db;
+  let groupCode1 = req.query.groupCode1;
+  let groupCode2 = req.query.groupCode2;
+  stdCode.getGenericGroups3(db, groupCode1, groupCode2)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.get('/generic-groups/4', (req, res, next) => {
+
+  let db = req.db;
+  let groupCode1 = req.query.groupCode1;
+  let groupCode2 = req.query.groupCode2;
+  let groupCode3 = req.query.groupCode3;
+  stdCode.getGenericGroups4(db, groupCode1, groupCode2, groupCode3)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
     })

@@ -206,7 +206,7 @@ router.post('/', warp(async (req, res, next) => {
   const primaryUnitId = req.body.primaryUnitId;
   // const workingCode = req.body.workingCode;
   const purchasePrice = req.body.purchasePrice;
-  const productGroupId = req.body.productGroupId;
+  // const productGroupId = req.body.productGroupId;
   const keywords = req.body.keywords;
   // const standardCost = req.body.standardCost;
   const db = req.db;
@@ -227,7 +227,7 @@ router.post('/', warp(async (req, res, next) => {
       issue_unit_id: issueUnitId,
       primary_unit_id: primaryUnitId,
       keywords: keywords,
-      product_group_id: productGroupId,
+      // product_group_id: productGroupId,
       // standard_cost: +standardCost
     }
 
@@ -266,8 +266,8 @@ router.put('/:productId', warp(async (req, res, next) => {
   let reg_no = req.body.reg_no;
   let purchasePrice = req.body.purchasePrice;
   let keywords = req.body.keywords;
-  let productGroupId = +req.body.productGroupId;
-  let productGroupOldId = +req.body.productGroupOldId;
+  // let productGroupId = +req.body.productGroupId;
+  // let productGroupOldId = +req.body.productGroupOldId;
 
   // if (!workingCode) {
   //   let srType = null;
@@ -330,7 +330,7 @@ router.put('/:productId', warp(async (req, res, next) => {
       // working_code: workingCode,
       reg_no: reg_no,
       keywords: keywords,
-      product_group_id: productGroupId,
+      // product_group_id: productGroupId,
       // min_qty: minQty,
       // max_qty: maxQty,
       // planning_method: planningMethod,
