@@ -71,8 +71,13 @@ router.delete('/mark-deleted/:productId', warp(async (req, res, next) => {
   const productId = req.params.productId;
 
   try {
-    await productModel.markDeleted(db, productId)
-    res.send({ ok: true });
+    const rs = await productModel.checkQtyForMarkDeleted(db, productId);
+    if (rs[0].qty > 0) {
+      res.send({ ok: false, error: 'ไม่สามารถลบรายการได้ เนื่องจากมียอดคงเหลือ หรือยอดจอง' }) ;
+    } else {
+      await productModel.markDeleted(db, productId);
+      res.send({ ok: true });
+    }
   } catch (error) {
     res.send({ ok: false, error: error.message });
   } finally {

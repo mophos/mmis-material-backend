@@ -262,4 +262,10 @@ export class ProductModel {
       .where('mg.generic_id', genericId)
   }
 
+  checkQtyForMarkDeleted(knex: Knex, productId: any) {
+    return knex('view_product_reserve')
+      .select(knex.raw('sum(stock_qty + reserve_qty) as qty'))
+      .where('product_id', productId);
+  }
+
 }
