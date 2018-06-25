@@ -125,6 +125,13 @@ export class GenericsModel {
       });
   }
 
+  checkRemove(knex: Knex, genericId: string) {
+    return knex('mm_generics')
+      .where('generic_id', genericId)
+      .where('mark_deleted','N')
+      .where('is_active','Y');
+  }
+
   getTypes(knex: Knex) {
     return knex('mm_generic_types')
       .where('is_actived', 'Y');

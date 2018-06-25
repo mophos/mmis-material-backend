@@ -265,20 +265,25 @@ router.get('/detail/:genericId', (req, res, next) => {
     });
 });
 
-router.delete('/:genericId', (req, res, next) => {
+router.delete('/:genericId', async (req, res, next) => {
   let genericId = req.params.genericId;
   let db = req.db;
+  try {
+    const cr = await genericModel.checkRemove(db, genericId);
+    if (cr) {
+      res.send({ ok: false, error: 'product' });
+    } else {
+      genericModel.remove(db, genericId)
+        .then((results: any) => {
+          res.send({ ok: true });
+        })
+    }
+  } catch (error) {
+    res.send({ ok: false, error: error })
+  } finally {
+    db.destroy();
+  }
 
-  genericModel.remove(db, genericId)
-    .then((results: any) => {
-      res.send({ ok: true })
-    })
-    .catch(error => {
-      res.send({ ok: false, error: error })
-    })
-    .finally(() => {
-      db.destroy();
-    });
 });
 
 router.post('/planning/:genericId', co(async (req, res, next) => {
@@ -401,6 +406,7 @@ router.get('/search-autocomplete', async (req, res, next) => {
   types.forEach(v => {
     gids.push(v);
   });
+  console.log(gids);
 
   try {
     let rs: any = await genericModel.searchAutoComplete(db, query, gids);
