@@ -195,6 +195,7 @@ export class ProductModel {
     return knex('mm_products')
       .where('product_id', productId)
       .update('mark_deleted','Y')
+      .update('is_active','N')
   }
 
   searchGeneric(knex: Knex, query: string) {
