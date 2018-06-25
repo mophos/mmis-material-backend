@@ -126,7 +126,7 @@ export class GenericsModel {
   }
 
   checkRemove(knex: Knex, genericId: string) {
-    return knex('mm_generics')
+    return knex('mm_products')
       .where('generic_id', genericId)
       .where('mark_deleted','N')
       .where('is_active','Y');
