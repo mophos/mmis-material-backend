@@ -99,7 +99,7 @@ export class ProductModel {
           .orWhere('p.keywords', 'like', _query)
       })
       .whereIn('product_group_id', groupId)
-      .where('p.mark_deleted','N');
+      .where('p.mark_deleted', 'N');
   }
 
   searchAllTotal(knex: Knex, query: any) {
@@ -113,7 +113,7 @@ export class ProductModel {
           .orWhere('p.working_code', query)
           .orWhere('p.keywords', 'like', _query)
       })
-      .where('p.mark_deleted','N');
+      .where('p.mark_deleted', 'N');
   }
 
   getProductGroups(knex: Knex, datas: any) {
@@ -194,7 +194,8 @@ export class ProductModel {
   remove(knex: Knex, productId: string) {
     return knex('mm_products')
       .where('product_id', productId)
-      .update('mark_deleted','Y')
+      .update('mark_deleted', 'Y')
+      .update('is_active', 'N')
   }
 
   searchGeneric(knex: Knex, query: string) {
@@ -240,7 +241,7 @@ export class ProductModel {
 
   markDeleted(knex: Knex, productId: any) {
     return knex('mm_products')
-      .update({ mark_deleted: 'Y' })
+      .update({ mark_deleted: 'Y', is_active: 'N' })
       .where('product_id', productId);
   }
 

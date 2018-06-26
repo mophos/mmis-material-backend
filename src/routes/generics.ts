@@ -274,7 +274,9 @@ router.delete('/:genericId', async (req, res, next) => {
   let db = req.db;
   try {
     const cr = await genericModel.checkRemove(db, genericId);
-    if (cr) {
+    console.log(cr);
+    
+    if (cr.length) {
       res.send({ ok: false, error: 'product' });
     } else {
       genericModel.remove(db, genericId)
