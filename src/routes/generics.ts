@@ -17,6 +17,9 @@ router.post('/list-type', co(async (req, res, next) => {
   let limit = req.body.limit;
   let offset = req.body.offset;
   let typeId = req.body.typeId;
+  if(typeof typeId === 'string'){
+    typeId = [typeId];
+  }
 
   try {
 
@@ -38,7 +41,10 @@ router.post('/search', co(async (req, res, next) => {
   let offset = req.body.offset;
   let query = req.body.query;
   let groupId = req.body.groupId;
-
+  if(typeof groupId === 'string')
+  {
+    groupId = [groupId];
+  }
   console.log(req.body);
 
   try {
