@@ -17,7 +17,7 @@ router.post('/list-type', co(async (req, res, next) => {
   let limit = req.body.limit;
   let offset = req.body.offset;
   let typeId = req.body.typeId;
-  if(typeof typeId === 'string'){
+  if (typeof typeId === 'string') {
     typeId = [typeId];
   }
 
@@ -41,8 +41,7 @@ router.post('/search', co(async (req, res, next) => {
   let offset = req.body.offset;
   let query = req.body.query;
   let groupId = req.body.groupId;
-  if(typeof groupId === 'string')
-  {
+  if (typeof groupId === 'string') {
     groupId = [groupId];
   }
   console.log(req.body);
@@ -281,7 +280,7 @@ router.delete('/:genericId', async (req, res, next) => {
   try {
     const cr = await genericModel.checkRemove(db, genericId);
     console.log(cr);
-    
+
     if (cr.length) {
       res.send({ ok: false, error: 'product' });
     } else {
@@ -368,7 +367,6 @@ router.put('/planning/:genericPlanningId', co(async (req, res, next) => {
   const genericPlanningId = req.params.genericPlanningId;
   const unitId = req.body.unitId;
   const minModifier = req.body.minModifier;
-  // const maxModifier = req.body.maxModifier;
   const primaryUnitId = req.body.primaryUnitId;
   const sourceWarehouseId = req.body.sourceWarehouseId;
   const isActive = req.body.isActive;
@@ -379,7 +377,6 @@ router.put('/planning/:genericPlanningId', co(async (req, res, next) => {
       min_qty: +minQty,
       max_qty: +maxQty,
       min_modifier_qty: +minModifier,
-      // max_modifier_qty: +maxModifier,
       primary_unit_id: primaryUnitId,
       is_active: isActive,
       source_warehouse_id: sourceWarehouseId,
