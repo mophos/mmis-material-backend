@@ -18,8 +18,11 @@ router.post('/', warp(async (req, res, next) => {
   let limit = +req.body.limit || 15;
   let offset = +req.body.offset || 0;
   let groupId = req.body.groupId;
-  console.log(groupId);
-  console.log('******************');
+
+  if(typeof groupId === 'string'){
+    groupId = [groupId];
+  }
+
   try {
     if (groupId) {
       let rsTotal = await productModel.totalProducts(db, groupId);
