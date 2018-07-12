@@ -3,14 +3,12 @@
 import * as express from 'express';
 import * as moment from 'moment';
 import { LabelerModel } from '../models/labeler';
-import { OrganizationModel } from '../models/organization';
 
 import warp = require('co-express');
 
 const router = express.Router();
 
 const labelerModel = new LabelerModel();
-const organizationModel = new OrganizationModel();
 
 router.get('/', (req, res, next) => {
   let db = req.db;
@@ -126,8 +124,6 @@ router.get('/search-autocomplete', warp(async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   let labeler: any = req.body.labeler;
-  let org: any = req.body.organization;
-
   let labelerData: any = {
     labeler_code: labeler.labelerCode,
     labeler_name: labeler.labelerName,
@@ -183,8 +179,6 @@ router.post('/', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   let labeler: any = req.body.labeler;
-  let org: any = req.body.organization;
-
   let labelerId = labeler.labelerId;
 
   let labelerData: any = {
@@ -266,7 +260,7 @@ router.delete('/:labelerId', (req, res, next) => {
 
   labelerModel.remove(db, labelerId)
     .then(() => {
-      return organizationModel.remove(db, labelerId)
+      return labelerModel.remove(db, labelerId)
     })
     .then(() => {
       res.send({ ok: true })
