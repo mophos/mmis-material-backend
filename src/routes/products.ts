@@ -19,7 +19,7 @@ router.post('/', warp(async (req, res, next) => {
   let offset = +req.body.offset || 0;
   let groupId = req.body.groupId;
 
-  if(typeof groupId === 'string'){
+  if (typeof groupId === 'string') {
     groupId = [groupId];
   }
 
@@ -48,8 +48,10 @@ router.post('/search', warp(async (req, res, next) => {
   const query = req.body.query;
   const limit = +req.body.limit || 15;
   const offset = +req.body.offset || 0;
-  const groupId = req.body.groupId;
-
+  let groupId = req.body.groupId;
+  if (typeof groupId === 'string') {
+    groupId = [groupId];
+  }
   try {
     if (groupId) {
       const respTotal = await productModel.searchTotal(db, query, groupId);
@@ -156,9 +158,9 @@ router.post('/fast-save', warp(async (req, res, next) => {
   let rsWorkingCode = await productModel.getWorkingCode(db, genericId);
   // console.log('1',workingCodeRuning);
 
-  let workingCodeRuning ='' + rsWorkingCode[0].count+1
- console.log(workingCodeRuning);
- 
+  let workingCodeRuning = '' + rsWorkingCode[0].count + 1
+  console.log(workingCodeRuning);
+
   console.log('length', workingCodeRuning.length);
   while (workingCodeRuning.length < 3) {
     console.log('length-', workingCodeRuning.length);
