@@ -184,10 +184,11 @@ export class ProductModel {
   detail(knex: Knex, productId: string) {
     return knex('mm_products as p')
       .select('p.*', 'g.generic_name', 'lm.labeler_name as m_labeler',
-        'lv.labeler_name as v_labeler')
+        'lv.labeler_name as v_labeler', 'pg.product_group_name')
       .leftJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
       .leftJoin('mm_labelers as lm', 'lm.labeler_id', 'p.m_labeler_id')
       .leftJoin('mm_labelers as lv', 'lv.labeler_id', 'p.v_labeler_id')
+      .leftJoin('mm_product_groups as pg', 'pg.product_group_id', 'p.product_group_id')
       .where('p.product_id', productId);
   }
 
