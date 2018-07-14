@@ -182,6 +182,7 @@ router.put('/', async (req, res, next) => {
   let labelerId = labeler.labelerId;
 
   let labelerData: any = {
+    labeler_code: labeler.labelerCode,
     labeler_name: labeler.labelerName,
     labeler_name_po: labeler.labelerNamePo,
     short_code: labeler.labelerShortCode,
@@ -217,17 +218,20 @@ router.put('/', async (req, res, next) => {
   let db = req.db;
 
   if (labeler.labelerName) {
-
     try {
-      await labelerModel.update(db, labelerId, labelerData);
-      await labelerModel.updateDonators(db, donatorsData.donator_name, donatorsData);
-      res.send({ ok: true })
+      let checkCode =  await labelerModel.checkCode(db, labelerData.labeler_code);
+      if(checkCode.length > 0) {
+        res.send({ ok: false, error: 'มีรหัสผู้ประกอบการนี้แล้ว' }) ;
+      } else {
+          await labelerModel.update(db, labelerId, labelerData);
+          await labelerModel.updateDonators(db, donatorsData.donator_name, donatorsData);
+          res.send({ ok: true })
+      }
     } catch (error) {
-      console.log(error);
       res.send({ ok: false, error: error.message })
     } finally {
       db.destroy();
-    }
+    } 
   } else {
     res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
   }
