@@ -93,7 +93,15 @@ export class StandardCodeModel {
   }
 
   getProductGroups(knex: Knex) {
-    return knex('mm_generic_types');
+    return knex('mm_product_groups')
+    .where('is_deleted','N')
+    .where('is_actived','Y');
+  }
+
+  getED(knex: Knex) {
+    return knex('mm_generic_group_ed')
+    .where('is_deleted','N')
+    .where('is_actived','Y');
   }
 
   getGenericAccounts(knex: Knex) {

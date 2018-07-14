@@ -270,6 +270,21 @@ router.get('/product-groups', async (req, res, next) => {
   }
 });
 
+router.get('/ed', async (req, res, next) => {
+
+  let db = req.db;
+
+  try {
+    let rs: any = await stdCode.getED(db);
+    res.send({ ok: true, rows: rs });
+  } catch (error) {
+    console.log(error);
+    res.send({ ok: false, error: error.message });
+  } finally {
+    db.destroy();
+  }
+});
+
 router.get('/generic-accounts', co(async (req, res, next) => {
 
   let db = req.db;

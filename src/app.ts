@@ -37,8 +37,9 @@ import unitRoute from './routes/units';
 import lotRoute from './routes/lots';
 import userRoute from './routes/users';
 import receivePlanningRoute from './routes/receivePlanning';
-
+import productGroups from './routes/productGroups'
 import stdRoute from './routes/standardCode';
+import genericGroupEDRoute from './routes/genericGroupED';
 
 const app: express.Express = express();
 
@@ -132,6 +133,8 @@ app.use('/std', checkAuth, stdRoute);
 app.use('/units', checkAuth, unitRoute);
 app.use('/lots', checkAuth, lotRoute);
 app.use('/users', checkAuth, userRoute);
+app.use('/product-groups', checkAuth, productGroups);
+app.use('/generic-group-ed', checkAuth, genericGroupEDRoute);
 
 app.use('/', indexRoute);
 
