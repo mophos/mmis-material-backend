@@ -271,7 +271,7 @@ router.put('/:productId', warp(async (req, res, next) => {
   let reg_no = req.body.reg_no;
   let purchasePrice = req.body.purchasePrice;
   let keywords = req.body.keywords;
-  // let productGroupId = +req.body.productGroupId;
+  let productGroupId = +req.body.productGroupId;
   // let productGroupOldId = +req.body.productGroupOldId;
 
   // if (!workingCode) {
@@ -335,7 +335,7 @@ router.put('/:productId', warp(async (req, res, next) => {
       // working_code: workingCode,
       reg_no: reg_no,
       keywords: keywords,
-      // product_group_id: productGroupId,
+      product_group_id: productGroupId,
       // min_qty: minQty,
       // max_qty: maxQty,
       // planning_method: planningMethod,
