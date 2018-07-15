@@ -30,9 +30,9 @@ export class GenericsModel {
     let _query = `%${query}%`;
     if(groupId){
       return knex('mm_generics as mg')
-      .select('mg.*', 'g.group_name', 'ac.account_name', 'd.dosage_name',
+      .select('mg.*', 'ac.account_name', 'd.dosage_name',
         't.generic_type_name', 'u.unit_name as primary_unit_name')
-      .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
+      // .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
       .leftJoin('mm_generic_accounts as ac', 'ac.account_id', 'mg.account_id')
       .leftJoin('mm_generic_dosages as d', 'd.dosage_id', 'mg.dosage_id')
       .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
@@ -48,9 +48,9 @@ export class GenericsModel {
       .offset(offset)
     } else{
       return knex('mm_generics as mg')
-      .select('mg.*', 'g.group_name', 'ac.account_name', 'd.dosage_name',
+      .select('mg.*', 'ac.account_name', 'd.dosage_name',
         't.generic_type_name', 'u.unit_name as primary_unit_name')
-      .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
+      // .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
       .leftJoin('mm_generic_accounts as ac', 'ac.account_id', 'mg.account_id')
       .leftJoin('mm_generic_dosages as d', 'd.dosage_id', 'mg.dosage_id')
       .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
@@ -71,9 +71,9 @@ export class GenericsModel {
     let sql = null;
     if (typeId) {
       return knex('mm_generics as mg')
-        .select('mg.*', 'g.group_name', 'ac.account_name', 'd.dosage_name',
+        .select('mg.*', 'ac.account_name', 'd.dosage_name',
           't.generic_type_name', 'u.unit_name as primary_unit_name')
-        .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
+        // .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
         .leftJoin('mm_generic_accounts as ac', 'ac.account_id', 'mg.account_id')
         .leftJoin('mm_generic_dosages as d', 'd.dosage_id', 'mg.dosage_id')
         .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
@@ -86,9 +86,9 @@ export class GenericsModel {
 
     } else {
       return knex('mm_generics as mg')
-        .select('mg.*', 'g.group_name', 'ac.account_name', 'd.dosage_name',
+        .select('mg.*', 'ac.account_name', 'd.dosage_name',
           't.generic_type_name', 'u.unit_name as primary_unit_name')
-        .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
+        // .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
         .leftJoin('mm_generic_accounts as ac', 'ac.account_id', 'mg.account_id')
         .leftJoin('mm_generic_dosages as d', 'd.dosage_id', 'mg.dosage_id')
         .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
