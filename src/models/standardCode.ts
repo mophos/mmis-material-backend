@@ -66,8 +66,6 @@ export class StandardCodeModel {
       .orderBy('group_code_4');
   }
 
-
-
   getGenericTypes(knex: Knex) {
     return knex('mm_generic_types')
       .orderBy('generic_type_name');
@@ -94,14 +92,14 @@ export class StandardCodeModel {
 
   getProductGroups(knex: Knex) {
     return knex('mm_product_groups')
-    .where('is_deleted','N')
-    .where('is_actived','Y');
+      .where('is_deleted', 'N')
+      .where('is_actived', 'Y');
   }
 
   getED(knex: Knex) {
     return knex('mm_generic_group_ed')
-    .where('is_deleted','N')
-    .where('is_actived','Y');
+      .where('is_deleted', 'N')
+      .where('is_actived', 'Y');
   }
 
   getGenericAccounts(knex: Knex) {

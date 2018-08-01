@@ -183,7 +183,7 @@ export class ProductModel {
 
   detail(knex: Knex, productId: string) {
     return knex('mm_products as p')
-      .select('p.*', 'g.generic_name', 'lm.labeler_name as m_labeler',
+      .select('p.*', 'g.generic_name', 'g.working_code as generic_code', 'lm.labeler_name as m_labeler',
         'lv.labeler_name as v_labeler', 'pg.product_group_name')
       .leftJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
       .leftJoin('mm_labelers as lm', 'lm.labeler_id', 'p.m_labeler_id')
@@ -258,8 +258,8 @@ export class ProductModel {
       .where('product_id', productId);
   }
   getWorkingCode(knex: Knex, genericId: any) {
-    return knex('mm_generics as mg').select('mg.working_code')
-      .select(knex.raw('count(*) as count'))
+    return knex('mm_generics as mg')
+      .select(knex.raw('count(*) as count,mg.working_code'))
       .join('mm_products as mp', 'mg.generic_id', 'mp.generic_id')
       .where('mg.generic_id', genericId)
   }

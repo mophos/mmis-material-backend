@@ -26,12 +26,15 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   let typeName = req.body.typeName;
+  let prefixName = req.body.prefixName;
 
   let db = req.db;
 
   if (typeName) {
     let datas: any = {
-      generic_type_name: typeName
+      generic_type_name: typeName,
+      prefix_name: prefixName,
+      prefix_no: 1
     }
 
     typeProduct.save(db, datas)
@@ -52,12 +55,14 @@ router.post('/', (req, res, next) => {
 router.put('/:typeId', (req, res, next) => {
   let typeId = req.params.typeId;
   let typeName = req.body.typeName;
+  let prefixName = req.body.prefixName;
 
   let db = req.db;
 
   if (typeId) {
     let datas: any = {
-      generic_type_name: typeName
+      generic_type_name: typeName,
+      prefix_name: prefixName
     }
 
     typeProduct.update(db, typeId, datas)
