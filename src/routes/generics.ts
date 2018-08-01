@@ -102,25 +102,25 @@ router.post('/', async (req, res, next) => {
 
   let db = req.db;
   if (genericCodeAuto) {
-    let srType = null;
+    // let srType = null;
 
-    if (typeId === 1) { // ยา
-      srType = 'WCA';
-    } else if (typeId === 2) { //ไม่ใช่ยา
-      srType = 'WCC'
-    } else if (typeId === 3) { // เคมีภัณฑ์
-      srType = 'WCB'
-    } else if (typeId === 4) { // วัสดุวิทยาศาสตร์และการแพทย์
-      srType = 'WCE'
-    } else if (typeId === 5) { // ยาผลิต
-      srType = 'WCD'
-    } else if (typeId === 10) { // อื่นๆ
-      srType = 'WCF'
-    } else { // ยา
-      srType = 'WCA'
-    }
+    // if (typeId === 1) { // ยา
+    //   srType = 'WCA';
+    // } else if (typeId === 2) { //ไม่ใช่ยา
+    //   srType = 'WCC'
+    // } else if (typeId === 3) { // เคมีภัณฑ์
+    //   srType = 'WCB'
+    // } else if (typeId === 4) { // วัสดุวิทยาศาสตร์และการแพทย์
+    //   srType = 'WCE'
+    // } else if (typeId === 5) { // ยาผลิต
+    //   srType = 'WCD'
+    // } else if (typeId === 10) { // อื่นๆ
+    //   srType = 'WCF'
+    // } else { // ยา
+    //   srType = 'WCA'
+    // }
 
-    workingCode = await serialModel.getSerial(db, srType);
+    workingCode = await serialModel.getSerialGenerics(db, typeId);
   } else {
     workingCode = drugs.workingCode;
   }
@@ -195,25 +195,25 @@ router.put('/:genericId', co(async (req, res, next) => {
   if (genericId && genericName && typeId && primaryUnitId) {
 
     if (typeId !== typeOldId) {
-      let srType = null;
+      // let srType = null;
 
-      if (typeId === 1) { // ยา
-        srType = 'WCA';
-      } else if (typeId === 2) { //ไม่ใช่ยา
-        srType = 'WCC'
-      } else if (typeId === 3) { // เคมีภัณฑ์
-        srType = 'WCB'
-      } else if (typeId === 4) { // วัสดุวิทยาศาสตร์และการแพทย์
-        srType = 'WCE'
-      } else if (typeId === 5) { // ยาผลิต
-        srType = 'WCD'
-      } else if (typeId === 10) { // อื่นๆ
-        srType = 'WCF'
-      } else { // ยา
-        srType = 'WCA'
-      }
+      // if (typeId === 1) { // ยา
+      //   srType = 'WCA';
+      // } else if (typeId === 2) { //ไม่ใช่ยา
+      //   srType = 'WCC'
+      // } else if (typeId === 3) { // เคมีภัณฑ์
+      //   srType = 'WCB'
+      // } else if (typeId === 4) { // วัสดุวิทยาศาสตร์และการแพทย์
+      //   srType = 'WCE'
+      // } else if (typeId === 5) { // ยาผลิต
+      //   srType = 'WCD'
+      // } else if (typeId === 10) { // อื่นๆ
+      //   srType = 'WCF'
+      // } else { // ยา
+      //   srType = 'WCA'
+      // }
 
-      workingCode = await serialModel.getSerial(db, srType);
+      workingCode = await serialModel.getSerialGenerics(db, typeId);
     }
 
     let datas: any = {

@@ -10,7 +10,7 @@ export class SerialModel {
       .limit(1);
   }
 
-  async getSerial(knex: Knex, srType: string) {
+  async getSerial(knex: Knex, srType: any) {
 
     let serialInfo = await this.getSerialInfo(knex, srType);
     if (serialInfo.length) {
@@ -49,6 +49,39 @@ export class SerialModel {
     return knex('sys_serials')
       .increment('sr_no', 1)
       .where('sr_type', srType);
+  }
+
+  // ##############################################
+  async getSerialGenerics(knex: Knex, typeId: any) {
+
+    let serialInfo = await this.getSerialGenericInfo(knex, typeId);
+    if (serialInfo.length) {
+      let prefixNo = serialInfo[0].prefix_no;
+      let prefixName = serialInfo[0].prefix_name;
+      let newSerialNo = this.paddingNumber(prefixNo, 6);
+
+      let sr = prefixName + newSerialNo;
+
+      // update serial
+      await this.updateSerialGeneric(knex, typeId);
+      // return serial
+      return sr;
+
+    } else {
+      return '000000';
+    }
+  }
+
+  async updateSerialGeneric(knex: Knex, typeId: string) {
+    return knex('mm_generic_types')
+      .increment('prefix_no', 1)
+      .where('generic_type_id', typeId);
+  }
+
+  getSerialGenericInfo(knex: Knex, typeId: any) {
+    return knex('mm_generic_types as gt')
+      .where('gt.generic_type_id', typeId)
+      .limit(1);
   }
 
 }

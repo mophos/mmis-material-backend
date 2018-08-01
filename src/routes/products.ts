@@ -158,7 +158,7 @@ router.post('/fast-save', warp(async (req, res, next) => {
   let rsWorkingCode = await productModel.getWorkingCode(db, genericId);
   // console.log('1',workingCodeRuning);
 
-  let workingCodeRuning = '' + rsWorkingCode[0].count + 1
+  let workingCodeRuning = '' + (+rsWorkingCode[0].count + 1)
   console.log(workingCodeRuning);
 
   console.log('length', workingCodeRuning.length);
