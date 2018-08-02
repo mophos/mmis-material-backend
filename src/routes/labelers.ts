@@ -220,7 +220,6 @@ router.put('/', async (req, res, next) => {
   if (labeler.labelerName) {
     try {
       let checkCode =  await labelerModel.checkCode(db, labelerData.labeler_code);
-      console.log(checkCode);
       
       if(checkCode.length > 0 && labelerId !== checkCode[0].labeler_id) {
         res.send({ ok: false, error: 'มีรหัสผู้ประกอบการนี้แล้ว' }) ;
