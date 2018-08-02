@@ -59,7 +59,9 @@ export class LabelerModel {
   }
   checkCode(knex:Knex , labelerCode:any ){
     return knex('mm_labelers')
+    .select('labeler_id')
     .where('labeler_code',labelerCode);
+
   }
   saveDonators(knex: Knex, data: any) {
     return knex('wm_donators')
