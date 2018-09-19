@@ -411,12 +411,9 @@ router.get('/search-autocomplete', async (req, res, next) => {
   let generic_type_id = req.decoded.generic_type_id;
   let gids = [];
   let types = req.decoded.generic_type_id.split(',');
-  console.log(types)
   types.forEach(v => {
     gids.push(v);
   });
-  console.log(gids);
-
   try {
     let rs: any = await genericModel.searchAutoComplete(db, query, gids);
     if (rs[0].length) {

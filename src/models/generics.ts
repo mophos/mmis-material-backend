@@ -14,7 +14,7 @@ export class GenericsModel {
     }
   }
 
-  searchTotal(knex: Knex, query: any,groupId: any) {
+  searchTotal(knex: Knex, query: any, groupId: any) {
     let _query = `%${query}%`;
 
     return knex('mm_generics')
@@ -28,43 +28,43 @@ export class GenericsModel {
 
   search(knex: Knex, limit: number, offset: any, query: any, groupId: any) {
     let _query = `%${query}%`;
-    if(groupId){
+    if (groupId) {
       return knex('mm_generics as mg')
-      .select('mg.*', 'ac.account_name', 'd.dosage_name',
-        't.generic_type_name', 'u.unit_name as primary_unit_name')
-      // .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
-      .leftJoin('mm_generic_accounts as ac', 'ac.account_id', 'mg.account_id')
-      .leftJoin('mm_generic_dosages as d', 'd.dosage_id', 'mg.dosage_id')
-      .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
-      .leftJoin('mm_units as u', 'u.unit_id', 'mg.primary_unit_id')
-      .where('mg.mark_deleted', '<>', 'Y')
-      .whereIn('mg.generic_type_id', groupId)
-      .where(w => {
-        w.orWhere('mg.generic_name', 'like', _query)
-          .orWhere('mg.working_code', query)
-      })
-      .orderBy('mg.generic_name')
-      .limit(limit)
-      .offset(offset)
-    } else{
+        .select('mg.*', 'ac.account_name', 'd.dosage_name',
+          't.generic_type_name', 'u.unit_name as primary_unit_name')
+        // .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
+        .leftJoin('mm_generic_accounts as ac', 'ac.account_id', 'mg.account_id')
+        .leftJoin('mm_generic_dosages as d', 'd.dosage_id', 'mg.dosage_id')
+        .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
+        .leftJoin('mm_units as u', 'u.unit_id', 'mg.primary_unit_id')
+        .where('mg.mark_deleted', '<>', 'Y')
+        .whereIn('mg.generic_type_id', groupId)
+        .where(w => {
+          w.orWhere('mg.generic_name', 'like', _query)
+            .orWhere('mg.working_code', query)
+        })
+        .orderBy('mg.generic_name')
+        .limit(limit)
+        .offset(offset)
+    } else {
       return knex('mm_generics as mg')
-      .select('mg.*', 'ac.account_name', 'd.dosage_name',
-        't.generic_type_name', 'u.unit_name as primary_unit_name')
-      // .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
-      .leftJoin('mm_generic_accounts as ac', 'ac.account_id', 'mg.account_id')
-      .leftJoin('mm_generic_dosages as d', 'd.dosage_id', 'mg.dosage_id')
-      .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
-      .leftJoin('mm_units as u', 'u.unit_id', 'mg.primary_unit_id')
-      .where('mg.mark_deleted', '<>', 'Y')
-      .where(w => {
-        w.orWhere('mg.generic_name', 'like', _query)
-          .orWhere('mg.working_code', query)
-      })
-      .orderBy('mg.generic_name')
-      .limit(limit)
-      .offset(offset)
+        .select('mg.*', 'ac.account_name', 'd.dosage_name',
+          't.generic_type_name', 'u.unit_name as primary_unit_name')
+        // .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
+        .leftJoin('mm_generic_accounts as ac', 'ac.account_id', 'mg.account_id')
+        .leftJoin('mm_generic_dosages as d', 'd.dosage_id', 'mg.dosage_id')
+        .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
+        .leftJoin('mm_units as u', 'u.unit_id', 'mg.primary_unit_id')
+        .where('mg.mark_deleted', '<>', 'Y')
+        .where(w => {
+          w.orWhere('mg.generic_name', 'like', _query)
+            .orWhere('mg.working_code', query)
+        })
+        .orderBy('mg.generic_name')
+        .limit(limit)
+        .offset(offset)
     }
-    
+
   }
 
   getListByType(knex: Knex, limit: number, offset: number, typeId: any) {
@@ -128,8 +128,8 @@ export class GenericsModel {
   checkRemove(knex: Knex, genericId: string) {
     return knex('mm_products')
       .where('generic_id', genericId)
-      .where('mark_deleted','N')
-      .where('is_active','Y');
+      .where('mark_deleted', 'N')
+      .where('is_active', 'Y');
   }
 
   getTypes(knex: Knex) {
@@ -178,7 +178,7 @@ export class GenericsModel {
   searchAutoComplete(knex: Knex, query: any, generic_type_id: any) {
     let q_ = `${query}%`;
     let _q_ = `%${query}%`;
-    let sql =`SELECT
+    let sql = `SELECT
     DISTINCT *
       FROM
       (
@@ -193,6 +193,8 @@ export class GenericsModel {
             WHERE
               working_code = '${query}'
               and generic_type_id in (${generic_type_id})
+              and is_active = 'Y'
+              and mark_deleted = 'N'
           ) AS s
         UNION ALL
           SELECT
@@ -206,6 +208,8 @@ export class GenericsModel {
               WHERE
                 generic_name LIKE '${q_}'
                 and generic_type_id in (${generic_type_id})
+                and is_active = 'Y'
+               and mark_deleted = 'N'
               LIMIT 5
             ) AS s
           UNION ALL
@@ -222,6 +226,8 @@ export class GenericsModel {
                   OR keywords LIKE '${_q_}'
                   )
               and generic_type_id in (${generic_type_id})
+              and is_active = 'Y'
+              and mark_deleted = 'N'
                 ORDER BY
                   generic_name
                 LIMIT 10
