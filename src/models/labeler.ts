@@ -9,7 +9,7 @@ export class LabelerModel {
       .select('l.labeler_id', 'l.short_code', 'l.moph_labeler_id', 'l.labeler_name', 'l.nin', 'l.phone', 'ls.status_name', 'lt.type_name')
       .leftJoin('mm_labeler_status as ls', 'ls.status_id', 'l.labeler_status')
       .leftJoin('mm_labeler_types as lt', 'lt.type_id', 'l.labeler_type')
-      .where('l.is_deleted','N')
+      .where('l.is_deleted', 'N')
       .orderBy('l.labeler_id');
   }
 
@@ -25,7 +25,7 @@ export class LabelerModel {
       .leftJoin('mm_labeler_status as ls', 'ls.status_id', 'l.labeler_status')
       .leftJoin('mm_labeler_types as lt', 'lt.type_id', 'l.labeler_type')
       .where('l.labeler_name', 'like', _query)
-      .where('l.id_deleted','N')
+      .where('l.id_deleted', 'N')
       .orderBy('l.labeler_id');
   }
 
@@ -39,10 +39,10 @@ export class LabelerModel {
       .leftJoin('mm_labeler_types as lt', 'lt.type_id', 'l.labeler_type')
       .where(w => {
         w.where('l.labeler_name', 'like', _queryAll)
-          .orWhere('l.short_code', query)
+          .orWhere('l.short_code', 'like', _queryAll)
           .orWhere('l.nin', query)
       })
-      .where('l.is_deleted','N');
+      .where('l.is_deleted', 'N');
     if (type === 'M') {
       db.where('l.is_manufacturer', 'Y');
     } else {
@@ -57,10 +57,10 @@ export class LabelerModel {
   save(knex: Knex, labeler: ILabeler) {
     return knex('mm_labelers').insert(labeler, 'labeler_id');
   }
-  checkCode(knex:Knex , labelerCode:any ){
+  checkCode(knex: Knex, labelerCode: any) {
     return knex('mm_labelers')
-    .select('labeler_id')
-    .where('labeler_code',labelerCode);
+      .select('labeler_id')
+      .where('labeler_code', labelerCode);
 
   }
   saveDonators(knex: Knex, data: any) {
@@ -98,7 +98,7 @@ export class LabelerModel {
   remove(knex: Knex, labelerId: string) {
     return knex('mm_labelers')
       .where('labeler_id', labelerId)
-      .update('is_deleted','Y')
+      .update('is_deleted', 'Y')
   }
 
   saveBank(knex: Knex, data: any) {
