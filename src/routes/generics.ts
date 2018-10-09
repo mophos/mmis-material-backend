@@ -178,7 +178,7 @@ router.put('/:genericId', co(async (req, res, next) => {
   // let shortName = generics.shortName;
   let typeId = +generics.typeId;
   let typeOldId = +generics.typeOldId;
-
+  let groupEd = generics.groupEd;
   let groupId1 = generics.groupId1;
   let groupId2 = generics.groupId2;
   let groupId3 = generics.groupId3;
@@ -186,7 +186,7 @@ router.put('/:genericId', co(async (req, res, next) => {
   let dosageId = generics.dosageId;
   let pTypeId = generics.pTypeId;
   let description = generics.description;
-  let keyword = generics.keyword;
+  let keywords = generics.keywords;
   let drugAccountId = generics.drugAccountId;
   let primaryUnitId = generics.primaryUnitId;
   let planningMethod = generics.planningMethod;
@@ -234,6 +234,7 @@ router.put('/:genericId', co(async (req, res, next) => {
       working_code: workingCode,
       generic_name: genericName,
       generic_type_id: typeId,
+      group_ed: groupEd,
       group_code_1: groupId1,
       group_code_2: groupId2,
       group_code_3: groupId3,
@@ -241,7 +242,7 @@ router.put('/:genericId', co(async (req, res, next) => {
       dosage_id: dosageId,
       generic_hosp_id: pTypeId,
       description: description,
-      keyword: keyword,
+      keywords: keywords,
       account_id: drugAccountId,
       primary_unit_id: primaryUnitId,
       planning_method: planningMethod,
