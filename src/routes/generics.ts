@@ -74,6 +74,20 @@ router.get('/types', co(async (req, res, next) => {
 
 }));
 
+router.get('/search/dc24', co(async (req, res, next) => {
+  let db = req.db;
+
+  try {
+    let rs = await genericModel.getTypes(db);
+    res.send({ ok: true, rows: rs[0] });
+  } catch (error) {
+    res.send({ ok: false, error: error });
+  } finally {
+    db.destroy();
+  }
+
+}));
+
 router.get('/generic-type', co(async (req, res, next) => {
   let db = req.db;
 
