@@ -1,6 +1,6 @@
 import Knex = require('knex');
 import * as moment from 'moment';
-
+const request = require("request");
 export class GenericsModel {
 
   getTotalByType(knex: Knex, typeId: any) {
@@ -235,5 +235,30 @@ export class GenericsModel {
       ) AS a`
     return knex.raw(sql);
   }
+  searchDc24(q) {
+    return new Promise((resolve: any, reject: any) => {
+      var options = {
+        method: 'GET',
+        url: `http://nmpcd.moph.go.th/api/nmpcd/search/dc24?q=${q}`,
+        agentOptions: {
+          rejectUnauthorized: false
+        },
+        headers:
+        {
+          // 'postman-token': 'c63b4187-f395-a969-dd57-19018273670b',
+          'cache-control': 'no-cache',
+          'content-type': 'application/json'
+        },
+        json: true
+      };
 
+      request(options, function (error, response, body) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(body);
+        }
+      });
+    });
+  }
 }
