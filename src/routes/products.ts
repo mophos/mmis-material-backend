@@ -78,7 +78,7 @@ router.delete('/mark-deleted/:productId', warp(async (req, res, next) => {
   try {
     const rs = await productModel.checkQtyForMarkDeleted(db, productId);
     if (rs[0].qty > 0) {
-      res.send({ ok: false, error: 'ไม่สามารถลบรายการได้ เนื่องจากมียอดคงเหลือ หรือยอดจอง' }) ;
+      res.send({ ok: false, error: 'ไม่สามารถลบรายการได้ เนื่องจากมียอดคงเหลือ หรือยอดจอง' });
     } else {
       await productModel.markDeleted(db, productId);
       res.send({ ok: true });
@@ -161,11 +161,10 @@ router.post('/fast-save', warp(async (req, res, next) => {
   let workingCodeRuning = '' + (+rsWorkingCode[0].count + 1)
   console.log(workingCodeRuning);
 
-  console.log('length', workingCodeRuning.length);
   while (workingCodeRuning.length < 3) {
-    console.log('length-', workingCodeRuning.length);
+    // console.log('length-', workingCodeRuning.length);
     workingCodeRuning = '0' + workingCodeRuning;
-    console.log('string', workingCodeRuning);
+    // console.log('string', workingCodeRuning);
   }
 
   workingCode = rsWorkingCode[0].working_code + workingCodeRuning;
@@ -246,7 +245,7 @@ router.post('/', warp(async (req, res, next) => {
     }
 
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 }));
 
@@ -355,7 +354,7 @@ router.put('/:productId', warp(async (req, res, next) => {
     }
 
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 }));
 

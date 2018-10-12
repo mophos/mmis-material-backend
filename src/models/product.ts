@@ -257,10 +257,11 @@ export class ProductModel {
       })
       .where('product_id', productId);
   }
+
   getWorkingCode(knex: Knex, genericId: any) {
     return knex('mm_generics as mg')
-      .select(knex.raw('count(*) as count,mg.working_code'))
-      .join('mm_products as mp', 'mg.generic_id', 'mp.generic_id')
+      .select(knex.raw('count(mp.product_id) as count,mg.working_code'))
+      .leftJoin('mm_products as mp', 'mg.generic_id', 'mp.generic_id')
       .where('mg.generic_id', genericId)
   }
 
