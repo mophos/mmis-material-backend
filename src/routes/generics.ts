@@ -76,10 +76,14 @@ router.get('/types', co(async (req, res, next) => {
 
 router.get('/search/dc24', co(async (req, res, next) => {
   let db = req.db;
-
+  let q = req.query.q;
   try {
-    let rs = await genericModel.getTypes(db);
-    res.send({ ok: true, rows: rs[0] });
+    let rs: any = await genericModel.searchDc24(q);
+    if (rs.ok) {
+      res.send({ ok: true, rows: rs.rows });
+    } else {
+      res.send({ ok: false, rows: rs.error });
+    }
   } catch (error) {
     res.send({ ok: false, error: error });
   } finally {
@@ -111,6 +115,7 @@ router.post('/', async (req, res, next) => {
   let groupId = drugs.groupId;
   let dosageId = drugs.dosageId;
   let drugAccountId = drugs.drugAccountId;
+  let primaryUnitId = drugs.primaryUnitId;
   let workingCode: any;
   let genericId = moment().format('x');
 
@@ -147,7 +152,8 @@ router.post('/', async (req, res, next) => {
       generic_hosp_id: genericTypeId,
       group_id: groupId,
       dosage_id: dosageId,
-      account_id: drugAccountId
+      account_id: drugAccountId,
+      primary_unit_id: primaryUnitId
     }
 
 
@@ -165,7 +171,7 @@ router.post('/', async (req, res, next) => {
     }
 
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 
 });
@@ -269,7 +275,7 @@ router.put('/:genericId', co(async (req, res, next) => {
       db.destroy();
     }
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 }));
 
