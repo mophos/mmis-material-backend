@@ -22,11 +22,11 @@ export class UnitModel {
       .orderBy('unit_name');
   }
 
-  search(knex: Knex,query) {
+  search(knex: Knex, query) {
     let q = `%${query}%`
     return knex('mm_units')
       .where('is_deleted', 'N')
-      .where('unit_name','like',q)
+      .where('unit_name', 'like', q)
       .orderBy('unit_name');
   }
 
@@ -89,12 +89,18 @@ export class UnitModel {
       .where('unit_generic_id', unitGenericId);
   }
 
-  updateConversionCancelDelete(knex: Knex, unitProductId: any) {
+  updateConversionPlanning(knex: Knex, genericId: any, unitGenericId: any) {
+    return knex('mm_generics')
+      .update({ 'planning_unit_generic_id': unitGenericId })
+      .where('generic_id', genericId);
+  }
+
+  updateActive(knex: Knex, unitGenericId: any, status: any) {
     return knex('mm_unit_generics')
       .update({
-        is_deleted: 'N'
+        is_active: status
       })
-      .where('productId', unitProductId);
+      .where('unit_generic_id', unitGenericId);
   }
 
   checkConversionDuplicated(knex: Knex, genericId: any, fromUnitId: any, toUnitId: any, qty: any) {
@@ -115,16 +121,18 @@ export class UnitModel {
         generic_id: genericId,
         from_unit_id: fromUnitId,
         to_unit_id: toUnitId,
-        qty: qty
+        qty: qty,
+        is_deleted: 'N'
       })
       .whereNot('unit_generic_id', unitGenericId);
   }
 
   getConversionList(knex: Knex, genericId: any) {
     return knex('mm_unit_generics as ug')
-      .select('ug.*', 'uf.unit_name as from_unit_name', 'ut.unit_name as to_unit_name')
+      .select('ug.*', 'uf.unit_name as from_unit_name', 'ut.unit_name as to_unit_name', 'mg.planning_unit_generic_id', knex.raw(`if(mg.planning_unit_generic_id is null,'N','Y') as planning`))
       .innerJoin('mm_units as uf', 'uf.unit_id', 'ug.from_unit_id')
       .innerJoin('mm_units as ut', 'ut.unit_id', 'ug.to_unit_id')
+      .joinRaw('LEFT JOIN mm_generics mg ON ug.generic_id = mg.generic_id AND mg.planning_unit_generic_id = ug.unit_generic_id ')
       .where('ug.generic_id', genericId)
       .where('ug.is_deleted', 'N');
   }
@@ -132,7 +140,7 @@ export class UnitModel {
   removeConversion(knex: Knex, unitGenericId: any) {
     return knex('mm_unit_generics')
       .where('unit_generic_id', unitGenericId)
-      .update('is_deleted','Y');
+      .update('is_deleted', 'Y');
   }
 
   getGenericPrimaryUnit(knex: Knex, genericId: any) {

@@ -27,7 +27,7 @@ router.get('/search', co(async (req, res, next) => {
   const query = req.query.query;
 
   try {
-    const rows = await unitModel.search(db,query);
+    const rows = await unitModel.search(db, query);
     res.send({ ok: true, rows: rows });
   } catch (error) {
     res.send({ ok: false, error: error.message })
@@ -144,42 +144,42 @@ router.post('/', co(async (req, res, next) => {
     }
 
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 }));
 
-router.put('/:unitId', co(async (req, res, next) => {
-  const unitId = req.params.unitId;
-  const unitName = req.body.unitName;
-  const unitEng = req.body.unitEng;
-  const unitCode = req.body.unitCode;
-  const isActive = req.body.isActive;
-  const isPrimary = req.body.isPrimary;
+// router.put('/:unitId', co(async (req, res, next) => {
+//   const unitId = req.params.unitId;
+//   const unitName = req.body.unitName;
+//   const unitEng = req.body.unitEng;
+//   const unitCode = req.body.unitCode;
+//   const isActive = req.body.isActive;
+//   const isPrimary = req.body.isPrimary;
 
-  let db = req.db;
+//   let db = req.db;
 
-  if (unitId && unitName && unitCode) {
-    let datas: any = {
-      unit_name: unitName,
-      unit_code: unitCode,
-      unit_eng: unitEng,
-      is_active: isActive,
-      is_primary: isPrimary
-    }
+//   if (unitId && unitName && unitCode) {
+//     let datas: any = {
+//       unit_name: unitName,
+//       unit_code: unitCode,
+//       unit_eng: unitEng,
+//       is_active: isActive,
+//       is_primary: isPrimary
+//     }
 
-    try {
-      await unitModel.update(db, unitId, datas);
-      res.send({ ok: true });
-    } catch (error) {
-      res.send({ ok: false, error: error.message });
-    } finally {
-      db.destroy();
-    }
+//     try {
+//       await unitModel.update(db, unitId, datas);
+//       res.send({ ok: true });
+//     } catch (error) {
+//       res.send({ ok: false, error: error.message });
+//     } finally {
+//       db.destroy();
+//     }
 
-  } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
-  }
-}));
+//   } else {
+//     res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
+//   }
+// }));
 
 router.get('/detail/:unitId', co(async (req, res, next) => {
   let unitId = req.params.unitId;
@@ -253,14 +253,50 @@ router.post('/conversion/:genericId', co(async (req, res, next) => {
 
 }));
 
-router.put('/conversion/:unitGenericId/:genericId', co(async (req, res, next) => {
-  const unitGenericId = req.params.unitGenericId;
-  const genericId = req.params.genericId;
+router.put('/conversion/planning', co(async (req, res, next) => {
+  const unitGenericId = req.body.unitGenericId;
+  const genericId = req.body.genericId;
+
+  const db = req.db;
+
+  try {
+    const total = await unitModel.updateConversionPlanning(db, genericId, unitGenericId);
+    res.send({ ok: true });
+
+  } catch (error) {
+    res.send({ ok: false, error: error.message });
+  } finally {
+    db.destroy();
+  }
+
+}));
+
+router.put('/conversion/active', co(async (req, res, next) => {
+  const unitGenericId = req.body.unitGenericId;
+  const status = req.body.status;
+
+  const db = req.db;
+
+  try {
+    const total = await unitModel.updateActive(db, unitGenericId, status);
+    res.send({ ok: true });
+
+  } catch (error) {
+    res.send({ ok: false, error: error.message });
+  } finally {
+    db.destroy();
+  }
+
+}));
+
+router.put('/conversion', co(async (req, res, next) => {
+  const genericId = req.body.genericId;
+  const unitGenericId = req.body.unitGenericId;
   const fromUnitId = req.body.fromUnitId;
   const toUnitId = req.body.toUnitId;
   const qty = +req.body.qty;
-  const isActive = req.body.isActive;
-  const cost = req.body.cost;
+  const cost = +req.body.cost;
+  console.log('@@@@@', req.body);
 
   const db = req.db;
 
@@ -269,9 +305,10 @@ router.put('/conversion/:unitGenericId/:genericId', co(async (req, res, next) =>
       from_unit_id: fromUnitId,
       to_unit_id: toUnitId,
       qty: qty,
-      is_active: isActive,
       cost: cost
     }
+    console.log(data);
+
     const total = await unitModel.checkConversionDuplicatedUpdate(db, unitGenericId, genericId, fromUnitId, toUnitId, qty);
     if (total[0].total > 0) {
       res.send({ ok: false, error: 'รายการซ้ำ' });
@@ -280,6 +317,8 @@ router.put('/conversion/:unitGenericId/:genericId', co(async (req, res, next) =>
       res.send({ ok: true });
     }
   } catch (error) {
+    console.log(error);
+
     res.send({ ok: false, error: error.message });
   } finally {
     db.destroy();
