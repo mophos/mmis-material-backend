@@ -22,6 +22,7 @@ export class GenericsModel {
       .where(w => {
         w.orWhere('generic_name', 'like', _query)
           .orWhere('working_code', query)
+          .orWhere('keywords', 'like', _query)
       })
       .whereIn('generic_type_id', groupId);
   }
@@ -42,6 +43,7 @@ export class GenericsModel {
         .where(w => {
           w.orWhere('mg.generic_name', 'like', _query)
             .orWhere('mg.working_code', query)
+            .orWhere('mg.keywords', 'like', _query)
         })
         .orderBy('mg.generic_name')
         .limit(limit)
