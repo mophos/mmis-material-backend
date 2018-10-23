@@ -16,7 +16,24 @@ router.delete('/', warp(async (req, res, next) => {
   try {
     const rs = await productGroupModel.remove(db, productGroupId);
     if (rs) {
-      res.send({ ok: true }) ;
+      res.send({ ok: true });
+    } else {
+      res.send({ ok: false });
+    }
+  } catch (error) {
+    res.send({ ok: false, error: error.message });
+  } finally {
+    db.destroy();
+  }
+}));
+
+router.post('/return', warp(async (req, res, next) => {
+  let db = req.db;
+  const productGroupId = req.body.productGroupId;
+  try {
+    const rs = await productGroupModel.return(db, productGroupId);
+    if (rs) {
+      res.send({ ok: true });
     } else {
       res.send({ ok: false });
     }
@@ -29,8 +46,9 @@ router.delete('/', warp(async (req, res, next) => {
 
 router.get('/', warp(async (req, res, next) => {
   let db = req.db;
+  const deleted = req.query.deleted == 'false' ? false : true;
   try {
-    const rs = await productGroupModel.list(db);
+    const rs = await productGroupModel.list(db, deleted);
     res.send({ ok: true, rows: rs });
   } catch (error) {
     res.send({ ok: false, error: error.message });

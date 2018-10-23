@@ -1,5 +1,6 @@
 import Knex = require('knex');
 import * as moment from 'moment';
+import { WSAEDQUOT } from 'constants';
 export class ProductModel {
   list(knex: Knex, limit: number, offset: number, groupId: any) {
     return knex('mm_products as p')
@@ -44,9 +45,9 @@ export class ProductModel {
       .where('mark_deleted', 'N');
   }
 
-  search(knex: Knex, query: any, limit: number, offset: number, groupId: any) {
+  search(knex: Knex, query: any, limit: number, offset: number, groupId: any, deleted: any) {
     const _query = `%${query}%`;
-    return knex('mm_products as p')
+    let sql = knex('mm_products as p')
       .select('p.*', 'g.generic_name', 'g.working_code as generic_working_code', 'lm.labeler_name as m_labeler',
         'lv.labeler_name as v_labeler', 'u.unit_name as primary_unit_name')
       .innerJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
@@ -59,16 +60,19 @@ export class ProductModel {
           .orWhere('p.working_code', query)
           .orWhere('p.keywords', 'like', _query)
       })
-      .where('p.mark_deleted', 'N')
-      .whereIn('g.generic_type_id', groupId)
+    if (!deleted) {
+      sql.where('p.mark_deleted', 'N')
+    }
+    sql.whereIn('g.generic_type_id', groupId)
       .orderBy('p.product_name')
       .limit(limit)
       .offset(offset);
+    return sql;
   }
 
-  searchAll(knex: Knex, query: any, limit: number, offset: number) {
+  searchAll(knex: Knex, query: any, limit: number, offset: number, deleted: any) {
     const _query = `%${query}%`;
-    return knex('mm_products as p')
+    let sql = knex('mm_products as p')
       .select('p.*', 'g.generic_name', 'g.working_code as generic_working_code', 'lm.labeler_name as m_labeler',
         'lv.labeler_name as v_labeler', 'u.unit_name as primary_unit_name')
       .innerJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
@@ -81,15 +85,18 @@ export class ProductModel {
           .orWhere('p.keywords', 'like', _query)
           .orWhere('p.working_code', query)
       })
-      .where('p.mark_deleted', 'N')
-      .orderBy('p.product_name')
+    if (!deleted) {
+      sql.where('p.mark_deleted', 'N')
+    }
+    sql.orderBy('p.product_name')
       .limit(limit)
       .offset(offset);
+    return sql;
   }
 
-  searchTotal(knex: Knex, query: any, groupId: any) {
+  searchTotal(knex: Knex, query: any, groupId: any, deleted: any) {
     const _query = `%${query}%`;
-    return knex('mm_products as p')
+    let sql = knex('mm_products as p')
       .count('* as total')
       .innerJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
       .where(w => {
@@ -98,13 +105,16 @@ export class ProductModel {
           .orWhere('p.working_code', query)
           .orWhere('p.keywords', 'like', _query)
       })
-      .whereIn('product_group_id', groupId)
-      .where('p.mark_deleted', 'N');
+      .whereIn('product_group_id', groupId);
+    if (!deleted) {
+      sql.where('p.mark_deleted', 'N')
+    }
+    return sql;
   }
 
-  searchAllTotal(knex: Knex, query: any) {
+  searchAllTotal(knex: Knex, query: any, deleted) {
     const _query = `%${query}%`;
-    return knex('mm_products as p')
+    let sql = knex('mm_products as p')
       .count('* as total')
       .innerJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
       .where(w => {
@@ -113,7 +123,10 @@ export class ProductModel {
           .orWhere('p.working_code', query)
           .orWhere('p.keywords', 'like', _query)
       })
-      .where('p.mark_deleted', 'N');
+    if (!deleted) {
+      sql.where('p.mark_deleted', 'N')
+    }
+    return sql;
   }
 
   getProductGroups(knex: Knex, datas: any) {
@@ -243,6 +256,12 @@ export class ProductModel {
   markDeleted(knex: Knex, productId: any) {
     return knex('mm_products')
       .update({ mark_deleted: 'Y', is_active: 'N' })
+      .where('product_id', productId);
+  }
+
+  returnDeleted(knex: Knex, productId: any) {
+    return knex('mm_products')
+      .update({ mark_deleted: 'N', is_active: 'Y' })
       .where('product_id', productId);
   }
 

@@ -3,14 +3,17 @@ import * as moment from 'moment';
 import { ILabeler, IOrganizationStructure } from './model';
 
 export class LabelerModel {
-  list(knex: Knex) {
-
-    return knex('mm_labelers as l')
-      .select('l.labeler_id', 'l.short_code', 'l.moph_labeler_id', 'l.labeler_name', 'l.nin', 'l.phone', 'ls.status_name', 'lt.type_name')
+  list(knex: Knex, deleted: any) {
+    console.log(!deleted, deleted);
+    let sql = knex('mm_labelers as l')
+      .select('l.labeler_id', 'l.short_code', 'l.moph_labeler_id', 'l.labeler_name', 'l.nin', 'l.phone', 'ls.status_name', 'lt.type_name', 'l.is_deleted')
       .leftJoin('mm_labeler_status as ls', 'ls.status_id', 'l.labeler_status')
       .leftJoin('mm_labeler_types as lt', 'lt.type_id', 'l.labeler_type')
-      .where('l.is_deleted', 'N')
-      .orderBy('l.labeler_id');
+    if (deleted == false) {
+      sql.where('l.is_deleted', 'N');
+    }
+    sql.orderBy('l.labeler_name');
+    return sql;
   }
 
   getBank(knex: Knex, labelerId) {
@@ -99,6 +102,12 @@ export class LabelerModel {
     return knex('mm_labelers')
       .where('labeler_id', labelerId)
       .update('is_deleted', 'Y')
+  }
+
+  return(knex: Knex, labelerId: string) {
+    return knex('mm_labelers')
+      .where('labeler_id', labelerId)
+      .update('is_deleted', 'N')
   }
 
   saveBank(knex: Knex, data: any) {

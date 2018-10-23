@@ -49,17 +49,20 @@ router.post('/search', warp(async (req, res, next) => {
   const limit = +req.body.limit || 15;
   const offset = +req.body.offset || 0;
   let groupId = req.body.groupId;
+  let deleted = req.body.deleted;
   if (typeof groupId === 'string') {
     groupId = [groupId];
   }
+  console.log('deleted', deleted);
+
   try {
     if (groupId) {
-      const respTotal = await productModel.searchTotal(db, query, groupId);
-      const resp = await productModel.search(db, query, limit, offset, groupId);
+      const respTotal = await productModel.searchTotal(db, query, groupId, deleted);
+      const resp = await productModel.search(db, query, limit, offset, groupId, deleted);
       res.send({ ok: true, rows: resp, total: respTotal[0].total });
     } else {
-      const respTotal = await productModel.searchAllTotal(db, query);
-      const resp = await productModel.searchAll(db, query, limit, offset);
+      const respTotal = await productModel.searchAllTotal(db, query, deleted);
+      const resp = await productModel.searchAll(db, query, limit, offset, deleted);
       res.send({ ok: true, rows: resp, total: respTotal[0].total });
     }
   } catch (error) {
@@ -77,12 +80,31 @@ router.delete('/mark-deleted/:productId', warp(async (req, res, next) => {
 
   try {
     const rs = await productModel.checkQtyForMarkDeleted(db, productId);
+    console.log(rs);
+
     if (rs[0].qty > 0) {
       res.send({ ok: false, error: 'ไม่สามารถลบรายการได้ เนื่องจากมียอดคงเหลือ หรือยอดจอง' });
     } else {
       await productModel.markDeleted(db, productId);
       res.send({ ok: true });
     }
+  } catch (error) {
+    res.send({ ok: false, error: error.message });
+  } finally {
+    db.destroy();
+  }
+
+}));
+
+router.delete('/return-deleted/:productId', warp(async (req, res, next) => {
+
+  let db = req.db;
+  const productId = req.params.productId;
+
+  try {
+
+    await productModel.returnDeleted(db, productId);
+    res.send({ ok: true });
   } catch (error) {
     res.send({ ok: false, error: error.message });
   } finally {
