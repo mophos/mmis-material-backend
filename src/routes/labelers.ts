@@ -12,8 +12,25 @@ const labelerModel = new LabelerModel();
 
 router.get('/', (req, res, next) => {
   let db = req.db;
+  const deleted = req.query.deleted == 'false' ? false : true;
 
-  labelerModel.list(db)
+  labelerModel.list(db, deleted)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error.message })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.post('/return', (req, res, next) => {
+  let db = req.db;
+  const labelerId = req.body.labelerId;
+
+  labelerModel.return(db, labelerId)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
     })
@@ -173,7 +190,7 @@ router.post('/', async (req, res, next) => {
       db.destroy();
     }
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 });
 
@@ -219,21 +236,21 @@ router.put('/', async (req, res, next) => {
 
   if (labeler.labelerName) {
     try {
-      let checkCode =  await labelerModel.checkCode(db, labelerData.labeler_code);
-      if(checkCode.length > 0 && labelerId !== checkCode[0].labeler_id) {
-        res.send({ ok: false, error: 'มีรหัสผู้ประกอบการนี้แล้ว' }) ;
+      let checkCode = await labelerModel.checkCode(db, labelerData.labeler_code);
+      if (checkCode.length > 0 && labelerId !== checkCode[0].labeler_id) {
+        res.send({ ok: false, error: 'มีรหัสผู้ประกอบการนี้แล้ว' });
       } else {
-          await labelerModel.update(db, labelerId, labelerData);
-          await labelerModel.updateDonators(db, donatorsData.donator_name, donatorsData);
-          res.send({ ok: true })
+        await labelerModel.update(db, labelerId, labelerData);
+        await labelerModel.updateDonators(db, donatorsData.donator_name, donatorsData);
+        res.send({ ok: true })
       }
     } catch (error) {
       res.send({ ok: false, error: error.message })
     } finally {
       db.destroy();
-    } 
+    }
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 });
 
