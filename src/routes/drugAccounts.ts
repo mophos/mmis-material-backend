@@ -7,10 +7,10 @@ const router = express.Router();
 const drugAccountModel = new DrugAccountModel();
 
 router.get('/', (req, res, next) => {
-let btnD = req.query.btnD
+  let deleted = req.query.deleted == 'false' ? false : true;
   let db = req.db;
 
-  drugAccountModel.list(db,btnD)
+  drugAccountModel.list(db, deleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
     })
@@ -43,7 +43,7 @@ router.post('/', (req, res, next) => {
         db.destroy();
       });
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 });
 
@@ -69,7 +69,7 @@ router.put('/:drugAccountId', (req, res, next) => {
         db.destroy();
       });
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 });
 

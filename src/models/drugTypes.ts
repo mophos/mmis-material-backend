@@ -2,16 +2,17 @@ import Knex = require('knex');
 import * as moment from 'moment';
 
 export class DrugTypeModel {
-  list(knex: Knex,btnD:any = 'N') {
+  list(knex: Knex, deleted: boolean) {
     let query = knex('mm_generic_accounts')
-    if(btnD == 'N') query.where('is_deleted','N')
-    .where('is_deleted','N')
+    if (!deleted) {
+      query.where('is_deleted', 'N')
+    }
     return query
   }
-  reRemove(knex: Knex, Id: string) {
+  returnRemove(knex: Knex, Id: string) {
     return knex('mm_generic_accounts')
       .where('account_id', Id)
-      .update('is_deleted','N');
+      .update('is_deleted', 'N');
   }
   save(knex: Knex, datas: any) {
     return knex('mm_generic_accounts')
@@ -32,7 +33,7 @@ export class DrugTypeModel {
   remove(knex: Knex, typeId: string) {
     return knex('mm_generic_accounts')
       .where('account_id', typeId)
-      .update('is_deleted','Y')
+      .update('is_deleted', 'Y')
   }
 
 }
