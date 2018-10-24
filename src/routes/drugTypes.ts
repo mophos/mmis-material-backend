@@ -8,11 +8,11 @@ const router = express.Router();
 
 const drugTypeModel = new DrugTypeModel();
 
-router.get('/:id', (req, res, next) => {
-let id = req.params.id
+router.get('/', (req, res, next) => {
+let btnD = req.query.btnD
   let db = req.db;
 
-  drugTypeModel.list(db,id)
+  drugTypeModel.list(db,btnD)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
     })

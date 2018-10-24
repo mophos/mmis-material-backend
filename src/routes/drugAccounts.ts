@@ -6,8 +6,8 @@ const router = express.Router();
 
 const drugAccountModel = new DrugAccountModel();
 
-router.get('/:btnD', (req, res, next) => {
-let btnD = req.params.btnD
+router.get('/', (req, res, next) => {
+let btnD = req.query.btnD
   let db = req.db;
 
   drugAccountModel.list(db,btnD)

@@ -8,10 +8,10 @@ const router = express.Router();
 
 const typeProduct = new typeProductModel();
 
-router.get('/:btnD', (req, res, next) => {
+router.get('/', (req, res, next) => {
 
   let db = req.db;
-const btnD = req.params.btnD
+const btnD = req.query.btnD
   typeProduct.list(db,btnD)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
