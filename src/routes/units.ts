@@ -11,9 +11,9 @@ const productModel = new ProductModel();
 
 router.get('/', co(async (req, res, next) => {
   const db = req.db;
-
+  const deleted = req.query.deleted == 'false' ? false : true;
   try {
-    const rows = await unitModel.list(db);
+    const rows = await unitModel.list(db, deleted);
     res.send({ ok: true, rows: rows });
   } catch (error) {
     res.send({ ok: false, error: error.message })
@@ -24,10 +24,10 @@ router.get('/', co(async (req, res, next) => {
 
 router.get('/search', co(async (req, res, next) => {
   const db = req.db;
-  const query = req.query.query;
-
+  const query = req.query.query || '';
+  const deleted = req.query.deleted == 'false' ? false : true;
   try {
-    const rows = await unitModel.search(db, query);
+    const rows = await unitModel.search(db, query, deleted);
     res.send({ ok: true, rows: rows });
   } catch (error) {
     res.send({ ok: false, error: error.message })
@@ -202,6 +202,21 @@ router.delete('/:unitId', co(async (req, res, next) => {
 
   try {
     await unitModel.remove(db, unitId);
+    res.send({ ok: true });
+  } catch (error) {
+    res.send({ ok: false, error: error.message });
+  } finally {
+    db.destroy();
+  }
+
+}));
+
+router.post('/return', co(async (req, res, next) => {
+  let unitId = req.body.unitId;
+  let db = req.db;
+
+  try {
+    await unitModel.return(db, unitId);
     res.send({ ok: true });
   } catch (error) {
     res.send({ ok: false, error: error.message });
