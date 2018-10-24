@@ -17,14 +17,15 @@ router.post('/list-type', co(async (req, res, next) => {
   let limit = req.body.limit;
   let offset = req.body.offset;
   let typeId = req.body.typeId;
+  let deleted = req.body.deleted;
   if (typeof typeId === 'string') {
     typeId = [typeId];
   }
 
   try {
 
-    let rs = await genericModel.getListByType(db, limit, offset, typeId);
-    let rsTotal = await genericModel.getTotalByType(db, typeId);
+    let rs = await genericModel.getListByType(db, limit, offset, typeId, deleted);
+    let rsTotal = await genericModel.getTotalByType(db, typeId, deleted);
     res.send({ ok: true, rows: rs, total: rsTotal[0].total });
 
   } catch (error) {
@@ -39,16 +40,16 @@ router.post('/search', co(async (req, res, next) => {
   let db = req.db;
   let limit = req.body.limit;
   let offset = req.body.offset;
-  let query = req.body.query;
+  let query = req.body.query || '';
   let groupId = req.body.groupId;
+  let deleted = req.body.deleted;
   if (typeof groupId === 'string') {
     groupId = [groupId];
   }
-  console.log(req.body);
-
   try {
-    let rs = await genericModel.search(db, limit, offset, query, groupId);
-    let rsTotal = await genericModel.searchTotal(db, query, groupId);
+
+    let rs = await genericModel.search(db, limit, offset, query, groupId, deleted);
+    let rsTotal = await genericModel.searchTotal(db, query, groupId, deleted);
     res.send({ ok: true, rows: rs, total: rsTotal[0].total });
   } catch (error) {
     console.log(error);
@@ -295,13 +296,11 @@ router.get('/detail/:genericId', (req, res, next) => {
     });
 });
 
-router.delete('/:genericId', async (req, res, next) => {
-  let genericId = req.params.genericId;
+router.delete('/', async (req, res, next) => {
+  let genericId = req.query.genericId;
   let db = req.db;
   try {
     const cr = await genericModel.checkRemove(db, genericId);
-    console.log(cr);
-
     if (cr.length) {
       res.send({ ok: false, error: 'product' });
     } else {
@@ -310,6 +309,24 @@ router.delete('/:genericId', async (req, res, next) => {
           res.send({ ok: true });
         })
     }
+  } catch (error) {
+    res.send({ ok: false, error: error })
+  } finally {
+    db.destroy();
+  }
+
+});
+
+router.post('return/', async (req, res, next) => {
+  let genericId = req.body.genericId;
+  let db = req.db;
+  try {
+
+    genericModel.return(db, genericId)
+      .then((results: any) => {
+        res.send({ ok: true });
+      })
+
   } catch (error) {
     res.send({ ok: false, error: error })
   } finally {
