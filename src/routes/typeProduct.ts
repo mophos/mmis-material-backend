@@ -11,8 +11,8 @@ const typeProduct = new typeProductModel();
 router.get('/', (req, res, next) => {
 
   let db = req.db;
-
-  typeProduct.list(db)
+const btnD = req.query.btnD
+  typeProduct.list(db,btnD)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
     })
@@ -23,7 +23,21 @@ router.get('/', (req, res, next) => {
       db.destroy();
     });
 });
+router.delete('/re-deleted', (req, res, next) => {
+  let typeId = req.query.id;
+  let db = req.db;
 
+  typeProduct.reRemove(db, typeId)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
 router.post('/', (req, res, next) => {
   let typeName = req.body.typeName;
   let prefixName = req.body.prefixName;
