@@ -2,16 +2,19 @@ import Knex = require('knex');
 import * as moment from 'moment';
 
 export class DrugDosageModel {
-  listAll(knex: Knex) {
-    return knex('mm_generic_dosages')
-      .where('is_deleted', 'N')
-      .orderBy('dosage_name');
+  listAll(knex: Knex, deleted) {
+    let sql = knex('mm_generic_dosages')
+    if (!deleted) {
+      sql.where('is_deleted', 'N')
+    }
+    sql.orderBy('dosage_name');
+    return sql;
   }
 
   list(knex: Knex) {
     return knex('mm_generic_dosages')
       .where('is_deleted', 'N')
-      .where('is_active','Y')
+      .where('is_active', 'Y')
       .orderBy('dosage_name');
   }
 
@@ -35,6 +38,12 @@ export class DrugDosageModel {
     return knex('mm_generic_dosages')
       .where('dosage_id', dosageId)
       .update('is_deleted', 'Y')
+  }
+
+  returnRemove(knex: Knex, dosageId: string) {
+    return knex('mm_generic_dosages')
+      .where('dosage_id', dosageId)
+      .update('is_deleted', 'N')
   }
 
 }

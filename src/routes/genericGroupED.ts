@@ -16,7 +16,24 @@ router.delete('/', warp(async (req, res, next) => {
   try {
     const rs = await genericGroupEDRouteModel.remove(db, genericGroupEDId);
     if (rs) {
-      res.send({ ok: true }) ;
+      res.send({ ok: true });
+    } else {
+      res.send({ ok: false });
+    }
+  } catch (error) {
+    res.send({ ok: false, error: error.message });
+  } finally {
+    db.destroy();
+  }
+}));
+
+router.post('/return', warp(async (req, res, next) => {
+  let db = req.db;
+  const genericGroupEDId = req.body.genericGroupEDId;
+  try {
+    const rs = await genericGroupEDRouteModel.returnRemove(db, genericGroupEDId);
+    if (rs) {
+      res.send({ ok: true });
     } else {
       res.send({ ok: false });
     }
@@ -29,8 +46,9 @@ router.delete('/', warp(async (req, res, next) => {
 
 router.get('/', warp(async (req, res, next) => {
   let db = req.db;
+  const deleted = req.query.deleted == 'false' ? false : true;
   try {
-    const rs = await genericGroupEDRouteModel.list(db);
+    const rs = await genericGroupEDRouteModel.list(db, deleted);
     res.send({ ok: true, rows: rs });
   } catch (error) {
     res.send({ ok: false, error: error.message });

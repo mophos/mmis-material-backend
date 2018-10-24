@@ -26,8 +26,8 @@ router.get('/', (req, res, next) => {
 
 router.get('/all', (req, res, next) => {
   let db = req.db;
-
-  dosageModel.listAll(db)
+  const deleted = req.query.deleted == 'false' ? false : true;
+  dosageModel.listAll(db, deleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
     })
@@ -60,7 +60,7 @@ router.post('/', (req, res, next) => {
         db.destroy();
       });
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 });
 
@@ -86,7 +86,7 @@ router.put('/:dosageId', (req, res, next) => {
         db.destroy();
       });
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 });
 
@@ -94,12 +94,12 @@ router.post('/isactive', (req, res, next) => {
   let db = req.db;
   let id = req.body.id;
   let isActive = req.body.isActive;
-  console.log(id,isActive,'55555');
-  
+  console.log(id, isActive, '55555');
+
   let is_active = {
-    is_active:isActive
+    is_active: isActive
   }
-  dosageModel.isactive(db,id,is_active)
+  dosageModel.isactive(db, id, is_active)
     .then((results: any) => {
       res.send({ ok: true });
     })
@@ -116,6 +116,22 @@ router.delete('/:dosageId', (req, res, next) => {
   let db = req.db;
 
   dosageModel.remove(db, dosageId)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.post('/return', (req, res, next) => {
+  let dosageId = req.body.dosageId;
+  let db = req.db;
+
+  dosageModel.returnRemove(db, dosageId)
     .then((results: any) => {
       res.send({ ok: true })
     })
