@@ -80,7 +80,7 @@ export class UnitModel {
     return knex('mm_units')
       .where('unit_id', unitId)
       .update({
-        is_deleted: 'Y'
+        'is_deleted': 'Y'
       });
   }
 
@@ -88,7 +88,7 @@ export class UnitModel {
     return knex('mm_units')
       .where('unit_id', unitId)
       .update({
-        is_deleted: 'N'
+        'is_deleted': 'N'
       });
   }
 
