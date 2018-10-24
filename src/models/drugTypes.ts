@@ -2,11 +2,17 @@ import Knex = require('knex');
 import * as moment from 'moment';
 
 export class DrugTypeModel {
-  list(knex: Knex) {
-    return knex('mm_generic_accounts')
+  list(knex: Knex,btnD:any = 'N') {
+    let query = knex('mm_generic_accounts')
+    if(btnD == 'N') query.where('is_deleted','N')
     .where('is_deleted','N')
+    return query
   }
-
+  reRemove(knex: Knex, Id: string) {
+    return knex('mm_generic_accounts')
+      .where('account_id', Id)
+      .update('is_deleted','N');
+  }
   save(knex: Knex, datas: any) {
     return knex('mm_generic_accounts')
       .insert(datas);

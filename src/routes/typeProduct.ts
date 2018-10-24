@@ -23,8 +23,8 @@ const btnD = req.params.btnD
       db.destroy();
     });
 });
-router.delete('/re-deleted/:typeId', (req, res, next) => {
-  let typeId = req.params.typeId;
+router.delete('/re-deleted', (req, res, next) => {
+  let typeId = req.query.id;
   let db = req.db;
 
   typeProduct.reRemove(db, typeId)

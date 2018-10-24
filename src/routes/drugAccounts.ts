@@ -88,8 +88,8 @@ router.get('/detail/:drugAccountId', (req, res, next) => {
       db.destroy();
     });
 });
-router.delete('/re-deleted/:drugAccountId', (req, res, next) => {
-  let drugAccountId = req.params.drugAccountId;
+router.delete('/re-deleted', (req, res, next) => {
+  let drugAccountId = req.query.id;
   let db = req.db;
 
   drugAccountModel.reRemove(db, drugAccountId)
