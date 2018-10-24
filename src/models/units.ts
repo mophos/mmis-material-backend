@@ -16,18 +16,24 @@ export class UnitModel {
       .orderBy('unit_name');
   }
 
-  list(knex: Knex) {
-    return knex('mm_units')
-      .where('is_deleted', 'N')
-      .orderBy('unit_name');
+  list(knex: Knex, deleted) {
+    let sql = knex('mm_units')
+    if (!deleted) {
+      sql.where('is_deleted', 'N')
+    }
+    sql.orderBy('unit_name');
+    return sql;
   }
 
-  search(knex: Knex, query) {
+  search(knex: Knex, query, deleted) {
     let q = `%${query}%`
-    return knex('mm_units')
-      .where('is_deleted', 'N')
-      .where('unit_name', 'like', q)
+    let sql = knex('mm_units')
+    if (!deleted) {
+      sql.where('is_deleted', 'N')
+    }
+    sql.where('unit_name', 'like', q)
       .orderBy('unit_name');
+    return sql;
   }
 
   listActive(knex: Knex) {
@@ -75,6 +81,14 @@ export class UnitModel {
       .where('unit_id', unitId)
       .update({
         is_deleted: 'Y'
+      });
+  }
+
+  return(knex: Knex, unitId: string) {
+    return knex('mm_units')
+      .where('unit_id', unitId)
+      .update({
+        is_deleted: 'N'
       });
   }
 
