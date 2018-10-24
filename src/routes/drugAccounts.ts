@@ -6,11 +6,11 @@ const router = express.Router();
 
 const drugAccountModel = new DrugAccountModel();
 
-router.get('/', (req, res, next) => {
-
+router.get('/:btnD', (req, res, next) => {
+let btnD = req.params.btnD
   let db = req.db;
 
-  drugAccountModel.list(db)
+  drugAccountModel.list(db,btnD)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
     })
@@ -88,7 +88,21 @@ router.get('/detail/:drugAccountId', (req, res, next) => {
       db.destroy();
     });
 });
+router.delete('/re-deleted/:drugAccountId', (req, res, next) => {
+  let drugAccountId = req.params.drugAccountId;
+  let db = req.db;
 
+  drugAccountModel.reRemove(db, drugAccountId)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
 router.delete('/:drugAccountId', (req, res, next) => {
   let drugAccountId = req.params.drugAccountId;
   let db = req.db;
