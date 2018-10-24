@@ -148,38 +148,38 @@ router.post('/', co(async (req, res, next) => {
   }
 }));
 
-// router.put('/:unitId', co(async (req, res, next) => {
-//   const unitId = req.params.unitId;
-//   const unitName = req.body.unitName;
-//   const unitEng = req.body.unitEng;
-//   const unitCode = req.body.unitCode;
-//   const isActive = req.body.isActive;
-//   const isPrimary = req.body.isPrimary;
+router.put('/:unitId', co(async (req, res, next) => {
+  const unitId = req.params.unitId;
+  const unitName = req.body.unitName;
+  const unitEng = req.body.unitEng;
+  const unitCode = req.body.unitCode;
+  const isActive = req.body.isActive;
+  const isPrimary = req.body.isPrimary;
 
-//   let db = req.db;
+  let db = req.db;
 
-//   if (unitId && unitName && unitCode) {
-//     let datas: any = {
-//       unit_name: unitName,
-//       unit_code: unitCode,
-//       unit_eng: unitEng,
-//       is_active: isActive,
-//       is_primary: isPrimary
-//     }
+  if (unitId && unitName && unitCode) {
+    let datas: any = {
+      unit_name: unitName,
+      unit_code: unitCode,
+      unit_eng: unitEng,
+      is_active: isActive,
+      is_primary: isPrimary
+    }
 
-//     try {
-//       await unitModel.update(db, unitId, datas);
-//       res.send({ ok: true });
-//     } catch (error) {
-//       res.send({ ok: false, error: error.message });
-//     } finally {
-//       db.destroy();
-//     }
+    try {
+      await unitModel.update(db, unitId, datas);
+      res.send({ ok: true });
+    } catch (error) {
+      res.send({ ok: false, error: error.message });
+    } finally {
+      db.destroy();
+    }
 
-//   } else {
-//     res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
-//   }
-// }));
+  } else {
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
+  }
+}));
 
 router.get('/detail/:unitId', co(async (req, res, next) => {
   let unitId = req.params.unitId;
@@ -216,8 +216,12 @@ router.post('/return', co(async (req, res, next) => {
   let db = req.db;
 
   try {
-    await unitModel.return(db, unitId);
-    res.send({ ok: true });
+    let rs = await unitModel.return(db, unitId);
+    if (rs) {
+      res.send({ ok: true });
+    } else {
+      res.send({ ok: false });
+    }
   } catch (error) {
     res.send({ ok: false, error: error.message });
   } finally {
