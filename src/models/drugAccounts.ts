@@ -2,9 +2,11 @@ import Knex = require('knex');
 import * as moment from 'moment';
 
 export class DrugAccountModel {
-  list(knex: Knex,btnD: any = 'N') {
-   let query =  knex('mm_generic_hosp')
-    if(btnD === 'N') query.where('is_deleted','N')
+  list(knex: Knex, deleted: boolean) {
+    let query = knex('mm_generic_hosp')
+    if (!deleted) {
+      query.where('is_deleted', 'N')
+    }
     return query
   }
 
@@ -26,12 +28,12 @@ export class DrugAccountModel {
   reRemove(knex: Knex, Id: string) {
     return knex('mm_generic_hosp')
       .where('id', Id)
-      .update('is_deleted','N');
+      .update('is_deleted', 'N');
   }
   remove(knex: Knex, Id: string) {
     return knex('mm_generic_hosp')
       .where('id', Id)
-      .update('is_deleted','Y');
+      .update('is_deleted', 'Y');
   }
 
 }

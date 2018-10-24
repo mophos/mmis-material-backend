@@ -9,10 +9,10 @@ const router = express.Router();
 const drugTypeModel = new DrugTypeModel();
 
 router.get('/', (req, res, next) => {
-let btnD = req.query.btnD
+  let deleted = req.query.deleted == 'false' ? false : true;
   let db = req.db;
 
-  drugTypeModel.list(db,btnD)
+  drugTypeModel.list(db, deleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
     })
@@ -23,11 +23,11 @@ let btnD = req.query.btnD
       db.destroy();
     });
 });
-router.delete('/re-deleted', (req, res, next) => {
-  let typeId = req.query.id;
+router.post('/return', (req, res, next) => {
+  let typeId = req.body.id;
   let db = req.db;
 
-  drugTypeModel.reRemove(db, typeId)
+  drugTypeModel.returnRemove(db, typeId)
     .then((results: any) => {
       res.send({ ok: true })
     })
@@ -59,7 +59,7 @@ router.post('/', (req, res, next) => {
         db.destroy();
       });
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 });
 
@@ -85,7 +85,7 @@ router.put('/:typeId', (req, res, next) => {
         db.destroy();
       });
   } else {
-    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' }) ;
+    res.send({ ok: false, error: 'ข้อมูลไม่สมบูรณ์' });
   }
 });
 
