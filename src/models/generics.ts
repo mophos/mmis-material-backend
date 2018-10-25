@@ -168,11 +168,13 @@ export class GenericsModel {
 
   getTypes(knex: Knex) {
     return knex('mm_generic_types')
-      .where('is_actived', 'Y');
+      .where('is_actived', 'Y')
+      .where('is_deleted', 'N');
   }
 
   getGenericType(knex: Knex) {
     return knex('mm_generic_hosp')
+      .where('is_deleted', 'N')
   }
 
   savePlanningInventory(knex: Knex, data: any) {

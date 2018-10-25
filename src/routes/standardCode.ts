@@ -140,21 +140,7 @@ router.get('/type-product', async (req, res, next) => {
   }
 });
 
-router.get('/generic-supplies-types', (req, res, next) => {
 
-  let db = req.db;
-
-  stdCode.getGenericSuppliesTypes(db)
-    .then((results: any) => {
-      res.send({ ok: true, rows: results });
-    })
-    .catch(error => {
-      res.send({ ok: false, error: error })
-    })
-    .finally(() => {
-      db.destroy();
-    });
-});
 
 router.get('/generic-groups/1', (req, res, next) => {
 
