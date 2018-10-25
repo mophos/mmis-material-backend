@@ -42,12 +42,16 @@ export class StandardCodeModel {
 
   getGenericGroups1(knex: Knex) {
     return knex('mm_generic_group_1')
+      .where('is_deleted', 'N')
+      .where('is_actived', 'Y')
       .orderBy('group_code_1');
   }
 
   getGenericGroups2(knex: Knex, groupCode1 = '') {
     return knex('mm_generic_group_2')
       .where('group_code_1', 'like', `%${groupCode1}%`)
+      .where('is_deleted', 'N')
+      .where('is_actived', 'Y')
       .orderBy('group_code_2');
   }
 
@@ -55,6 +59,8 @@ export class StandardCodeModel {
     return knex('mm_generic_group_3')
       .where('group_code_1', groupCode1)
       .where('group_code_2', groupCode2)
+      .where('is_deleted', 'N')
+      .where('is_actived', 'Y')
       .orderBy('group_code_3');
   }
 
@@ -63,30 +69,35 @@ export class StandardCodeModel {
       .where('group_code_1', groupCode1)
       .where('group_code_2', groupCode2)
       .where('group_code_3', groupCode3)
+      .where('is_deleted', 'N')
+      .where('is_actived', 'Y')
       .orderBy('group_code_4');
   }
 
   getGenericTypes(knex: Knex) {
     return knex('mm_generic_types')
-      .orderBy('generic_type_name');
+      .orderBy('generic_type_name')
+      .where('is_deleted', 'N')
+      .where('is_actived', 'Y');
   }
 
   getGenericHospType(knex: Knex) {
-    return knex('mm_generic_hosp');
+    return knex('mm_generic_hosp')
+      .where('is_deleted', 'N');
   }
 
   getGenericDosage(knex: Knex) {
     return knex('mm_generic_dosages')
+      .where('is_deleted', 'N')
+      .where('is_active', 'Y')
       .orderBy('dosage_name');
   }
 
-  getGenericSuppliesTypes(knex: Knex) {
-    return knex('mm_generic_supplies_types')
-      .orderBy('type_name');
-  }
 
   getWarehouseList(knex: Knex) {
     return knex('wm_warehouses')
+      .where('is_deleted', 'N')
+      .where('is_actived', 'Y')
       .orderBy('warehouse_name');
   }
 
@@ -103,15 +114,19 @@ export class StandardCodeModel {
   }
 
   getGenericAccounts(knex: Knex) {
-    return knex('mm_generic_accounts');
+    return knex('mm_generic_accounts')
+      .where('is_deleted', 'N');
   }
 
   getBitTypes(knex: Knex) {
-    return knex('l_bid_type');
+    return knex('l_bid_type')
+      .where('isactive', '1');
   }
 
   getProductType(knex: Knex) {
-    return knex('mm_generic_hosp');
+    return knex('mm_generic_hosp')
+      .where('is_deleted', 'N');
+
   }
 
 }
