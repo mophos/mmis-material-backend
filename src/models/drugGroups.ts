@@ -63,9 +63,11 @@ export class DrugGroupModel {
   }
 
   // ############## GROUP 1 #####################
-  group1(knex: Knex, isActived = 'Y') {
+  group1(knex: Knex, isActived = 'Y', isDeleted = 'false') {
     let sql = knex('mm_generic_group_1')
-      .where('is_deleted', 'N')
+    if(isDeleted == 'false') { 
+      sql.where('is_deleted', 'N')
+    }
     if (isActived != 'A') {
       sql.where('is_actived', isActived)
     }
@@ -95,15 +97,22 @@ export class DrugGroupModel {
       .where('group_code_1', groupCode1)
       .update('is_deleted', 'Y')
   }
+  returnRemove1(knex: Knex, groupCode1: string) {
+    return knex('mm_generic_group_1')
+      .where('group_code_1', groupCode1)
+      .update('is_deleted', 'N')
+  }
   // ################################################
   // ############## GROUP 2 #####################
-  group2(knex: Knex, isActived = 'Y') {
+  group2(knex: Knex, isActived = 'Y', isDeleted = 'false') {
     let sql = knex('mm_generic_group_2 as g2')
-      .select('g2.is_actived', 'g1.group_code_1', 'g2.group_code_2', 'g1.group_name_1', 'g2.group_name_2', knex.raw('concat(g1.group_name_1,g2.group_name_2)  as full_name'), knex.raw('concat(g1.group_code_1,g2.group_code_2)  as full_code'))
+      .select('g2.is_deleted','g2.is_actived', 'g1.group_code_1', 'g2.group_code_2', 'g1.group_name_1', 'g2.group_name_2', knex.raw('concat(g1.group_name_1,g2.group_name_2)  as full_name'), knex.raw('concat(g1.group_code_1,g2.group_code_2)  as full_code'))
       .join('mm_generic_group_1 as g1', 'g1.group_code_1', 'g2.group_code_1')
       .where('g1.is_deleted', 'N')
-      .where('g2.is_deleted', 'N')
       .where('g1.is_actived', 'Y')
+    if (isDeleted == 'false') {
+      sql.where('g2.is_deleted', 'N')
+    }
     if (isActived != 'A') {
       sql.where('g2.is_actived', isActived)
     }
@@ -137,17 +146,25 @@ export class DrugGroupModel {
       .where('group_code_2', groupCode2)
       .update('is_deleted', 'Y')
   }
+  returnRemove2(knex: Knex, groupCode1: string, groupCode2: string) {
+    return knex('mm_generic_group_2')
+      .where('group_code_1', groupCode1)
+      .where('group_code_2', groupCode2)
+      .update('is_deleted', 'N')
+  }
   // ############## GROUP 3 #####################
-  group3(knex: Knex, isActived = 'Y') {
+  group3(knex: Knex, isActived = 'Y', isDeleted = 'false') {
     let sql = knex('mm_generic_group_3 as g3')
-      .select('g3.is_actived', 'g1.group_code_1', 'g2.group_code_2', 'g3.group_code_3', 'g1.group_name_1', 'g2.group_name_2', 'g3.group_name_3', knex.raw('concat(g1.group_name_1,g2.group_name_2,g3.group_name_3)  as full_name'), knex.raw('concat(g1.group_code_1,g2.group_code_2,g3.group_code_3)  as full_code'))
+      .select('g3.is_deleted','g3.is_actived', 'g1.group_code_1', 'g2.group_code_2', 'g3.group_code_3', 'g1.group_name_1', 'g2.group_name_2', 'g3.group_name_3', knex.raw('concat(g1.group_name_1,g2.group_name_2,g3.group_name_3)  as full_name'), knex.raw('concat(g1.group_code_1,g2.group_code_2,g3.group_code_3)  as full_code'))
       .joinRaw('join mm_generic_group_2 as g2 on g2.group_code_2=g3.group_code_2 and g3.group_code_1 = g2.group_code_1')
       .join('mm_generic_group_1 as g1', 'g1.group_code_1', 'g2.group_code_1')
       .where('g1.is_deleted', 'N')
       .where('g2.is_deleted', 'N')
-      .where('g3.is_deleted', 'N')
       .where('g1.is_actived', 'Y')
       .where('g2.is_actived', 'Y')
+    if(isDeleted == 'false'){
+      sql.where('g3.is_deleted', 'N')
+    }
     if (isActived != 'A') {
       sql.where('g3.is_actived', isActived)
     }
@@ -185,20 +202,29 @@ export class DrugGroupModel {
       .where('group_code_3', groupCode3)
       .update('is_deleted', 'Y')
   }
+  returnRemove3(knex: Knex, groupCode1: string, groupCode2: string, groupCode3: string, ) {
+    return knex('mm_generic_group_3')
+      .where('group_code_1', groupCode1)
+      .where('group_code_2', groupCode2)
+      .where('group_code_3', groupCode3)
+      .update('is_deleted', 'N')
+  }
   // ############## GROUP 4 #####################
-  group4(knex: Knex, isActived = 'Y') {
+  group4(knex: Knex, isActived = 'Y', isDeleted = 'false') {
     let sql = knex('mm_generic_group_4 as g4')
-      .select('g4.is_actived', 'g1.group_code_1', 'g2.group_code_2', 'g3.group_code_3', 'g4.group_code_4', 'g1.group_name_1', 'g2.group_name_2', 'g3.group_name_3', 'g4.group_name_4', knex.raw('concat(g1.group_name_1,g2.group_name_2,g3.group_name_3,g4.group_name_4)  as full_name'), knex.raw('concat(g1.group_code_1,g2.group_code_2,g3.group_code_3,g4.group_code_4)  as full_code'))
+      .select('g4.is_deleted','g4.is_actived', 'g1.group_code_1', 'g2.group_code_2', 'g3.group_code_3', 'g4.group_code_4', 'g1.group_name_1', 'g2.group_name_2', 'g3.group_name_3', 'g4.group_name_4', knex.raw('concat(g1.group_name_1,g2.group_name_2,g3.group_name_3,g4.group_name_4)  as full_name'), knex.raw('concat(g1.group_code_1,g2.group_code_2,g3.group_code_3,g4.group_code_4)  as full_code'))
       .joinRaw('join mm_generic_group_3 as g3 on g4.group_code_3=g3.group_code_3 and g4.group_code_2=g3.group_code_2 and g3.group_code_1 = g4.group_code_1')
       .joinRaw('join mm_generic_group_2 as g2 on g2.group_code_2=g4.group_code_2 and g4.group_code_1 = g2.group_code_1')
       .join('mm_generic_group_1 as g1', 'g1.group_code_1', 'g2.group_code_1')
       .where('g1.is_deleted', 'N')
       .where('g2.is_deleted', 'N')
       .where('g3.is_deleted', 'N')
-      .where('g4.is_deleted', 'N')
       .where('g1.is_actived', 'Y')
       .where('g2.is_actived', 'Y')
       .where('g3.is_actived', 'Y')
+    if (isDeleted == 'false') {
+      sql.where('g4.is_deleted', 'N')
+    }
     if (isActived != 'A') {
       sql.where('g4.is_actived', isActived)
     }
@@ -241,5 +267,13 @@ export class DrugGroupModel {
       .where('group_code_3', groupCode3)
       .where('group_code_4', groupCode4)
       .update('is_deleted', 'Y')
+  }
+  returnRemove4(knex: Knex, groupCode1: string, groupCode2: string, groupCode3: string, groupCode4: string ) {
+    return knex('mm_generic_group_4')
+      .where('group_code_1', groupCode1)
+      .where('group_code_2', groupCode2)
+      .where('group_code_3', groupCode3)
+      .where('group_code_4', groupCode4)
+      .update('is_deleted', 'N')
   }
 }

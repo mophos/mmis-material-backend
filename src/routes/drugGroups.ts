@@ -42,7 +42,8 @@ router.get('/', (req, res, next) => {
 router.get('/group/1', (req, res, next) => {
   let db = req.db;
   let isActived = req.query.isActived;
-  groupModel.group1(db, isActived)
+  let isDeleted = req.query.isDeleted;  
+  groupModel.group1(db, isActived, isDeleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
     })
@@ -131,12 +132,28 @@ router.delete('/group1', (req, res, next) => {
       db.destroy();
     });
 });
+router.post('/return1', (req, res, next) => {
+  let id = req.body.id;
+  let db = req.db;
+
+  groupModel.returnRemove1(db, id.group_code_1)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
 // ################################################
 // ############## GROUP 2 #####################
 router.get('/group/2', (req, res, next) => {
   let db = req.db;
   let isActived = req.query.isActived;
-  groupModel.group2(db, isActived)
+  let isDeleted = req.query.isDeleted;  
+  groupModel.group2(db, isActived, isDeleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
     })
@@ -230,12 +247,28 @@ router.delete('/group2', (req, res, next) => {
       db.destroy();
     });
 });
+router.post('/return2', (req, res, next) => {
+  let id = req.body.id;
+  let db = req.db;
+
+  groupModel.returnRemove2(db, id.group_code_1, id.group_code_2)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
 // ################################################
 // ############## GROUP 3 #####################
 router.get('/group/3', (req, res, next) => {
   let db = req.db;
   let isActived = req.query.isActived;
-  groupModel.group3(db, isActived)
+  let isDeleted = req.query.isDeleted;  
+  groupModel.group3(db, isActived, isDeleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
     })
@@ -333,12 +366,28 @@ router.delete('/group3', (req, res, next) => {
       db.destroy();
     });
 });
+router.post('/return3', (req, res, next) => {
+  let id = req.body.id;
+  let db = req.db;
+
+  groupModel.returnRemove3(db, id.group_code_1, id.group_code_2, id.group_code_3)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
 // ################################################
 // ############## GROUP 4 #####################
 router.get('/group/4', (req, res, next) => {
   let db = req.db;
   let isActived = req.query.isActived;
-  groupModel.group4(db, isActived)
+  let isDeleted = req.query.isDeleted;  
+  groupModel.group4(db, isActived, isDeleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
     })
@@ -431,6 +480,21 @@ router.delete('/group4', (req, res, next) => {
   let db = req.db;
 
   groupModel.removeGroup4(db, groupCode1, groupCode2, groupCode3, groupCode4)
+    .then((results: any) => {
+      res.send({ ok: true })
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+router.post('/return4', (req, res, next) => {
+  let id = req.body.id;
+  let db = req.db;
+
+  groupModel.returnRemove4(db, id.group_code_1, id.group_code_2, id.group_code_3, id.group_code_4)
     .then((results: any) => {
       res.send({ ok: true })
     })
