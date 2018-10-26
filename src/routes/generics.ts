@@ -304,9 +304,12 @@ router.delete('/', async (req, res, next) => {
     if (cr.length) {
       res.send({ ok: false, error: 'product' });
     } else {
-      genericModel.remove(db, genericId)
+      await genericModel.remove(db, genericId)
         .then((results: any) => {
           res.send({ ok: true });
+        })
+        .catch((err)=>{
+          res.send({ ok: false, error: err.message })
         })
     }
   } catch (error) {
@@ -322,9 +325,12 @@ router.post('/return', async (req, res, next) => {
   let db = req.db;
   try {
 
-    genericModel.return(db, genericId)
+    await genericModel.return(db, genericId)
       .then((results: any) => {
         res.send({ ok: true });
+      })
+      .catch((err)=>{
+        res.send({ ok: false, error: err.message })
       })
 
   } catch (error) {
