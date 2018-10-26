@@ -317,7 +317,7 @@ router.delete('/', async (req, res, next) => {
 
 });
 
-router.post('return/', async (req, res, next) => {
+router.post('/return', async (req, res, next) => {
   let genericId = req.body.genericId;
   let db = req.db;
   try {
