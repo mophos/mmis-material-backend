@@ -102,9 +102,16 @@ router.delete('/return-deleted/:productId', warp(async (req, res, next) => {
   const productId = req.params.productId;
 
   try {
-
-    await productModel.returnDeleted(db, productId);
-    res.send({ ok: true });
+    let rs:any = await productModel.checkReturnDeleted(db, productId)
+    console.log(rs[0]);
+    
+    if(rs[0].mark_deleted == 'N' && rs[0].is_active == 'Y'){
+      await productModel.returnDeleted(db, productId);
+      res.send({ ok: true });
+    } else {
+      res.send({ ok: false, error: 'ไม่สามารถเรียกคืนได้เนื่องจาก '+ rs[0].working_code + '-'+ rs[0].generic_name + ' ถูกลบหรือปิดใช้งานอยู่'});
+    }
+    
   } catch (error) {
     res.send({ ok: false, error: error.message });
   } finally {
