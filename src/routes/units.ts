@@ -308,14 +308,14 @@ router.put('/conversion/active', co(async (req, res, next) => {
 
 }));
 
-router.put('/conversion', co(async (req, res, next) => {
+router.put('/update/Conversion', co(async (req, res, next) => {
   const genericId = req.body.genericId;
   const unitGenericId = req.body.unitGenericId;
   const fromUnitId = req.body.fromUnitId;
   const toUnitId = req.body.toUnitId;
   const qty = +req.body.qty;
   const cost = +req.body.cost;
-  console.log('@@@@@', req.body);
+  console.log('@@@@@', genericId);
 
   const db = req.db;
 

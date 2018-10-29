@@ -321,7 +321,12 @@ export class ProductModel {
       .update({ mark_deleted: 'Y', is_active: 'N' })
       .where('product_id', productId);
   }
-
+  checkReturnDeleted(knex: Knex, productId: any){
+    return knex('mm_products as mp')
+      .select('mg.*')
+      .leftJoin('mm_generics as mg','mg.generic_id','mp.generic_id')
+      .where('mp.product_id',productId)
+  }
   returnDeleted(knex: Knex, productId: any) {
     return knex('mm_products')
       .update({ mark_deleted: 'N', is_active: 'Y' })
