@@ -39,7 +39,7 @@ export class GenericsModel {
     return sql;
   }
 
-  search(knex: Knex, limit: number, offset: any, query: any, groupId: any, deleted: boolean) {
+  search(knex: Knex, limit: number, offset: any, query: any, groupId: any, deleted: boolean, sort: any) {
     let _query = `%${query}%`;
     if (groupId) {
       let sql = knex('mm_generics as mg')
@@ -58,8 +58,23 @@ export class GenericsModel {
       if (!deleted) {
         sql.where('mg.mark_deleted', 'N');
       }
-      sql.orderBy('mg.generic_name')
-        .limit(limit)
+      if (sort.by) {
+        let reverse = sort.reverse ? 'DESC' : 'ASC';
+        if (sort.by === 'generic_name') {
+          sql.orderBy('mg.generic_name', reverse)
+        } else if (sort.by === 'working_code') {
+          sql.orderBy('mg.working_code', reverse)
+        } else if (sort.by === 'account_name') {
+          sql.orderBy('ac.account_name', reverse)
+        } else if (sort.by === 'primary_unit_name') {
+          sql.orderBy('u.unit_name', reverse)
+        } else if (sort.by === 'generic_type_name') {
+          sql.orderBy('t.generic_type_name', reverse)
+        }
+      } else {
+        sql.orderBy('mg.generic_name')
+      }
+      sql.limit(limit)
         .offset(offset)
       return sql;
     } else {
@@ -78,15 +93,30 @@ export class GenericsModel {
         w.orWhere('mg.generic_name', 'like', _query)
           .orWhere('mg.working_code', query)
       })
-        .orderBy('mg.generic_name')
-        .limit(limit)
+      if (sort.by) {
+        let reverse = sort.reverse ? 'DESC' : 'ASC';
+        if (sort.by === 'generic_name') {
+          sql.orderBy('mg.generic_name', reverse)
+        } else if (sort.by === 'working_code') {
+          sql.orderBy('mg.working_code', reverse)
+        } else if (sort.by === 'account_name') {
+          sql.orderBy('ac.account_name', reverse)
+        } else if (sort.by === 'primary_unit_name') {
+          sql.orderBy('u.unit_name', reverse)
+        } else if (sort.by === 'generic_type_name') {
+          sql.orderBy('t.generic_type_name', reverse)
+        }
+      } else {
+        sql.orderBy('mg.generic_name')
+      }
+      sql.limit(limit)
         .offset(offset)
       return sql;
     }
 
   }
 
-  getListByType(knex: Knex, limit: number, offset: number, typeId: any, deleted) {
+  getListByType(knex: Knex, limit: number, offset: number, typeId: any, deleted, sort: any) {
     let sql = null;
     if (typeId) {
       let sql = knex('mm_generics as mg')
@@ -101,8 +131,23 @@ export class GenericsModel {
         sql.where('mg.mark_deleted', 'N')
       }
       sql.whereIn('mg.generic_type_id', typeId)
-        .orderBy('mg.generic_name')
-        .limit(limit)
+      if (sort.by) {
+        let reverse = sort.reverse ? 'DESC' : 'ASC';
+        if (sort.by === 'generic_name') {
+          sql.orderBy('mg.generic_name', reverse)
+        } else if (sort.by === 'working_code') {
+          sql.orderBy('mg.working_code', reverse)
+        } else if (sort.by === 'account_name') {
+          sql.orderBy('ac.account_name', reverse)
+        } else if (sort.by === 'primary_unit_name') {
+          sql.orderBy('u.unit_name', reverse)
+        } else if (sort.by === 'generic_type_name') {
+          sql.orderBy('t.generic_type_name', reverse)
+        }
+      } else {
+        sql.orderBy('mg.generic_name')
+      }
+      sql.limit(limit)
         .offset(offset);
       return sql;
 
@@ -118,8 +163,23 @@ export class GenericsModel {
       if (!deleted) {
         sql.where('mg.mark_deleted', 'N')
       }
-      sql.orderBy('mg.generic_name')
-        .limit(limit)
+      if (sort.by) {
+        let reverse = sort.reverse ? 'DESC' : 'ASC';
+        if (sort.by === 'generic_name') {
+          sql.orderBy('mg.generic_name', reverse)
+        } else if (sort.by === 'working_code') {
+          sql.orderBy('mg.working_code', reverse)
+        } else if (sort.by === 'account_name') {
+          sql.orderBy('ac.account_name', reverse)
+        } else if (sort.by === 'primary_unit_name') {
+          sql.orderBy('u.unit_name', reverse)
+        } else if (sort.by === 'generic_type_name') {
+          sql.orderBy('t.generic_type_name', reverse)
+        }
+      } else {
+        sql.orderBy('mg.generic_name')
+      }
+      sql.limit(limit)
         .offset(offset);
       return sql;
     }

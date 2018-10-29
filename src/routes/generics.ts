@@ -18,13 +18,14 @@ router.post('/list-type', co(async (req, res, next) => {
   let offset = req.body.offset;
   let typeId = req.body.typeId;
   let deleted = req.body.deleted;
+  let sort = req.body.sort;
   if (typeof typeId === 'string') {
     typeId = [typeId];
   }
 
   try {
 
-    let rs = await genericModel.getListByType(db, limit, offset, typeId, deleted);
+    let rs = await genericModel.getListByType(db, limit, offset, typeId, deleted, sort);
     let rsTotal = await genericModel.getTotalByType(db, typeId, deleted);
     res.send({ ok: true, rows: rs, total: rsTotal[0].total });
 
@@ -43,12 +44,13 @@ router.post('/search', co(async (req, res, next) => {
   let query = req.body.query || '';
   let groupId = req.body.groupId;
   let deleted = req.body.deleted;
+  let sort = req.body.sort;
   if (typeof groupId === 'string') {
     groupId = [groupId];
   }
   try {
 
-    let rs = await genericModel.search(db, limit, offset, query, groupId, deleted);
+    let rs = await genericModel.search(db, limit, offset, query, groupId, deleted, sort);
     let rsTotal = await genericModel.searchTotal(db, query, groupId, deleted);
     res.send({ ok: true, rows: rs, total: rsTotal[0].total });
   } catch (error) {
