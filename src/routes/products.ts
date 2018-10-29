@@ -18,6 +18,7 @@ router.post('/', warp(async (req, res, next) => {
   let limit = +req.body.limit || 15;
   let offset = +req.body.offset || 0;
   let groupId = req.body.groupId;
+  let sort = req.body.sort;
 
   if (typeof groupId === 'string') {
     groupId = [groupId];
@@ -26,11 +27,11 @@ router.post('/', warp(async (req, res, next) => {
   try {
     if (groupId) {
       let rsTotal = await productModel.totalProducts(db, groupId);
-      const resp = await productModel.list(db, limit, offset, groupId);
+      const resp = await productModel.list(db, limit, offset, groupId, sort);
       res.send({ ok: true, rows: resp, total: rsTotal[0].total });
     } else {
       let rsTotal = await productModel.totalAllProducts(db);
-      const resp = await productModel.listAll(db, limit, offset);
+      const resp = await productModel.listAll(db, limit, offset, sort);
       res.send({ ok: true, rows: resp, total: rsTotal[0].total });
     }
 
@@ -50,19 +51,18 @@ router.post('/search', warp(async (req, res, next) => {
   const offset = +req.body.offset || 0;
   let groupId = req.body.groupId;
   let deleted = req.body.deleted;
+  let sort = req.body.sort;
   if (typeof groupId === 'string') {
     groupId = [groupId];
   }
-  console.log('deleted', deleted);
-
   try {
     if (groupId) {
       const respTotal = await productModel.searchTotal(db, query, groupId, deleted);
-      const resp = await productModel.search(db, query, limit, offset, groupId, deleted);
+      const resp = await productModel.search(db, query, limit, offset, groupId, deleted, sort);
       res.send({ ok: true, rows: resp, total: respTotal[0].total });
     } else {
       const respTotal = await productModel.searchAllTotal(db, query, deleted);
-      const resp = await productModel.searchAll(db, query, limit, offset, deleted);
+      const resp = await productModel.searchAll(db, query, limit, offset, deleted, sort);
       res.send({ ok: true, rows: resp, total: respTotal[0].total });
     }
   } catch (error) {

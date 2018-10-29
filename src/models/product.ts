@@ -2,8 +2,8 @@ import Knex = require('knex');
 import * as moment from 'moment';
 import { WSAEDQUOT } from 'constants';
 export class ProductModel {
-  list(knex: Knex, limit: number, offset: number, groupId: any) {
-    return knex('mm_products as p')
+  list(knex: Knex, limit: number, offset: number, groupId: any, sort: any) {
+    let sql = knex('mm_products as p')
       .select('p.*', 'g.working_code as generic_working_code', 'g.generic_name', 'lm.labeler_name as m_labeler',
         'lv.labeler_name as v_labeler', 'u.unit_name as primary_unit_name')
       .leftJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
@@ -12,13 +12,30 @@ export class ProductModel {
       .leftJoin('mm_units as u', 'u.unit_id', 'p.primary_unit_id')
       .where('p.mark_deleted', 'N')
       .whereIn('g.generic_type_id', groupId)
-      .orderBy('p.product_name')
-      .limit(limit)
+    if (sort.by) {
+      let reverse = sort.reverse ? 'DESC' : 'ASC';
+      if (sort.by === 'product_name') {
+        // sql += ` order by pc.purchase_order_number ${reverse} `;
+        sql.orderBy('p.product_name', reverse)
+      } else if (sort.by === 'generic_name') {
+        sql.orderBy('g.generic_name', reverse)
+      } else if (sort.by === 'primary_unit_name') {
+        sql.orderBy('u.unit_name', reverse)
+      } else if (sort.by === 'm_labeler') {
+        sql.orderBy('lm.labeler_name', reverse)
+      } else if (sort.by === 'v_labeler') {
+        sql.orderBy('lv.labeler_name', reverse)
+      }
+    } else {
+      sql.orderBy('p.product_name')
+    }
+    sql.limit(limit)
       .offset(offset);
+    return sql;
   }
 
-  listAll(knex: Knex, limit: number, offset: number) {
-    return knex('mm_products as p')
+  listAll(knex: Knex, limit: number, offset: number, sort: any) {
+    let sql = knex('mm_products as p')
       .select('p.*', 'g.working_code as generic_working_code', 'g.generic_name', 'lm.labeler_name as m_labeler',
         'lv.labeler_name as v_labeler', 'u.unit_name as primary_unit_name')
       .leftJoin('mm_generics as g', 'g.generic_id', 'p.generic_id')
@@ -26,8 +43,24 @@ export class ProductModel {
       .leftJoin('mm_labelers as lv', 'lv.labeler_id', 'p.v_labeler_id')
       .leftJoin('mm_units as u', 'u.unit_id', 'p.primary_unit_id')
       .where('p.mark_deleted', 'N')
-      .orderBy('p.product_name')
-      .limit(limit)
+    if (sort.by) {
+      let reverse = sort.reverse ? 'DESC' : 'ASC';
+      if (sort.by === 'product_name') {
+        // sql += ` order by pc.purchase_order_number ${reverse} `;
+        sql.orderBy('p.product_name', reverse)
+      } else if (sort.by === 'generic_name') {
+        sql.orderBy('g.generic_name', reverse)
+      } else if (sort.by === 'primary_unit_name') {
+        sql.orderBy('u.unit_name', reverse)
+      } else if (sort.by === 'm_labeler') {
+        sql.orderBy('lm.labeler_name', reverse)
+      } else if (sort.by === 'v_labeler') {
+        sql.orderBy('lv.labeler_name', reverse)
+      }
+    } else {
+      sql.orderBy('p.product_name')
+    }
+    sql.limit(limit)
       .offset(offset);
   }
 
@@ -45,7 +78,7 @@ export class ProductModel {
       .where('mark_deleted', 'N');
   }
 
-  search(knex: Knex, query: any, limit: number, offset: number, groupId: any, deleted: any) {
+  search(knex: Knex, query: any, limit: number, offset: number, groupId: any, deleted: any, sort: any) {
     const _query = `%${query}%`;
     let sql = knex('mm_products as p')
       .select('p.*', 'g.generic_name', 'g.working_code as generic_working_code', 'lm.labeler_name as m_labeler',
@@ -64,13 +97,28 @@ export class ProductModel {
       sql.where('p.mark_deleted', 'N')
     }
     sql.whereIn('g.generic_type_id', groupId)
-      .orderBy('p.product_name')
-      .limit(limit)
+    if (sort.by) {
+      let reverse = sort.reverse ? 'DESC' : 'ASC';
+      if (sort.by === 'product_name') {
+        sql.orderBy('p.product_name', reverse)
+      } else if (sort.by === 'generic_name') {
+        sql.orderBy('g.generic_name', reverse)
+      } else if (sort.by === 'primary_unit_name') {
+        sql.orderBy('u.unit_name', reverse)
+      } else if (sort.by === 'm_labeler') {
+        sql.orderBy('lm.labeler_name', reverse)
+      } else if (sort.by === 'v_labeler') {
+        sql.orderBy('lv.labeler_name', reverse)
+      }
+    } else {
+      sql.orderBy('p.product_name')
+    }
+    sql.limit(limit)
       .offset(offset);
     return sql;
   }
 
-  searchAll(knex: Knex, query: any, limit: number, offset: number, deleted: any) {
+  searchAll(knex: Knex, query: any, limit: number, offset: number, deleted: any, sort: any) {
     const _query = `%${query}%`;
     let sql = knex('mm_products as p')
       .select('p.*', 'g.generic_name', 'g.working_code as generic_working_code', 'lm.labeler_name as m_labeler',
@@ -88,8 +136,23 @@ export class ProductModel {
     if (!deleted) {
       sql.where('p.mark_deleted', 'N')
     }
-    sql.orderBy('p.product_name')
-      .limit(limit)
+    if (sort.by) {
+      let reverse = sort.reverse ? 'DESC' : 'ASC';
+      if (sort.by === 'product_name') {
+        sql.orderBy('p.product_name', reverse)
+      } else if (sort.by === 'generic_name') {
+        sql.orderBy('g.generic_name', reverse)
+      } else if (sort.by === 'primary_unit_name') {
+        sql.orderBy('u.unit_name', reverse)
+      } else if (sort.by === 'm_labeler') {
+        sql.orderBy('lm.labeler_name', reverse)
+      } else if (sort.by === 'v_labeler') {
+        sql.orderBy('lv.labeler_name', reverse)
+      }
+    } else {
+      sql.orderBy('p.product_name')
+    }
+    sql.limit(limit)
       .offset(offset);
     return sql;
   }
