@@ -115,8 +115,8 @@ router.post('/', async (req, res, next) => {
   let genericName = drugs.genericName;
   let typeId = +drugs.typeId;
   let genericTypeId = +drugs.genericTypeId;
-  let groupId = drugs.groupId;
-  let dosageId = drugs.dosageId;
+  // let groupId = drugs.groupId;
+  // let dosageId = drugs.dosageId;
   let drugAccountId = drugs.drugAccountId;
   let primaryUnitId = drugs.primaryUnitId;
   let workingCode: any;
@@ -152,9 +152,9 @@ router.post('/', async (req, res, next) => {
       generic_name: genericName,
       working_code: workingCode,
       generic_type_id: typeId,
-      generic_hosp_id: genericTypeId,
-      group_id: groupId,
-      dosage_id: dosageId,
+      // generic_hosp_id: genericTypeId,
+      // group_id: groupId,
+      // dosage_id: dosageId,
       account_id: drugAccountId,
       primary_unit_id: primaryUnitId
     }
@@ -310,7 +310,7 @@ router.delete('/', async (req, res, next) => {
         .then((results: any) => {
           res.send({ ok: true });
         })
-        .catch((err)=>{
+        .catch((err) => {
           res.send({ ok: false, error: err.message })
         })
     }
@@ -331,7 +331,7 @@ router.post('/return', async (req, res, next) => {
       .then((results: any) => {
         res.send({ ok: true });
       })
-      .catch((err)=>{
+      .catch((err) => {
         res.send({ ok: false, error: err.message })
       })
 
