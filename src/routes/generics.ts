@@ -212,7 +212,7 @@ router.put('/:genericId', co(async (req, res, next) => {
   let purchasingMethod = generics.purchasingMethod;
   let planningUnitGenericId = generics.planningUnitGenericId;
   let workingCode = generics.workingCode;
-
+  let minmaxGroupId = generics.minmaxGroupId
   let db = req.db;
 
   if (genericId && genericName && typeId && primaryUnitId) {
@@ -266,7 +266,8 @@ router.put('/:genericId', co(async (req, res, next) => {
       is_active: isActive,
       is_planning: isPlanning,
       purchasing_method: purchasingMethod,
-      planning_unit_generic_id: planningUnitGenericId
+      planning_unit_generic_id: planningUnitGenericId,
+      minmax_group_id: minmaxGroupId
     }
 
     try {
