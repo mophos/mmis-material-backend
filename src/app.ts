@@ -41,6 +41,8 @@ import productGroups from './routes/productGroups'
 import stdRoute from './routes/standardCode';
 import genericGroupEDRoute from './routes/genericGroupED';
 import minMaxGroups from './routes/minmax-groups';
+import mappingsRoute from './routes/mappings';
+
 const app: express.Express = express();
 
 //view engine setup
@@ -136,6 +138,7 @@ app.use('/users', checkAuth, userRoute);
 app.use('/product-groups', checkAuth, productGroups);
 app.use('/generic-group-ed', checkAuth, genericGroupEDRoute);
 app.use('/minmax-groups', checkAuth, minMaxGroups);
+app.use('/mappings', checkAuth, mappingsRoute);
 
 app.use('/', indexRoute);
 
