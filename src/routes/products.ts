@@ -102,16 +102,16 @@ router.delete('/return-deleted/:productId', warp(async (req, res, next) => {
   const productId = req.params.productId;
 
   try {
-    let rs:any = await productModel.checkReturnDeleted(db, productId)
+    let rs: any = await productModel.checkReturnDeleted(db, productId)
     console.log(rs[0]);
-    
-    if(rs[0].mark_deleted == 'N' && rs[0].is_active == 'Y'){
+
+    if (rs[0].mark_deleted == 'N' && rs[0].is_active == 'Y') {
       await productModel.returnDeleted(db, productId);
       res.send({ ok: true });
     } else {
-      res.send({ ok: false, error: 'ไม่สามารถเรียกคืนได้เนื่องจาก '+ rs[0].working_code + '-'+ rs[0].generic_name + ' ถูกลบหรือปิดใช้งานอยู่'});
+      res.send({ ok: false, error: 'ไม่สามารถเรียกคืนได้เนื่องจาก ' + rs[0].working_code + '-' + rs[0].generic_name + ' ถูกลบหรือปิดใช้งานอยู่' });
     }
-    
+
   } catch (error) {
     res.send({ ok: false, error: error.message });
   } finally {
@@ -233,6 +233,7 @@ router.post('/', warp(async (req, res, next) => {
   const pickingRuleId = req.body.pickingRuleId;
   const isActive = req.body.isActive;
   const isLotControl = req.body.isLotControl;
+  const isExpiredControl = req.body.isExpiredControl;
   const description = req.body.description;
   const purchaseUnitId = req.body.purchaseUnitId;
   const issueUnitId = req.body.issueUnitId;
@@ -254,6 +255,7 @@ router.post('/', warp(async (req, res, next) => {
       picking_rule_id: pickingRuleId,
       is_active: isActive,
       is_lot_control: isLotControl,
+      is_expired_control: isExpiredControl,
       description: description,
       purchase_unit_id: purchaseUnitId,
       purchase_cost: purchasePrice,
@@ -291,6 +293,7 @@ router.put('/:productId', warp(async (req, res, next) => {
   let pickingRuleId = req.body.pickingRuleId;
   let isActive = req.body.isActive;
   let isLotControl = req.body.isLotControl;
+  let isExpiredControl = req.body.isExpiredControl;
   let description = req.body.description;
   let purchaseUnitId = req.body.purchaseUnitId;
   let issueUnitId = req.body.issueUnitId;
@@ -355,6 +358,7 @@ router.put('/:productId', warp(async (req, res, next) => {
       picking_rule_id: pickingRuleId,
       is_active: isActive,
       is_lot_control: isLotControl,
+      is_expired_control: isExpiredControl,
       description: description,
       purchase_unit_id: purchaseUnitId,
       purchase_cost: purchasePrice,

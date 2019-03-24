@@ -4,9 +4,8 @@ import { ILabeler, IOrganizationStructure } from './model';
 
 export class LabelerModel {
   list(knex: Knex, deleted: any) {
-    console.log(!deleted, deleted);
     let sql = knex('mm_labelers as l')
-      .select('l.labeler_id', 'l.short_code', 'l.moph_labeler_id', 'l.labeler_name', 'l.nin', 'l.phone', 'ls.status_name', 'lt.type_name', 'l.is_deleted')
+      .select('l.labeler_id', 'l.short_code', 'l.labeler_code', 'l.moph_labeler_id', 'l.labeler_name', 'l.nin', 'l.phone', 'ls.status_name', 'lt.type_name', 'l.is_deleted')
       .leftJoin('mm_labeler_status as ls', 'ls.status_id', 'l.labeler_status')
       .leftJoin('mm_labeler_types as lt', 'lt.type_id', 'l.labeler_type')
     if (deleted == false) {
@@ -37,11 +36,12 @@ export class LabelerModel {
     let _queryAll = `%${query}%`;
 
     let db = knex('mm_labelers as l')
-      .select('l.labeler_id', 'l.short_code', 'l.moph_labeler_id', 'l.labeler_name', 'l.nin', 'l.phone', 'ls.status_name', 'lt.type_name')
+      .select('l.labeler_id', 'l.labeler_code', 'l.short_code', 'l.moph_labeler_id', 'l.labeler_name', 'l.nin', 'l.phone', 'ls.status_name', 'lt.type_name')
       .leftJoin('mm_labeler_status as ls', 'ls.status_id', 'l.labeler_status')
       .leftJoin('mm_labeler_types as lt', 'lt.type_id', 'l.labeler_type')
       .where(w => {
         w.where('l.labeler_name', 'like', _queryAll)
+          .orWhere('l.labeler_code', 'like', _queryAll)
           .orWhere('l.short_code', 'like', _queryAll)
           .orWhere('l.nin', query)
       })
