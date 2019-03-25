@@ -95,6 +95,48 @@ router.get('/search/dc24', co(async (req, res, next) => {
 
 }));
 
+
+router.get('/uom-req', co(async (req, res, next) => {
+  let db = req.db;
+  const genericId = req.query.genericId
+  try {
+    let rs = await genericModel.detail(db,genericId);
+    
+    if (rs[0]) {
+      res.send({ ok: true, rows: rs[0].issue_unit_id });
+    } else {
+      res.send({ ok: false, rows: rs.error });
+    }
+  } catch (error) {
+    res.send({ ok: false, error: error });
+  } finally {
+    db.destroy();
+  }
+}));
+
+router.put('/uom-req', co(async (req, res, next) => {
+  let db = req.db;
+  const genericId = req.body.genericId
+  const unitGenericId = req.body.unitGenericId
+  try {
+  let data = {
+    issue_unit_id: unitGenericId
+  }
+    let rs = await genericModel.update(db,genericId,data);
+    console.log(rs);
+    
+    if (rs) {
+      res.send({ ok: true, rows: rs});
+    } else {
+      res.send({ ok: false, error: 'เกิดข้อผิดผลาด'});
+    }
+  } catch (error) {
+    res.send({ ok: false, error: error });
+  } finally {
+    db.destroy();
+  }
+}));
+
 router.get('/generic-type', co(async (req, res, next) => {
   let db = req.db;
 
