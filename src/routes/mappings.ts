@@ -66,4 +66,29 @@ router.get('/search/tmt-code', async (req, res, next) => {
   }
 
 });
+
+router.get('/search/dc24-code', async (req, res, next) => {
+
+  let db = req.db;
+  const query = req.query.q;
+  console.log(query);
+
+  try {
+    let rs: any = await mappingModel.searchDc24(query);
+    if (rs.ok) {
+      if (rs.rows.length) {
+        res.send(rs.rows);
+      } else {
+        res.send([]);
+      }
+    }
+
+  } catch (error) {
+    console.log(error);
+    res.send([]);
+  } finally {
+    db.destroy();
+  }
+
+});
 export default router;
