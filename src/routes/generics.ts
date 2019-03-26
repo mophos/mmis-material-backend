@@ -199,9 +199,6 @@ router.put('/:genericId', co(async (req, res, next) => {
   let drugAccountId = generics.drugAccountId;
   let primaryUnitId = generics.primaryUnitId;
   let planningMethod = generics.planningMethod;
-  let packCost = generics.packCost;
-  let convers = generics.convers;
-  let standardCost = +generics.standardCost;
   let maxQty = +generics.maxQty;
   let minQty = +generics.minQty;
   let eoqQty = +generics.eoqQty;
@@ -255,9 +252,6 @@ router.put('/:genericId', co(async (req, res, next) => {
       account_id: drugAccountId,
       primary_unit_id: primaryUnitId,
       planning_method: planningMethod,
-      standard_pack_cost: packCost,
-      pack_ratio: convers,
-      standard_cost: standardCost,
       max_qty: maxQty,
       min_qty: minQty,
       eoq_qty: eoqQty,
