@@ -123,7 +123,6 @@ router.put('/uom-req', co(async (req, res, next) => {
     issue_unit_id: unitGenericId
   }
     let rs = await genericModel.update(db,genericId,data);
-    console.log(rs);
     
     if (rs) {
       res.send({ ok: true, rows: rs});
