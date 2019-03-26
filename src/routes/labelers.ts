@@ -168,7 +168,8 @@ router.post('/', async (req, res, next) => {
     year_established: labeler.orgYearEstablished,
     year_register: labeler.orgYearRegister,
     is_edi: labeler.isEdi,
-    labeler_code_edi: labeler.ediLabelerCode
+    labeler_code_edi: labeler.ediLabelerCode,
+    contact_name: labeler.labelerContact
   }
 
   let donatorsData: any = {
@@ -227,7 +228,8 @@ router.put('/', async (req, res, next) => {
     is_vendor: labeler.isVendor,
     is_manufacturer: labeler.isManufacturer,
     is_edi: labeler.isEdi,
-    labeler_code_edi: labeler.ediLabelerCode
+    labeler_code_edi: labeler.ediLabelerCode,
+    contact_name: labeler.labelerContact
   }
 
   let donatorsData: any = {
