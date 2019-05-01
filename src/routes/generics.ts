@@ -406,6 +406,71 @@ router.get('/planning/:genericId', co(async (req, res, next) => {
   }
 }));
 
+router.get('/planning-detail', co(async (req, res, next) => {
+  const db = req.db;
+  const warehouseId = req.query.warehouseId;
+
+  try {
+    const rows = await genericModel.getPlanningByWarehouse(db, warehouseId);
+    res.send({ ok: true, rows: rows });
+  } catch (error) {
+    res.send({ ok: false, error: error.message })
+  } finally {
+    db.destroy();
+  }
+}));
+
+router.put('/planning-detail/min', co(async (req, res, next) => {
+  const db = req.db;
+  const genericPlanningId = req.query.genericPlanningId;
+  const min_qty = req.body.min_qty;
+
+  try {
+    const data = {
+      min_qty: min_qty
+    }
+    const rows = await genericModel.updateMinQty(db, genericPlanningId, data);
+    res.send({ ok: true, rows: rows });
+  } catch (error) {
+    res.send({ ok: false, error: error.message })
+  } finally {
+    db.destroy();
+  }
+}));
+
+router.put('/planning-detail/max', co(async (req, res, next) => {
+  const db = req.db;
+  const genericPlanningId = req.query.genericPlanningId;
+  const max_qty = req.body.max_qty;
+
+  try {
+    const data = {
+      max_qty: max_qty
+    }
+    const rows = await genericModel.updateMaxQty(db, genericPlanningId, data);
+    res.send({ ok: true, rows: rows });
+  } catch (error) {
+    res.send({ ok: false, error: error.message })
+  } finally {
+    db.destroy();
+  }
+}));
+
+router.get('/addall/generic/:warehouseId/:genericTypeId', co(async (req, res, next) => {
+  const db = req.db;
+  let warehouseId = req.params.warehouseId
+  let genericTypeId = req.params.genericTypeId;
+
+  try {
+    await genericModel.addAllGenericPlanning(db, warehouseId, genericTypeId);
+    res.send({ ok: true });
+  } catch (error) {
+    res.send({ ok: false, error: error.message })
+  } finally {
+    db.destroy();
+  }
+}));
+
 router.put('/planning/:genericPlanningId', co(async (req, res, next) => {
   const db = req.db;
   const minQty = +req.body.minQty;
@@ -442,6 +507,19 @@ router.delete('/planning/:genericPlanningId', co(async (req, res, next) => {
   const genericPlanningId = req.params.genericPlanningId;
   try {
     await genericModel.removePlanningInventroy(db, genericPlanningId);
+    res.send({ ok: true });
+  } catch (error) {
+    res.send({ ok: false, error: error.message })
+  } finally {
+    db.destroy();
+  }
+}));
+
+router.delete('/delete/generic/planning/:warehouseId', co(async (req, res, next) => {
+  const db = req.db;
+  const warehouseId = req.params.warehouseId;
+  try {
+    await genericModel.removePlanningInventroybyWarehouse(db, warehouseId);
     res.send({ ok: true });
   } catch (error) {
     res.send({ ok: false, error: error.message })

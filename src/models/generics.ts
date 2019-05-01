@@ -250,6 +250,13 @@ export class GenericsModel {
       });
   }
 
+  addAllGenericPlanning(knex: Knex, warehouseId: any, genericTypeId: any) {
+    let sql = `INSERT INTO mm_generic_planning (generic_id,warehouse_id,is_active,max_qty,min_qty,primary_unit_id)
+    SELECT mg.generic_id,wm.warehouse_id,'Y',mg.max_qty,mg.min_qty,mg.primary_unit_id FROM mm_generics mg
+    CROSS join  wm_warehouses wm WHERE wm.warehouse_id = ${warehouseId} AND mg.generic_type_id = ${genericTypeId}`;
+    return knex.raw(sql)
+  }
+
   getPlanningWarehouse(knex: Knex, genericId: any) {
     return knex('mm_generic_planning as gp')
       .select('gp.*', 'u.unit_name', 'u.unit_code', 'w.warehouse_name', 'ws.warehouse_name as source_warehouse_name')
@@ -257,6 +264,28 @@ export class GenericsModel {
       .leftJoin('wm_warehouses as w', 'w.warehouse_id', 'gp.warehouse_id')
       .leftJoin('wm_warehouses as ws', 'ws.warehouse_id', 'gp.source_warehouse_id')
       .where('gp.generic_id', genericId);
+  }
+
+  getPlanningByWarehouse(knex: Knex, warehouseId: any) {
+    return knex('mm_generic_planning as gp')
+      .select('gp.*', 'u.unit_name', 'u.unit_code', 'w.warehouse_name', 'mg.working_code', 'mg.generic_name')
+      .join('mm_generics as mg', 'gp.generic_id', 'mg.generic_id')
+      .leftJoin('mm_units as u', 'u.unit_id', 'gp.primary_unit_id')
+      .leftJoin('wm_warehouses as w', 'w.warehouse_id', 'gp.warehouse_id')
+      .where('w.warehouse_id', warehouseId)
+      .orderBy('mg.generic_name');
+  }
+
+  updateMinQty(knex: Knex, genericPlanningId: any, data: any) {
+    return knex('mm_generic_planning')
+      .where('generic_planning_id', genericPlanningId)
+      .update(data);
+  }
+
+  updateMaxQty(knex: Knex, genericPlanningId: any, data: any) {
+    return knex('mm_generic_planning')
+      .where('generic_planning_id', genericPlanningId)
+      .update(data);
   }
 
   updatePlanningInventory(knex: Knex, genericPlanningId: any, data: any) {
@@ -268,6 +297,12 @@ export class GenericsModel {
   removePlanningInventroy(knex: Knex, genericPlanningId: any) {
     return knex('mm_generic_planning')
       .where('generic_planning_id', genericPlanningId)
+      .del();
+  }
+
+  removePlanningInventroybyWarehouse(knex: Knex, warehouseId: any) {
+    return knex('mm_generic_planning')
+      .where('warehouse_id', warehouseId)
       .del();
   }
 
