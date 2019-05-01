@@ -141,6 +141,54 @@ router.get('/type-product', async (req, res, next) => {
 });
 
 
+router.get('/generic-type-lv1', (req, res, next) => {
+
+  let db = req.db;
+
+  stdCode.getGenericTypeLV1(db)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.get('/generic-type-lv2', (req, res, next) => {
+
+  let db = req.db;
+  let genericTypeLV1Id = req.query.genericTypeLV1Id;
+  stdCode.getGenericTypeLV2(db, genericTypeLV1Id)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
+router.get('/generic-type-lv3', (req, res, next) => {
+
+  let db = req.db;
+  let genericTypeLV2Id = req.query.genericTypeLV2Id;
+  let genericTypeLV1Id = req.query.genericTypeLV1Id;
+  stdCode.getGenericTypeLV3(db, genericTypeLV1Id, genericTypeLV2Id)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
 
 router.get('/generic-groups/1', (req, res, next) => {
 

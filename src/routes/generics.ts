@@ -154,8 +154,7 @@ router.post('/', async (req, res, next) => {
   let drugs = req.body.drugs;
   let genericCodeAuto = req.decoded.MM_GENERIC_CODE_AUTO === 'Y' ? true : false;
   let genericName = drugs.genericName;
-  let typeId = +drugs.typeId;
-  let genericTypeId = +drugs.genericTypeId;
+  let genericTypeId = +drugs.genericTypeLV1Id;
   // let groupId = drugs.groupId;
   // let dosageId = drugs.dosageId;
   let drugAccountId = drugs.drugAccountId;
@@ -165,37 +164,16 @@ router.post('/', async (req, res, next) => {
 
   let db = req.db;
   if (genericCodeAuto) {
-    // let srType = null;
-
-    // if (typeId === 1) { // ยา
-    //   srType = 'WCA';
-    // } else if (typeId === 2) { //ไม่ใช่ยา
-    //   srType = 'WCC'
-    // } else if (typeId === 3) { // เคมีภัณฑ์
-    //   srType = 'WCB'
-    // } else if (typeId === 4) { // วัสดุวิทยาศาสตร์และการแพทย์
-    //   srType = 'WCE'
-    // } else if (typeId === 5) { // ยาผลิต
-    //   srType = 'WCD'
-    // } else if (typeId === 10) { // อื่นๆ
-    //   srType = 'WCF'
-    // } else { // ยา
-    //   srType = 'WCA'
-    // }
-
-    workingCode = await serialModel.getSerialGenerics(db, typeId);
+    workingCode = await serialModel.getSerialGenerics(db, genericTypeId);
   } else {
     workingCode = drugs.workingCode;
   }
-  if (genericName && typeId) {
+  if (genericName && genericTypeId) {
     let datas: any = {
       generic_id: genericId,
       generic_name: genericName,
       working_code: workingCode,
-      generic_type_id: typeId,
-      // generic_hosp_id: genericTypeId,
-      // group_id: groupId,
-      // dosage_id: dosageId,
+      generic_type_id: genericTypeId,
       account_id: drugAccountId,
       primary_unit_id: primaryUnitId
     }
@@ -226,7 +204,9 @@ router.put('/:genericId', co(async (req, res, next) => {
 
   let genericName = generics.genericName;
   // let shortName = generics.shortName;
-  let typeId = +generics.typeId;
+  let genericTypeLV1Id = +generics.genericTypeLV1Id;
+  let genericTypeLV2Id = +generics.genericTypeLV2Id;
+  let genericTypeLV3Id = +generics.genericTypeLV3Id;
   let typeOldId = +generics.typeOldId;
   let groupEd = generics.groupEd;
   let groupId1 = generics.groupId1;
@@ -253,34 +233,18 @@ router.put('/:genericId', co(async (req, res, next) => {
   let minmaxGroupId = generics.minmaxGroupId
   let db = req.db;
 
-  if (genericId && genericName && typeId && primaryUnitId) {
+  if (genericId && genericName && genericTypeLV1Id && primaryUnitId) {
 
-    if (typeId !== typeOldId) {
-      // let srType = null;
-
-      // if (typeId === 1) { // ยา
-      //   srType = 'WCA';
-      // } else if (typeId === 2) { //ไม่ใช่ยา
-      //   srType = 'WCC'
-      // } else if (typeId === 3) { // เคมีภัณฑ์
-      //   srType = 'WCB'
-      // } else if (typeId === 4) { // วัสดุวิทยาศาสตร์และการแพทย์
-      //   srType = 'WCE'
-      // } else if (typeId === 5) { // ยาผลิต
-      //   srType = 'WCD'
-      // } else if (typeId === 10) { // อื่นๆ
-      //   srType = 'WCF'
-      // } else { // ยา
-      //   srType = 'WCA'
-      // }
-
-      workingCode = await serialModel.getSerialGenerics(db, typeId);
+    if (genericTypeLV1Id !== typeOldId) {
+      workingCode = await serialModel.getSerialGenerics(db, genericTypeLV1Id);
     }
 
     let datas: any = {
       working_code: workingCode,
       generic_name: genericName,
-      generic_type_id: typeId,
+      generic_type_id: genericTypeLV1Id,
+      generic_type_lv2_id: genericTypeLV2Id,
+      generic_type_lv3_id: genericTypeLV3Id,
       group_ed: groupEd,
       group_code_1: groupId1,
       group_code_2: groupId2,
