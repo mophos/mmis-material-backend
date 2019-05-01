@@ -240,6 +240,7 @@ router.post('/conversion/:genericId', co(async (req, res, next) => {
   const qty = +req.body.qty;
   const isActive = req.body.isActive;
   const cost = +req.body.cost;
+  const standard_cost = +req.body.standard_cost;
 
   const db = req.db;
 
@@ -250,7 +251,8 @@ router.post('/conversion/:genericId', co(async (req, res, next) => {
       to_unit_id: toUnitId,
       qty: qty,
       is_active: isActive,
-      cost: cost
+      cost: cost,
+      standard_cost: standard_cost
     }
     const rs = await unitModel.checkConversionDuplicated(db, genericId, fromUnitId, toUnitId, qty);
     if (rs.length > 0) {
@@ -315,6 +317,7 @@ router.put('/update/Conversion', co(async (req, res, next) => {
   const toUnitId = req.body.toUnitId;
   const qty = +req.body.qty;
   const cost = +req.body.cost;
+  const standard_cost = +req.body.standard_cost;
   console.log('@@@@@', genericId);
 
   const db = req.db;
@@ -324,7 +327,8 @@ router.put('/update/Conversion', co(async (req, res, next) => {
       from_unit_id: fromUnitId,
       to_unit_id: toUnitId,
       qty: qty,
-      cost: cost
+      cost: cost,
+      standard_cost: standard_cost
     }
     console.log(data);
 

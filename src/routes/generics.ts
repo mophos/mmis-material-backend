@@ -95,6 +95,47 @@ router.get('/search/dc24', co(async (req, res, next) => {
 
 }));
 
+
+router.get('/uom-req', co(async (req, res, next) => {
+  let db = req.db;
+  const genericId = req.query.genericId
+  try {
+    let rs = await genericModel.detail(db, genericId);
+
+    if (rs[0]) {
+      res.send({ ok: true, rows: rs[0].issue_unit_id });
+    } else {
+      res.send({ ok: false, rows: rs.error });
+    }
+  } catch (error) {
+    res.send({ ok: false, error: error });
+  } finally {
+    db.destroy();
+  }
+}));
+
+router.put('/uom-req', co(async (req, res, next) => {
+  let db = req.db;
+  const genericId = req.body.genericId
+  const unitGenericId = req.body.unitGenericId
+  try {
+    let data = {
+      issue_unit_id: unitGenericId
+    }
+    let rs = await genericModel.update(db, genericId, data);
+
+    if (rs) {
+      res.send({ ok: true, rows: rs });
+    } else {
+      res.send({ ok: false, error: 'เกิดข้อผิดผลาด' });
+    }
+  } catch (error) {
+    res.send({ ok: false, error: error });
+  } finally {
+    db.destroy();
+  }
+}));
+
 router.get('/generic-type', co(async (req, res, next) => {
   let db = req.db;
 
@@ -179,9 +220,6 @@ router.put('/:genericId', co(async (req, res, next) => {
   let drugAccountId = generics.drugAccountId;
   let primaryUnitId = generics.primaryUnitId;
   let planningMethod = generics.planningMethod;
-  let packCost = generics.packCost;
-  let convers = generics.convers;
-  let standardCost = +generics.standardCost;
   let maxQty = +generics.maxQty;
   let minQty = +generics.minQty;
   let eoqQty = +generics.eoqQty;
@@ -219,9 +257,6 @@ router.put('/:genericId', co(async (req, res, next) => {
       account_id: drugAccountId,
       primary_unit_id: primaryUnitId,
       planning_method: planningMethod,
-      standard_pack_cost: packCost,
-      pack_ratio: convers,
-      // standard_cost: standardCost,
       max_qty: maxQty,
       min_qty: minQty,
       eoq_qty: eoqQty,
