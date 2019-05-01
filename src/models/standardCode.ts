@@ -40,6 +40,22 @@ export class StandardCodeModel {
       .orderBy('status_name');
   }
 
+  getGenericTypeLV1(knex: Knex) {
+    return knex('mm_generic_types')
+      .where('is_deleted', 'N')
+  }
+  getGenericTypeLV2(knex: Knex, genericTypeLv1Id) {
+    return knex('mm_generic_types_lv2')
+      .where('is_deleted', 'N')
+      .where('generic_type_lv1_id', genericTypeLv1Id)
+  }
+  getGenericTypeLV3(knex: Knex, genericTypeLv1Id, genericTypeLv2Id) {
+    return knex('mm_generic_types_lv3')
+      .where('is_deleted', 'N')
+      .where('generic_type_lv1_id', genericTypeLv1Id)
+      .where('generic_type_lv2_id', genericTypeLv2Id)
+  }
+
   getGenericGroups1(knex: Knex) {
     return knex('mm_generic_group_1')
       .where('is_deleted', 'N')
