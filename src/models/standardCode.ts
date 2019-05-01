@@ -93,11 +93,19 @@ export class StandardCodeModel {
       .orderBy('dosage_name');
   }
 
-
   getWarehouseList(knex: Knex) {
     return knex('wm_warehouses')
       .where('is_deleted', 'N')
       .where('is_actived', 'Y')
+      .orderBy('warehouse_name');
+  }
+
+  getWarehouseSearch(knex: Knex, query: any) {
+    let _query = '%' + query + '%';
+    return knex('wm_warehouses')
+      .where('is_deleted', 'N')
+      .where('is_actived', 'Y')
+      .whereRaw(`warehouse_name LIKE '${_query}'`)
       .orderBy('warehouse_name');
   }
 
