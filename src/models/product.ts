@@ -78,7 +78,7 @@ export class ProductModel {
       .where('mark_deleted', 'N');
   }
 
-  search(knex: Knex, query: any, limit: number, offset: number, groupId: any, deleted: any, sort: any) {
+  search(knex: Knex, query: any, limit: number, offset: number, genericType: any, deleted: any, sort: any) {
     const _query = `%${query}%`;
     let sql = knex('mm_products as p')
       .select('p.*', 'g.generic_name', 'g.working_code as generic_working_code', 'lm.labeler_name as m_labeler',
@@ -96,7 +96,17 @@ export class ProductModel {
     if (!deleted) {
       sql.where('p.mark_deleted', 'N')
     }
-    sql.whereIn('g.generic_type_id', groupId)
+    if (genericType) {
+      if (genericType.generic_type_lv1_id.length) {
+        sql.whereIn('g.generic_type_id', genericType.generic_type_lv1_id);
+      }
+      if (genericType.generic_type_lv2_id.length) {
+        sql.whereIn('g.generic_type_lv2_id', genericType.generic_type_lv2_id);
+      }
+      if (genericType.generic_type_lv3_id.length) {
+        sql.whereIn('g.generic_type_lv3_id', genericType.generic_type_lv3_id);
+      }
+    }
     if (sort.by) {
       let reverse = sort.reverse ? 'DESC' : 'ASC';
       if (sort.by === 'product_name') {
@@ -157,7 +167,7 @@ export class ProductModel {
     return sql;
   }
 
-  searchTotal(knex: Knex, query: any, groupId: any, deleted: any) {
+  searchTotal(knex: Knex, query: any, genericType: any, deleted: any) {
     const _query = `%${query}%`;
     let sql = knex('mm_products as p')
       .count('* as total')
@@ -168,7 +178,17 @@ export class ProductModel {
           .orWhere('p.working_code', query)
           .orWhere('p.keywords', 'like', _query)
       })
-      .whereIn('product_group_id', groupId);
+    if (genericType) {
+      if (genericType.generic_type_lv1_id.length) {
+        sql.whereIn('g.generic_type_id', genericType.generic_type_lv1_id);
+      }
+      if (genericType.generic_type_lv2_id.length) {
+        sql.whereIn('g.generic_type_lv2_id', genericType.generic_type_lv2_id);
+      }
+      if (genericType.generic_type_lv3_id.length) {
+        sql.whereIn('g.generic_type_lv3_id', genericType.generic_type_lv3_id);
+      }
+    }
     if (!deleted) {
       sql.where('p.mark_deleted', 'N')
     }
@@ -321,11 +341,11 @@ export class ProductModel {
       .update({ mark_deleted: 'Y', is_active: 'N' })
       .where('product_id', productId);
   }
-  checkReturnDeleted(knex: Knex, productId: any){
+  checkReturnDeleted(knex: Knex, productId: any) {
     return knex('mm_products as mp')
       .select('mg.*')
-      .leftJoin('mm_generics as mg','mg.generic_id','mp.generic_id')
-      .where('mp.product_id',productId)
+      .leftJoin('mm_generics as mg', 'mg.generic_id', 'mp.generic_id')
+      .where('mp.product_id', productId)
   }
   returnDeleted(knex: Knex, productId: any) {
     return knex('mm_products')
