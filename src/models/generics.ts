@@ -22,7 +22,7 @@ export class GenericsModel {
     }
   }
 
-  searchTotal(knex: Knex, query: any, groupId: any, deleted: boolean) {
+  searchTotal(knex: Knex, query: any, genericType: any, deleted: boolean) {
     let _query = `%${query}%`;
 
     let sql = knex('mm_generics')
@@ -32,87 +32,72 @@ export class GenericsModel {
           .orWhere('working_code', query)
           .orWhere('keywords', 'like', _query)
       })
-      .whereIn('generic_type_id', groupId);
+    if (genericType) {
+      if (genericType.generic_type_lv1_id.length) {
+        sql.whereIn('generic_type_id', genericType.generic_type_lv1_id);
+      }
+      if (genericType.generic_type_lv2_id.length) {
+        sql.whereIn('generic_type_lv2_id', genericType.generic_type_lv2_id);
+      }
+      if (genericType.generic_type_lv3_id.length) {
+        sql.whereIn('generic_type_lv3_id', genericType.generic_type_lv3_id);
+      }
+    }
     if (!deleted) {
       sql.where('mark_deleted', 'N')
     }
     return sql;
   }
 
-  search(knex: Knex, limit: number, offset: any, query: any, groupId: any, deleted: boolean, sort: any) {
+  search(knex: Knex, limit: number, offset: any, query: any, genericType: any, deleted: boolean, sort: any) {
     let _query = `%${query}%`;
-    if (groupId) {
-      let sql = knex('mm_generics as mg')
-        .select('mg.*', 'ac.account_name', 'd.dosage_name',
-          't.generic_type_name', 'u.unit_name as primary_unit_name')
-        .leftJoin('mm_generic_accounts as ac', 'ac.account_id', 'mg.account_id')
-        .leftJoin('mm_generic_dosages as d', 'd.dosage_id', 'mg.dosage_id')
-        .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
-        .leftJoin('mm_units as u', 'u.unit_id', 'mg.primary_unit_id')
-        .whereIn('mg.generic_type_id', groupId)
-        .where(w => {
-          w.orWhere('mg.generic_name', 'like', _query)
-            .orWhere('mg.working_code', query)
-            .orWhere('mg.keywords', 'like', _query)
-        })
-      if (!deleted) {
-        sql.where('mg.mark_deleted', 'N');
+
+    let sql = knex('mm_generics as mg')
+      .select('mg.*', 'ac.account_name', 'd.dosage_name',
+        't.generic_type_name', 'u.unit_name as primary_unit_name')
+      .leftJoin('mm_generic_accounts as ac', 'ac.account_id', 'mg.account_id')
+      .leftJoin('mm_generic_dosages as d', 'd.dosage_id', 'mg.dosage_id')
+      .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
+      .leftJoin('mm_units as u', 'u.unit_id', 'mg.primary_unit_id')
+    if (genericType) {
+      if (genericType.generic_type_lv1_id.length) {
+        sql.whereIn('mg.generic_type_id', genericType.generic_type_lv1_id);
       }
-      if (sort.by) {
-        let reverse = sort.reverse ? 'DESC' : 'ASC';
-        if (sort.by === 'generic_name') {
-          sql.orderBy('mg.generic_name', reverse)
-        } else if (sort.by === 'working_code') {
-          sql.orderBy('mg.working_code', reverse)
-        } else if (sort.by === 'account_name') {
-          sql.orderBy('ac.account_name', reverse)
-        } else if (sort.by === 'primary_unit_name') {
-          sql.orderBy('u.unit_name', reverse)
-        } else if (sort.by === 'generic_type_name') {
-          sql.orderBy('t.generic_type_name', reverse)
-        }
-      } else {
-        sql.orderBy('mg.generic_name')
+      if (genericType.generic_type_lv2_id.length) {
+        sql.whereIn('mg.generic_type_lv2_id', genericType.generic_type_lv2_id);
       }
-      sql.limit(limit)
-        .offset(offset)
-      return sql;
-    } else {
-      let sql = knex('mm_generics as mg')
-        .select('mg.*', 'ac.account_name', 'd.dosage_name',
-          't.generic_type_name', 'u.unit_name as primary_unit_name')
-        // .leftJoin('mm_generic_groups as g', 'g.group_id', 'mg.group_id')
-        .leftJoin('mm_generic_accounts as ac', 'ac.account_id', 'mg.account_id')
-        .leftJoin('mm_generic_dosages as d', 'd.dosage_id', 'mg.dosage_id')
-        .leftJoin('mm_generic_types as t', 't.generic_type_id', 'mg.generic_type_id')
-        .leftJoin('mm_units as u', 'u.unit_id', 'mg.primary_unit_id')
-      if (!deleted) {
-        sql.where('mg.mark_deleted', 'N')
+      if (genericType.generic_type_lv3_id.length) {
+        sql.whereIn('mg.generic_type_lv3_id', genericType.generic_type_lv3_id);
       }
-      sql.where(w => {
-        w.orWhere('mg.generic_name', 'like', _query)
-          .orWhere('mg.working_code', query)
-      })
-      if (sort.by) {
-        let reverse = sort.reverse ? 'DESC' : 'ASC';
-        if (sort.by === 'generic_name') {
-          sql.orderBy('mg.generic_name', reverse)
-        } else if (sort.by === 'working_code') {
-          sql.orderBy('mg.working_code', reverse)
-        } else if (sort.by === 'account_name') {
-          sql.orderBy('ac.account_name', reverse)
-        } else if (sort.by === 'primary_unit_name') {
-          sql.orderBy('u.unit_name', reverse)
-        } else if (sort.by === 'generic_type_name') {
-          sql.orderBy('t.generic_type_name', reverse)
-        }
-      } else {
-        sql.orderBy('mg.generic_name')
-      }
-      sql.limit(limit)
-        .offset(offset)
-      return sql;
     }
+    sql.where(w => {
+      w.orWhere('mg.generic_name', 'like', _query)
+        .orWhere('mg.working_code', query)
+        .orWhere('mg.keywords', 'like', _query)
+    })
+    if (!deleted) {
+      sql.where('mg.mark_deleted', 'N');
+    }
+    if (sort.by) {
+      let reverse = sort.reverse ? 'DESC' : 'ASC';
+      if (sort.by === 'generic_name') {
+        sql.orderBy('mg.generic_name', reverse)
+      } else if (sort.by === 'working_code') {
+        sql.orderBy('mg.working_code', reverse)
+      } else if (sort.by === 'account_name') {
+        sql.orderBy('ac.account_name', reverse)
+      } else if (sort.by === 'primary_unit_name') {
+        sql.orderBy('u.unit_name', reverse)
+      } else if (sort.by === 'generic_type_name') {
+        sql.orderBy('t.generic_type_name', reverse)
+      }
+    } else {
+      sql.orderBy('mg.generic_name')
+    }
+    sql.limit(limit)
+      .offset(offset)
+    return sql;
+
 
   }
 

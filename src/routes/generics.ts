@@ -42,16 +42,13 @@ router.post('/search', co(async (req, res, next) => {
   let limit = req.body.limit;
   let offset = req.body.offset;
   let query = req.body.query || '';
-  let groupId = req.body.groupId;
+  let genericType = req.body.genericType;
   let deleted = req.body.deleted;
   let sort = req.body.sort;
-  if (typeof groupId === 'string') {
-    groupId = [groupId];
-  }
   try {
 
-    let rs = await genericModel.search(db, limit, offset, query, groupId, deleted, sort);
-    let rsTotal = await genericModel.searchTotal(db, query, groupId, deleted);
+    let rs = await genericModel.search(db, limit, offset, query, genericType, deleted, sort);
+    let rsTotal = await genericModel.searchTotal(db, query, genericType, deleted);
     res.send({ ok: true, rows: rs, total: rsTotal[0].total });
   } catch (error) {
     console.log(error);
