@@ -242,6 +242,13 @@ export class GenericsModel {
     return knex.raw(sql)
   }
 
+  addGenericByWarehouse(knex: Knex, dstWarehouseId: any, srcWarehouseId: any) {
+    let sql = `INSERT INTO mm_generic_planning(generic_id,warehouse_id,primary_unit_id,min_qty,max_qty)
+    SELECT generic_id,'${srcWarehouseId}',primary_unit_id,min_qty,max_qty FROM mm_generic_planning WHERE warehouse_id = ${dstWarehouseId}`;
+    console.log(sql, 'xzczxczxcxzcxczczxczx');
+    return knex.raw(sql);
+  }
+
   getPlanningWarehouse(knex: Knex, genericId: any) {
     return knex('mm_generic_planning as gp')
       .select('gp.*', 'u.unit_name', 'u.unit_code', 'w.warehouse_name', 'ws.warehouse_name as source_warehouse_name')
@@ -288,6 +295,12 @@ export class GenericsModel {
   removePlanningInventroybyWarehouse(knex: Knex, warehouseId: any) {
     return knex('mm_generic_planning')
       .where('warehouse_id', warehouseId)
+      .del();
+  }
+
+  removePlanningInventroybyGenericPlanningId(knex: Knex, genericPlanningId: any) {
+    return knex('mm_generic_planning')
+      .where('generic_planning_id', genericPlanningId)
       .del();
   }
 

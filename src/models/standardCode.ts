@@ -125,6 +125,18 @@ export class StandardCodeModel {
       .orderBy('warehouse_name');
   }
 
+  searchPlanningByWarehouse(knex: Knex, warehouseId: any, query: any) {
+    let _query = '%' + query + '%';
+    return knex('mm_generic_planning as gp')
+      .select('gp.*', 'u.unit_name', 'u.unit_code', 'w.warehouse_name', 'mg.working_code', 'mg.generic_name')
+      .join('mm_generics as mg', 'gp.generic_id', 'mg.generic_id')
+      .leftJoin('mm_units as u', 'u.unit_id', 'gp.primary_unit_id')
+      .leftJoin('wm_warehouses as w', 'w.warehouse_id', 'gp.warehouse_id')
+      .where('w.warehouse_id', warehouseId)
+      .whereRaw(`mg.generic_name LIKE '${_query}'`)
+      .orderBy('mg.generic_name');
+  }
+
   getProductGroups(knex: Knex) {
     return knex('mm_product_groups')
       .where('is_deleted', 'N')
