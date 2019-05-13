@@ -468,6 +468,46 @@ router.get('/addall/generic/:warehouseId/:genericTypeId', co(async (req, res, ne
   }
 }));
 
+router.get('/add/generics/warehouse', co(async (req, res, next) => {
+  const db = req.db;
+  let srcWarehouseId = req.query.srcWarehouseId
+  let dstWarehouseId = req.query.dstWarehouseId
+
+  try {
+    await genericModel.removePlanningInventroybyWarehouse(db, srcWarehouseId);
+    await genericModel.addGenericByWarehouse(db, dstWarehouseId, srcWarehouseId);
+
+    res.send({ ok: true });
+  } catch (error) {
+    res.send({ ok: false, error: error.message })
+  } finally {
+    db.destroy();
+  }
+}));
+
+router.post('/add/generics', co(async (req, res, next) => {
+  const db = req.db;
+  let warehouseId = req.body.warehouseId
+  let data = req.body.data;
+
+  try {
+    const _data = {
+      warehouse_id: warehouseId,
+      generic_id: data.generic_id,
+      primary_unit_id: data.primary_unit_id,
+      min_qty: data.min_qty,
+      max_qty: data.max_qty
+    }
+
+    await genericModel.savePlanningInventory(db, _data);
+    res.send({ ok: true });
+  } catch (error) {
+    res.send({ ok: false, error: error.message })
+  } finally {
+    db.destroy();
+  }
+}));
+
 router.put('/planning/:genericPlanningId', co(async (req, res, next) => {
   const db = req.db;
   const minQty = +req.body.minQty;
@@ -517,6 +557,19 @@ router.delete('/delete/generic/planning/:warehouseId', co(async (req, res, next)
   const warehouseId = req.params.warehouseId;
   try {
     await genericModel.removePlanningInventroybyWarehouse(db, warehouseId);
+    res.send({ ok: true });
+  } catch (error) {
+    res.send({ ok: false, error: error.message })
+  } finally {
+    db.destroy();
+  }
+}));
+
+router.delete('/delete/generic/planning/id/:genericPlanningId', co(async (req, res, next) => {
+  const db = req.db;
+  const genericPlanningId = req.params.genericPlanningId;
+  try {
+    await genericModel.removePlanningInventroybyGenericPlanningId(db, genericPlanningId);
     res.send({ ok: true });
   } catch (error) {
     res.send({ ok: false, error: error.message })

@@ -398,6 +398,24 @@ router.get('/search/warehouses', (req, res, next) => {
     });
 });
 
+router.get('/search/generics', (req, res, next) => {
+
+  let db = req.db;
+  let _query = req.query.query;
+  let warehouseId = req.decoded.warehouseId;
+
+  stdCode.searchPlanningByWarehouse(db, warehouseId, _query)
+    .then((results: any) => {
+      res.send({ ok: true, rows: results });
+    })
+    .catch(error => {
+      res.send({ ok: false, error: error })
+    })
+    .finally(() => {
+      db.destroy();
+    });
+});
+
 router.get('/product-groups', async (req, res, next) => {
 
   let db = req.db;
