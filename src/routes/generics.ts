@@ -151,7 +151,7 @@ router.post('/', async (req, res, next) => {
   let drugs = req.body.drugs;
   let genericCodeAuto = req.decoded.MM_GENERIC_CODE_AUTO === 'Y' ? true : false;
   let genericName = drugs.genericName;
-  let genericTypeId = +drugs.genericTypeLV1Id;
+  let genericTypeId = +drugs.genericTypeId;
   // let groupId = drugs.groupId;
   // let dosageId = drugs.dosageId;
   let drugAccountId = drugs.drugAccountId;
