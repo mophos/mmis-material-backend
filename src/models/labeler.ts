@@ -80,7 +80,8 @@ export class LabelerModel {
   updateDonators(knex: Knex, dName: string, data: any) {
     let _query = '%' + dName + '%'
     return knex('wm_donators')
-      .where('donator_name', 'like', _query)
+      // .where('donator_name', 'like', _query)
+      .where('donator_name', dName)
       .update(data);
   }
 
