@@ -57,8 +57,16 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use(cors());
 
 let checkAuth = (req, res, next) => {
-  let token: string = null;
 
+  const url = decodeURI(req.url).substring(_.indexOf(req.url, '?') + 1, decodeURI(req.url).length).split('&');
+  let query = {};
+  for (const u of url) {
+    const up = u.split('=');
+    query[up[0]] = up[1]
+  }
+  req.query2 = query;
+
+  let token: string = null;
   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
     token = req.headers.authorization.split(' ')[1];
   } else if (req.query && req.query.token) {

@@ -401,7 +401,7 @@ router.get('/search/warehouses', (req, res, next) => {
 router.get('/search/generics', (req, res, next) => {
 
   let db = req.db;
-  let _query = req.query.query;
+  let _query = req.query2.query;
   let warehouseId = req.query.warehouseId;
 
   stdCode.searchPlanningByWarehouse(db, warehouseId, _query)
