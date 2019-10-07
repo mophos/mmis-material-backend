@@ -581,7 +581,7 @@ router.delete('/delete/generic/planning/id/:genericPlanningId', co(async (req, r
 router.get('/search-autocomplete', async (req, res, next) => {
 
   const db = req.db;
-  let query = req.query.q;
+  let query = req.query2.q;
   let generic_type_id = req.decoded.generic_type_id;
   let gids = [];
   let types = req.decoded.generic_type_id.split(',');
