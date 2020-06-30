@@ -14,7 +14,7 @@ router.post('/change-password', co(async(req, res, next) => {
 
   let db = req.db;
   let userId = req.decoded.id;
-  let password = req.body.password;
+  let password: any = req.body.password;
 
   console.log(req.decoded);
 

@@ -11,7 +11,7 @@ const productModel = new ProductModel();
 
 router.get('/', co(async (req, res, next) => {
   const db = req.db;
-  const deleted = req.query.deleted == 'false' ? false : true;
+  const deleted: any = req.query.deleted == 'false' ? false : true;
   try {
     const rows = await unitModel.list(db, deleted);
     res.send({ ok: true, rows: rows });
@@ -24,8 +24,8 @@ router.get('/', co(async (req, res, next) => {
 
 router.get('/search', co(async (req, res, next) => {
   const db = req.db;
-  const query = req.query.query || '';
-  const deleted = req.query.deleted == 'false' ? false : true;
+  const query: any = req.query.query || '';
+  const deleted: any = req.query.deleted == 'false' ? false : true;
   try {
     const rows = await unitModel.search(db, query, deleted);
     res.send({ ok: true, rows: rows });
@@ -117,11 +117,11 @@ router.get('/not-primary', co(async (req, res, next) => {
 }));
 
 router.post('/', co(async (req, res, next) => {
-  const unitName = req.body.unitName;
-  const unitEng = req.body.unitEng;
-  const unitCode = req.body.unitCode;
-  const isActive = req.body.isActive;
-  const isPrimary = req.body.isPrimary;
+  const unitName: any = req.body.unitName;
+  const unitEng: any = req.body.unitEng;
+  const unitCode: any = req.body.unitCode;
+  const isActive: any = req.body.isActive;
+  const isPrimary: any = req.body.isPrimary;
 
   const db = req.db;
 
@@ -150,11 +150,11 @@ router.post('/', co(async (req, res, next) => {
 
 router.put('/:unitId', co(async (req, res, next) => {
   const unitId = req.params.unitId;
-  const unitName = req.body.unitName;
-  const unitEng = req.body.unitEng;
-  const unitCode = req.body.unitCode;
-  const isActive = req.body.isActive;
-  const isPrimary = req.body.isPrimary;
+  const unitName: any = req.body.unitName;
+  const unitEng: any = req.body.unitEng;
+  const unitCode: any = req.body.unitCode;
+  const isActive: any = req.body.isActive;
+  const isPrimary: any = req.body.isPrimary;
 
   let db = req.db;
 
@@ -212,7 +212,7 @@ router.delete('/:unitId', co(async (req, res, next) => {
 }));
 
 router.post('/return', co(async (req, res, next) => {
-  let unitId = req.body.unitId;
+  let unitId: any = req.body.unitId;
   let db = req.db;
 
   try {
@@ -235,10 +235,10 @@ router.post('/return', co(async (req, res, next) => {
 
 router.post('/conversion/:genericId', co(async (req, res, next) => {
   const genericId = req.params.genericId;
-  const fromUnitId = req.body.fromUnitId;
-  const toUnitId = req.body.toUnitId;
+  const fromUnitId: any = req.body.fromUnitId;
+  const toUnitId: any = req.body.toUnitId;
   const qty = +req.body.qty;
-  const isActive = req.body.isActive;
+  const isActive: any = req.body.isActive;
   const cost = +req.body.cost;
   const standard_cost = +req.body.standard_cost;
 
@@ -275,8 +275,8 @@ router.post('/conversion/:genericId', co(async (req, res, next) => {
 }));
 
 router.put('/conversion/planning', co(async (req, res, next) => {
-  const unitGenericId = req.body.unitGenericId;
-  const genericId = req.body.genericId;
+  const unitGenericId: any = req.body.unitGenericId;
+  const genericId: any = req.body.genericId;
 
   const db = req.db;
 
@@ -293,8 +293,8 @@ router.put('/conversion/planning', co(async (req, res, next) => {
 }));
 
 router.put('/conversion/active', co(async (req, res, next) => {
-  const unitGenericId = req.body.unitGenericId;
-  const status = req.body.status;
+  const unitGenericId: any = req.body.unitGenericId;
+  const status: any = req.body.status;
 
   const db = req.db;
 
@@ -311,10 +311,10 @@ router.put('/conversion/active', co(async (req, res, next) => {
 }));
 
 router.put('/update/Conversion', co(async (req, res, next) => {
-  const genericId = req.body.genericId;
-  const unitGenericId = req.body.unitGenericId;
-  const fromUnitId = req.body.fromUnitId;
-  const toUnitId = req.body.toUnitId;
+  const genericId: any = req.body.genericId;
+  const unitGenericId: any = req.body.unitGenericId;
+  const fromUnitId: any = req.body.fromUnitId;
+  const toUnitId: any = req.body.toUnitId;
   const qty = +req.body.qty;
   const cost = +req.body.cost;
   const standard_cost = +req.body.standard_cost;

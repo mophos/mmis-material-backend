@@ -7,7 +7,7 @@ const router = express.Router();
 const minMaxGroupModel = new MinMaxGroupModel();
 
 router.get('/', (req, res, next) => {
-  let deleted = req.query.deleted == 'false' ? false : true;
+  let deleted: any = req.query.deleted == 'false' ? false : true;
   let db = req.db;
 
   minMaxGroupModel.list(db, deleted)
@@ -23,7 +23,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  let minMaxGroupName = req.body.minMaxGroupName;
+  let minMaxGroupName: any = req.body.minMaxGroupName;
   let minMaxGroupCal = +req.body.minMaxGroupCal;
   let maxSafety = +req.body.maxSafety;
   let minSafety = +req.body.minSafety;
@@ -54,7 +54,7 @@ router.post('/', (req, res, next) => {
 
 router.put('/:minMaxGroupId', (req, res, next) => {
   let minMaxGroupId = req.params.minMaxGroupId;
-  let minMaxGroupName = req.body.minMaxGroupName;
+  let minMaxGroupName: any = req.body.minMaxGroupName;
   let minMaxGroupCal = +req.body.minMaxGroupCal;
   let maxSafety = +req.body.maxSafety;
   let minSafety = +req.body.minSafety;
@@ -100,7 +100,7 @@ router.get('/detail/:minMaxGroupId', (req, res, next) => {
     });
 });
 router.delete('/re-deleted', (req, res, next) => {
-  let minMaxGroupId = req.query.id;
+  let minMaxGroupId: any = req.query.id;
   let db = req.db;
 
   minMaxGroupModel.reRemove(db, minMaxGroupId)

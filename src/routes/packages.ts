@@ -26,10 +26,10 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  let largeUnit = req.body.largeUnit;
-  let smallUnit = req.body.smallUnit;
-  let largeQty = req.body.largeQty || 1;
-  let smallQty = req.body.smalQty || 1;
+  let largeUnit: any = req.body.largeUnit;
+  let smallUnit: any = req.body.smallUnit;
+  let largeQty: any = req.body.largeQty || 1;
+  let smallQty: any = req.body.smalQty || 1;
 
   let db = req.db;
 
@@ -58,8 +58,8 @@ router.post('/', (req, res, next) => {
 
 router.put('/:packageId', (req, res, next) => {
   let packageId = req.params.packageId;
-  let largeUnit = req.body.largeUnit;
-  let smallUnit = req.body.smallUnit;
+  let largeUnit: any = req.body.largeUnit;
+  let smallUnit: any = req.body.smallUnit;
   let largeQty = +req.body.largeQty;
   let smallQty = +req.body.smallQty;
 

@@ -63,7 +63,7 @@ router.post('/', (req, res, next) => {
 
 router.put('/:genericId', (req, res, next) => {
 
-  let data = req.body.supplies;
+  let data: any = req.body.supplies;
   let genericId = req.params.genericId;
 
   let genericName = data.genericName;

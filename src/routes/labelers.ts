@@ -12,7 +12,7 @@ const labelerModel = new LabelerModel();
 
 router.get('/', (req, res, next) => {
   let db = req.db;
-  const deleted = req.query.deleted == 'false' ? false : true;
+  const deleted: any = req.query.deleted == 'false' ? false : true;
 
   labelerModel.list(db, deleted)
     .then((results: any) => {
@@ -28,7 +28,7 @@ router.get('/', (req, res, next) => {
 
 router.post('/return', (req, res, next) => {
   let db = req.db;
-  const labelerId = req.body.labelerId;
+  const labelerId: any = req.body.labelerId;
 
   labelerModel.return(db, labelerId)
     .then((results: any) => {
@@ -44,7 +44,7 @@ router.post('/return', (req, res, next) => {
 
 router.get('/bank', (req, res, next) => {
   let db = req.db;
-  let labelerId = req.query.labelerId;
+  let labelerId: any = req.query.labelerId;
 
   labelerModel.getBank(db, labelerId)
     .then((results: any) => {
@@ -60,7 +60,7 @@ router.get('/bank', (req, res, next) => {
 
 router.post('/bank', (req, res, next) => {
   let db = req.db;
-  let data = req.body.data;
+  let data: any = req.body.data;
 
   labelerModel.saveBank(db, data)
     .then((results: any) => {
@@ -76,8 +76,8 @@ router.post('/bank', (req, res, next) => {
 
 router.put('/bank', (req, res, next) => {
   let db = req.db;
-  let bankId = req.query.bankId;
-  let data = req.body.data;
+  let bankId: any = req.query.bankId;
+  let data: any = req.body.data;
 
   labelerModel.updateBank(db, bankId, data)
     .then((results: any) => {
@@ -93,7 +93,7 @@ router.put('/bank', (req, res, next) => {
 
 router.delete('/bank', (req, res, next) => {
   let db = req.db;
-  let bankId = req.query.bankId;
+  let bankId: any = req.query.bankId;
   labelerModel.removeBank(db, bankId)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -108,7 +108,7 @@ router.delete('/bank', (req, res, next) => {
 
 router.get('/search', warp(async (req, res, next) => {
   let db = req.db;
-  const query = req.query.query;
+  const query: any = req.query.query;
 
   try {
     const rs = await labelerModel.search(db, query);
@@ -122,8 +122,8 @@ router.get('/search', warp(async (req, res, next) => {
 
 router.get('/search-autocomplete', warp(async (req, res, next) => {
   const db = req.db;
-  const query = req.query.q;
-  const type = req.query.type;
+  const query: any = req.query.q;
+  const type: any = req.query.type;
 
   try {
     const rs = await labelerModel.searchAutoComplete(db, query, type);
@@ -302,8 +302,8 @@ router.delete('/:labelerId', (req, res, next) => {
 });
 
 router.post('/mcd-map', (req, res, next) => {
-  let labelerId = req.body.labelerId;
-  let mcdLabelerId = req.body.mcdLabelerId;
+  let labelerId: any = req.body.labelerId;
+  let mcdLabelerId: any = req.body.mcdLabelerId;
 
   let db = req.db;
   if (labelerId && mcdLabelerId) {
