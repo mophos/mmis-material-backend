@@ -50,10 +50,10 @@ router.get('/get-lots/:productId', wrap(async (req, res, next) => {
 }));
 
 router.post('/', (req, res, next) => {
-  let lotNo = req.body.lotNo;
-  let expiredDate = req.body.expiredDate;
-  let productId = req.body.productId;
-  let isActive = req.body.isActive;
+  let lotNo: any = req.body.lotNo;
+  let expiredDate: any = req.body.expiredDate;
+  let productId: any = req.body.productId;
+  let isActive: any = req.body.isActive;
 
   let db = req.db;
 
@@ -84,9 +84,9 @@ router.post('/', (req, res, next) => {
 
 router.put('/:lotId', (req, res, next) => {
   let lotId = req.params.lotId;
-  let lotNo = req.body.lotNo;
-  let expiredDate = req.body.expiredDate;
-  let isActive = req.body.isActive;
+  let lotNo: any = req.body.lotNo;
+  let expiredDate: any = req.body.expiredDate;
+  let isActive: any = req.body.isActive;
 
   let db = req.db;
 

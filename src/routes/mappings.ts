@@ -10,7 +10,7 @@ const mappingModel = new MappingModel();
 
 router.get('/', wrap(async (req, res, next) => {
   const db = req.db;
-  const productId = req.query.productId;
+  const productId: any = req.query.productId;
 
   try {
     const results = await mappingModel.getMappings(db, productId)
@@ -24,8 +24,8 @@ router.get('/', wrap(async (req, res, next) => {
 
 router.post('/', wrap(async (req, res, next) => {
   const db = req.db;
-  const productId = req.body.productId;
-  const data = req.body.data;
+  const productId: any = req.body.productId;
+  const data: any = req.body.data;
 
   try {
     const results = await mappingModel.saveMappings(db, productId, data)
@@ -42,7 +42,7 @@ router.post('/', wrap(async (req, res, next) => {
 router.get('/search/tmt-code', async (req, res, next) => {
 
   let db = req.db;
-  const query = req.query.q;
+  const query: any = req.query.q;
 
   try {
     let rs: any = await mappingModel.searchTmtCode(db, query);
@@ -70,7 +70,7 @@ router.get('/search/tmt-code', async (req, res, next) => {
 router.get('/search/dc24-code', async (req, res, next) => {
 
   let db = req.db;
-  const query = req.query.q;
+  const query: any = req.query.q;
   console.log(query);
 
   try {

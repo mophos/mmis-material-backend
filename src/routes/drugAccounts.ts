@@ -7,7 +7,7 @@ const router = express.Router();
 const drugAccountModel = new DrugAccountModel();
 
 router.get('/', (req, res, next) => {
-  let deleted = req.query.deleted == 'false' ? false : true;
+  let deleted: any = req.query.deleted == 'false' ? false : true;
   let db = req.db;
 
   drugAccountModel.list(db, deleted)
@@ -23,7 +23,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  let drugAccountName = req.body.drugAccountName;
+  let drugAccountName: any = req.body.drugAccountName;
 
   let db = req.db;
 
@@ -49,7 +49,7 @@ router.post('/', (req, res, next) => {
 
 router.put('/:drugAccountId', (req, res, next) => {
   let drugAccountId = req.params.drugAccountId;
-  let drugAccountName = req.body.drugAccountName;
+  let drugAccountName: any = req.body.drugAccountName;
 
   let db = req.db;
 
@@ -89,7 +89,7 @@ router.get('/detail/:drugAccountId', (req, res, next) => {
     });
 });
 router.delete('/re-deleted', (req, res, next) => {
-  let drugAccountId = req.query.id;
+  let drugAccountId: any = req.query.id;
   let db = req.db;
 
   drugAccountModel.reRemove(db, drugAccountId)

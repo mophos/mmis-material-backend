@@ -25,7 +25,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  let typeName = req.body.typeName;
+  let typeName: any = req.body.typeName;
 
   let db = req.db;
 
@@ -51,7 +51,7 @@ router.post('/', (req, res, next) => {
 
 router.put('/:typeId', (req, res, next) => {
   let typeId = req.params.typeId;
-  let typeName = req.body.typeName;
+  let typeName: any = req.body.typeName;
 
   let db = req.db;
 

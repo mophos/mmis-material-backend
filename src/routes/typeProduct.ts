@@ -10,7 +10,7 @@ const typeProduct = new typeProductModel();
 
 router.get('/', (req, res, next) => {
   let db = req.db;
-  const deleted = req.query.deleted == 'false' ? false : true;
+  const deleted: any = req.query.deleted == 'false' ? false : true;
   typeProduct.list(db, deleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -25,7 +25,7 @@ router.get('/', (req, res, next) => {
 
 router.get('/lv1', (req, res, next) => {
   let db = req.db;
-  const deleted = req.query.deleted == 'false' ? false : true;
+  const deleted: any = req.query.deleted == 'false' ? false : true;
   typeProduct.getGenericTypeLV1(db, deleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -40,7 +40,7 @@ router.get('/lv1', (req, res, next) => {
 
 router.get('/lv2', (req, res, next) => {
   let db = req.db;
-  const deleted = req.query.deleted == 'false' ? false : true;
+  const deleted: any = req.query.deleted == 'false' ? false : true;
   typeProduct.getGenericTypeLV2(db, deleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -55,7 +55,7 @@ router.get('/lv2', (req, res, next) => {
 
 router.get('/lv3', (req, res, next) => {
   let db = req.db;
-  const deleted = req.query.deleted == 'false' ? false : true;
+  const deleted: any = req.query.deleted == 'false' ? false : true;
   typeProduct.getGenericTypeLV3(db, deleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -69,7 +69,7 @@ router.get('/lv3', (req, res, next) => {
 });
 
 router.post('/return/lv1', (req, res, next) => {
-  let typeId = req.body.id;
+  let typeId: any = req.body.id;
   let db = req.db;
 
   typeProduct.returnRemoveLV1(db, typeId)
@@ -84,7 +84,7 @@ router.post('/return/lv1', (req, res, next) => {
     });
 });
 router.post('/return/lv2', (req, res, next) => {
-  let typeId = req.body.id;
+  let typeId: any = req.body.id;
   let db = req.db;
 
   typeProduct.returnRemoveLV2(db, typeId)
@@ -99,7 +99,7 @@ router.post('/return/lv2', (req, res, next) => {
     });
 });
 router.post('/return/lv3', (req, res, next) => {
-  let typeId = req.body.id;
+  let typeId: any = req.body.id;
   let db = req.db;
 
   typeProduct.returnRemoveLV3(db, typeId)
@@ -115,8 +115,8 @@ router.post('/return/lv3', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  let typeName = req.body.typeName;
-  let prefixName = req.body.prefixName;
+  let typeName: any = req.body.typeName;
+  let prefixName: any = req.body.prefixName;
 
   let db = req.db;
 
@@ -144,8 +144,8 @@ router.post('/', (req, res, next) => {
 
 router.put('/:typeId', (req, res, next) => {
   let typeId = req.params.typeId;
-  let typeName = req.body.typeName;
-  let prefixName = req.body.prefixName;
+  let typeName: any = req.body.typeName;
+  let prefixName: any = req.body.prefixName;
 
   let db = req.db;
 
@@ -172,8 +172,8 @@ router.put('/:typeId', (req, res, next) => {
 
 
 router.post('/lv1', (req, res, next) => {
-  let genericTypeLV1Name = req.body.genericTypeLV1Name;
-  let prefixName = req.body.prefixName;
+  let genericTypeLV1Name: any = req.body.genericTypeLV1Name;
+  let prefixName: any = req.body.prefixName;
 
   let db = req.db;
 
@@ -201,8 +201,8 @@ router.post('/lv1', (req, res, next) => {
 
 router.put('/lv1/:genericTypeLV1Id', (req, res, next) => {
   let genericTypeLV1Id = req.params.genericTypeLV1Id;
-  let genericTypeLV1Name = req.body.genericTypeLV1Name;
-  let prefixName = req.body.prefixName;
+  let genericTypeLV1Name: any = req.body.genericTypeLV1Name;
+  let prefixName: any = req.body.prefixName;
 
   let db = req.db;
 
@@ -229,8 +229,8 @@ router.put('/lv1/:genericTypeLV1Id', (req, res, next) => {
 });
 
 router.post('/lv2', (req, res, next) => {
-  let genericTypeLV2Name = req.body.genericTypeLV2Name;
-  let genericTypeLV1Id = req.body.genericTypeLV1Id;
+  let genericTypeLV2Name: any = req.body.genericTypeLV2Name;
+  let genericTypeLV1Id: any = req.body.genericTypeLV1Id;
 
   let db = req.db;
 
@@ -257,8 +257,8 @@ router.post('/lv2', (req, res, next) => {
 
 router.put('/lv2/:genericTypeLV2Id', (req, res, next) => {
   let genericTypeLV2Id = req.params.genericTypeLV2Id;
-  let genericTypeLV1Id = req.body.genericTypeLV1Id;
-  let genericTypeLV2Name = req.body.genericTypeLV2Name;
+  let genericTypeLV1Id: any = req.body.genericTypeLV1Id;
+  let genericTypeLV2Name: any = req.body.genericTypeLV2Name;
 
   let db = req.db;
 
@@ -284,9 +284,9 @@ router.put('/lv2/:genericTypeLV2Id', (req, res, next) => {
 });
 
 router.post('/lv3', (req, res, next) => {
-  let genericTypeLV3Name = req.body.genericTypeLV3Name;
-  let genericTypeLV1Id = req.body.genericTypeLV1Id;
-  let genericTypeLV2Id = req.body.genericTypeLV2Id;
+  let genericTypeLV3Name: any = req.body.genericTypeLV3Name;
+  let genericTypeLV1Id: any = req.body.genericTypeLV1Id;
+  let genericTypeLV2Id: any = req.body.genericTypeLV2Id;
 
   let db = req.db;
 
@@ -314,9 +314,9 @@ router.post('/lv3', (req, res, next) => {
 
 router.put('/lv3/:genericTypeLV3Id', (req, res, next) => {
   let genericTypeLV3Id = req.params.genericTypeLV3Id;
-  let genericTypeLV1Id = req.body.genericTypeLV1Id;
-  let genericTypeLV2Id = req.body.genericTypeLV2Id;
-  let genericTypeLV3Name = req.body.genericTypeLV3Name;
+  let genericTypeLV1Id: any = req.body.genericTypeLV1Id;
+  let genericTypeLV2Id: any = req.body.genericTypeLV2Id;
+  let genericTypeLV3Name: any = req.body.genericTypeLV3Name;
 
   let db = req.db;
 

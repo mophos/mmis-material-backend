@@ -25,8 +25,8 @@ router.get('/:genericId', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   let db = req.db;
-  let genericId = req.body.genericId;
-  let warehouseId = req.body.warehouseId;
+  let genericId: any = req.body.genericId;
+  let warehouseId: any = req.body.warehouseId;
   receivePlanningModel.save(db, genericId, warehouseId)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -41,8 +41,8 @@ router.post('/', (req, res, next) => {
 
 router.delete('/', (req, res, next) => {
   let db = req.db;
-  let genericId = req.query.genericId;
-  let warehouseId = req.query.warehouseId;
+  let genericId: any = req.query.genericId;
+  let warehouseId: any = req.query.warehouseId;
   receivePlanningModel.remove(db, genericId, warehouseId)
     .then((results: any) => {
       res.send({ ok: true, rows: results });

@@ -77,7 +77,7 @@ router.get('/changwat', (req, res, next) => {
 router.post('/ampur', (req, res, next) => {
 
   let db = req.db;
-  let changwatCode = req.body.changwatCode;
+  let changwatCode: any = req.body.changwatCode;
 
   stdCode.getAmpur(db, changwatCode)
     .then((results: any) => {
@@ -94,8 +94,8 @@ router.post('/ampur', (req, res, next) => {
 router.post('/tambon', (req, res, next) => {
 
   let db = req.db;
-  let changwatCode = req.body.changwatCode;
-  let ampurCode = req.body.ampurCode;
+  let changwatCode: any = req.body.changwatCode;
+  let ampurCode: any = req.body.ampurCode;
 
   stdCode.getTambon(db, ampurCode, changwatCode)
     .then((results: any) => {
@@ -160,7 +160,7 @@ router.get('/generic-type-lv1', (req, res, next) => {
 router.get('/generic-type-lv2', (req, res, next) => {
 
   let db = req.db;
-  let genericTypeLV1Id = req.query.genericTypeLV1Id;
+  let genericTypeLV1Id: any = req.query.genericTypeLV1Id;
   stdCode.getGenericTypeLV2(db, genericTypeLV1Id)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -176,8 +176,8 @@ router.get('/generic-type-lv2', (req, res, next) => {
 router.get('/generic-type-lv3', (req, res, next) => {
 
   let db = req.db;
-  let genericTypeLV2Id = req.query.genericTypeLV2Id;
-  let genericTypeLV1Id = req.query.genericTypeLV1Id;
+  let genericTypeLV2Id: any = req.query.genericTypeLV2Id;
+  let genericTypeLV1Id: any = req.query.genericTypeLV1Id;
   stdCode.getGenericTypeLV3(db, genericTypeLV1Id, genericTypeLV2Id)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -213,7 +213,7 @@ router.get('/generic-types/lv1', co(async (req, res, next) => {
 }));
 router.get('/generic-types/lv2', co(async (req, res, next) => {
   let db = req.db;
-  const genericTypeLV1Id = req.query.genericTypeLV1Id == 'null' ? null : req.query.genericTypeLV1Id;
+  const genericTypeLV1Id: any = req.query.genericTypeLV1Id == 'null' ? null : req.query.genericTypeLV1Id;
   try {
     let _genericTypeLV1Id = req.decoded.generic_type_id;
     let _genericTypeLV2Id = req.decoded.generic_type_lv2_id;
@@ -244,8 +244,8 @@ router.get('/generic-types/lv2', co(async (req, res, next) => {
 }));
 router.get('/generic-types/lv3', co(async (req, res, next) => {
   let db = req.db;
-  const genericTypeLV1Id = req.query.genericTypeLV1Id == 'null' ? null : req.query.genericTypeLV1Id;
-  const genericTypeLV2Id = req.query.genericTypeLV2Id == 'null' ? null : req.query.genericTypeLV2Id;
+  const genericTypeLV1Id: any = req.query.genericTypeLV1Id == 'null' ? null : req.query.genericTypeLV1Id;
+  const genericTypeLV2Id: any = req.query.genericTypeLV2Id == 'null' ? null : req.query.genericTypeLV2Id;
   try {
     let _genericTypeLV1Id = req.decoded.generic_type_id;
     let _genericTypeLV2Id = req.decoded.generic_type_lv2_id;
@@ -301,7 +301,7 @@ router.get('/generic-groups/1', (req, res, next) => {
 router.get('/generic-groups/2', (req, res, next) => {
 
   let db = req.db;
-  let groupCode1 = req.query.groupCode1;
+  let groupCode1: any = req.query.groupCode1;
   stdCode.getGenericGroups2(db, groupCode1)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -317,8 +317,8 @@ router.get('/generic-groups/2', (req, res, next) => {
 router.get('/generic-groups/3', (req, res, next) => {
 
   let db = req.db;
-  let groupCode1 = req.query.groupCode1;
-  let groupCode2 = req.query.groupCode2;
+  let groupCode1: any = req.query.groupCode1;
+  let groupCode2: any = req.query.groupCode2;
   stdCode.getGenericGroups3(db, groupCode1, groupCode2)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -334,9 +334,9 @@ router.get('/generic-groups/3', (req, res, next) => {
 router.get('/generic-groups/4', (req, res, next) => {
 
   let db = req.db;
-  let groupCode1 = req.query.groupCode1;
-  let groupCode2 = req.query.groupCode2;
-  let groupCode3 = req.query.groupCode3;
+  let groupCode1: any = req.query.groupCode1;
+  let groupCode2: any = req.query.groupCode2;
+  let groupCode3: any = req.query.groupCode3;
   stdCode.getGenericGroups4(db, groupCode1, groupCode2, groupCode3)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -384,7 +384,7 @@ router.get('/warehouses', (req, res, next) => {
 router.get('/search/warehouses', (req, res, next) => {
 
   let db = req.db;
-  let _query = req.query.query;
+  let _query: any = req.query.query;
 
   stdCode.getWarehouseSearch(db, _query)
     .then((results: any) => {
@@ -401,8 +401,8 @@ router.get('/search/warehouses', (req, res, next) => {
 router.get('/search/generics', (req, res, next) => {
 
   let db = req.db;
-  let _query = req.query2.query;
-  let warehouseId = req.query.warehouseId;
+  let _query: any = req.query2.query;
+  let warehouseId: any = req.query.warehouseId;
 
   stdCode.searchPlanningByWarehouse(db, warehouseId, _query)
     .then((results: any) => {
