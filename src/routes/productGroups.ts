@@ -12,7 +12,7 @@ const productGroupModel = new ProductGroupsModel();
 
 router.delete('/', warp(async (req, res, next) => {
   let db = req.db;
-  const productGroupId = req.query.productGroupId;
+  const productGroupId: any = req.query.productGroupId;
   try {
     const rs = await productGroupModel.remove(db, productGroupId);
     if (rs) {
@@ -29,7 +29,7 @@ router.delete('/', warp(async (req, res, next) => {
 
 router.post('/return', warp(async (req, res, next) => {
   let db = req.db;
-  const productGroupId = req.body.productGroupId;
+  const productGroupId: any = req.body.productGroupId;
   try {
     const rs = await productGroupModel.return(db, productGroupId);
     if (rs) {
@@ -46,7 +46,7 @@ router.post('/return', warp(async (req, res, next) => {
 
 router.get('/', warp(async (req, res, next) => {
   let db = req.db;
-  const deleted = req.query.deleted == 'false' ? false : true;
+  const deleted: any = req.query.deleted == 'false' ? false : true;
   try {
     const rs = await productGroupModel.list(db, deleted);
     res.send({ ok: true, rows: rs });
@@ -59,7 +59,7 @@ router.get('/', warp(async (req, res, next) => {
 
 router.post('/', warp(async (req, res, next) => {
   let db = req.db;
-  let productGroupName = req.body.productGroupName;
+  let productGroupName: any = req.body.productGroupName;
   try {
     const rs = await productGroupModel.save(db, productGroupName);
     res.send({ ok: true });
@@ -72,8 +72,8 @@ router.post('/', warp(async (req, res, next) => {
 
 router.put('/', warp(async (req, res, next) => {
   let db = req.db;
-  let productGroupId = req.body.productGroupId;
-  let productGroupName = req.body.productGroupName;
+  let productGroupId: any = req.body.productGroupId;
+  let productGroupName: any = req.body.productGroupName;
   try {
     const rs = await productGroupModel.update(db, productGroupId, productGroupName);
     res.send({ ok: true });

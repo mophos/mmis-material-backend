@@ -17,7 +17,8 @@ router.post('/', warp(async (req, res, next) => {
   let db = req.db;
   let limit = +req.body.limit || 15;
   let offset = +req.body.offset || 0;
-  let groupId = req.body.groupId;
+  let groupId: any = req.body.groupId;
+  let sort: any = req.body.sort;
 
   if (typeof groupId === 'string') {
     groupId = [groupId];
@@ -26,11 +27,11 @@ router.post('/', warp(async (req, res, next) => {
   try {
     if (groupId) {
       let rsTotal = await productModel.totalProducts(db, groupId);
-      const resp = await productModel.list(db, limit, offset, groupId);
+      const resp = await productModel.list(db, limit, offset, groupId, sort);
       res.send({ ok: true, rows: resp, total: rsTotal[0].total });
     } else {
       let rsTotal = await productModel.totalAllProducts(db);
-      const resp = await productModel.listAll(db, limit, offset);
+      const resp = await productModel.listAll(db, limit, offset, sort);
       res.send({ ok: true, rows: resp, total: rsTotal[0].total });
     }
 
@@ -45,26 +46,17 @@ router.post('/', warp(async (req, res, next) => {
 router.post('/search', warp(async (req, res, next) => {
 
   let db = req.db;
-  const query = req.body.query;
+  const query: any = req.body.query;
   const limit = +req.body.limit || 15;
   const offset = +req.body.offset || 0;
-  let groupId = req.body.groupId;
-  let deleted = req.body.deleted;
-  if (typeof groupId === 'string') {
-    groupId = [groupId];
-  }
-  console.log('deleted', deleted);
-
+  let genericType: any = req.body.genericType;
+  let deleted: any = req.body.deleted;
+  let sort: any = req.body.sort;
   try {
-    if (groupId) {
-      const respTotal = await productModel.searchTotal(db, query, groupId, deleted);
-      const resp = await productModel.search(db, query, limit, offset, groupId, deleted);
-      res.send({ ok: true, rows: resp, total: respTotal[0].total });
-    } else {
-      const respTotal = await productModel.searchAllTotal(db, query, deleted);
-      const resp = await productModel.searchAll(db, query, limit, offset, deleted);
-      res.send({ ok: true, rows: resp, total: respTotal[0].total });
-    }
+
+    const respTotal = await productModel.searchTotal(db, query, genericType, deleted);
+    const resp = await productModel.search(db, query, limit, offset, genericType, deleted, sort);
+    res.send({ ok: true, rows: resp, total: respTotal[0].total });
   } catch (error) {
     res.send({ ok: false, error: error.message });
   } finally {
@@ -102,16 +94,16 @@ router.delete('/return-deleted/:productId', warp(async (req, res, next) => {
   const productId = req.params.productId;
 
   try {
-    let rs:any = await productModel.checkReturnDeleted(db, productId)
+    let rs: any = await productModel.checkReturnDeleted(db, productId)
     console.log(rs[0]);
-    
-    if(rs[0].mark_deleted == 'N' && rs[0].is_active == 'Y'){
+
+    if (rs[0].mark_deleted == 'N' && rs[0].is_active == 'Y') {
       await productModel.returnDeleted(db, productId);
       res.send({ ok: true });
     } else {
-      res.send({ ok: false, error: 'ไม่สามารถเรียกคืนได้เนื่องจาก '+ rs[0].working_code + '-'+ rs[0].generic_name + ' ถูกลบหรือปิดใช้งานอยู่'});
+      res.send({ ok: false, error: 'ไม่สามารถเรียกคืนได้เนื่องจาก ' + rs[0].working_code + '-' + rs[0].generic_name + ' ถูกลบหรือปิดใช้งานอยู่' });
     }
-    
+
   } catch (error) {
     res.send({ ok: false, error: error.message });
   } finally {
@@ -123,7 +115,7 @@ router.delete('/return-deleted/:productId', warp(async (req, res, next) => {
 router.get('/search-generic', warp(async (req, res, next) => {
 
   let db = req.db;
-  let query = req.query.query;
+  let query: any = req.query.query;
   try {
     const resp = await productModel.searchGeneric(db, query);
     res.send(resp[0]);
@@ -176,11 +168,11 @@ router.post('/generate-workingcode', async (req, res, next) => {
 });
 
 router.post('/fast-save', warp(async (req, res, next) => {
-  const productName = req.body.productName;
-  const primaryUnitId = req.body.primaryUnitId;
-  const genericId = req.body.genericId;
-  const mLabelerId = req.body.mLabelerId;
-  const vLabelerId = req.body.vLabelerId;
+  const productName: any = req.body.productName;
+  const primaryUnitId: any = req.body.primaryUnitId;
+  const genericId: any = req.body.genericId;
+  const mLabelerId: any = req.body.mLabelerId;
+  const vLabelerId: any = req.body.vLabelerId;
 
   const db = req.db;
   let workingCode;
@@ -225,23 +217,24 @@ router.post('/fast-save', warp(async (req, res, next) => {
 
 router.post('/', warp(async (req, res, next) => {
 
-  const productName = req.body.productName;
-  const isRawMaterial = req.body.isRawMaterial;
-  const genericId = req.body.selectedGenericId;
-  const mLabelerId = req.body.mLabelerId;
-  const vLabelerId = req.body.vLabelerId;
-  const pickingRuleId = req.body.pickingRuleId;
-  const isActive = req.body.isActive;
-  const isLotControl = req.body.isLotControl;
-  const description = req.body.description;
-  const purchaseUnitId = req.body.purchaseUnitId;
-  const issueUnitId = req.body.issueUnitId;
-  const primaryUnitId = req.body.primaryUnitId;
-  // const workingCode = req.body.workingCode;
-  const purchasePrice = req.body.purchasePrice;
-  // const productGroupId = req.body.productGroupId;
-  const keywords = req.body.keywords;
-  // const standardCost = req.body.standardCost;
+  const productName: any = req.body.productName;
+  const isRawMaterial: any = req.body.isRawMaterial;
+  const genericId: any = req.body.selectedGenericId;
+  const mLabelerId: any = req.body.mLabelerId;
+  const vLabelerId: any = req.body.vLabelerId;
+  const pickingRuleId: any = req.body.pickingRuleId;
+  const isActive: any = req.body.isActive;
+  const isLotControl: any = req.body.isLotControl;
+  const isExpiredControl: any = req.body.isExpiredControl;
+  const description: any = req.body.description;
+  const purchaseUnitId: any = req.body.purchaseUnitId;
+  const issueUnitId: any = req.body.issueUnitId;
+  const primaryUnitId: any = req.body.primaryUnitId;
+  // const workingCode: any = req.body.workingCode;
+  const purchasePrice: any = req.body.purchasePrice;
+  // const productGroupId: any = req.body.productGroupId;
+  const keywords: any = req.body.keywords;
+  // const standardCost: any = req.body.standardCost;
   const db = req.db;
 
   if (productName && mLabelerId && vLabelerId && genericId) {
@@ -254,6 +247,7 @@ router.post('/', warp(async (req, res, next) => {
       picking_rule_id: pickingRuleId,
       is_active: isActive,
       is_lot_control: isLotControl,
+      is_expired_control: isExpiredControl,
       description: description,
       purchase_unit_id: purchaseUnitId,
       purchase_cost: purchasePrice,
@@ -283,22 +277,23 @@ router.put('/:productId', warp(async (req, res, next) => {
 
   let productId = req.params.productId;
 
-  let productName = req.body.productName;
-  let isRawMaterial = req.body.isRawMaterial;
-  let genericId = req.body.selectedGenericId;
-  let mLabelerId = req.body.mLabelerId;
-  let vLabelerId = req.body.vLabelerId;
-  let pickingRuleId = req.body.pickingRuleId;
-  let isActive = req.body.isActive;
-  let isLotControl = req.body.isLotControl;
-  let description = req.body.description;
-  let purchaseUnitId = req.body.purchaseUnitId;
-  let issueUnitId = req.body.issueUnitId;
-  let primaryUnitId = req.body.primaryUnitId;
-  // let workingCode = req.body.workingCode;
-  let reg_no = req.body.reg_no;
-  let purchasePrice = req.body.purchasePrice;
-  let keywords = req.body.keywords;
+  let productName: any = req.body.productName;
+  let isRawMaterial: any = req.body.isRawMaterial;
+  let genericId: any = req.body.selectedGenericId;
+  let mLabelerId: any = req.body.mLabelerId;
+  let vLabelerId: any = req.body.vLabelerId;
+  let pickingRuleId: any = req.body.pickingRuleId;
+  let isActive: any = req.body.isActive;
+  let isLotControl: any = req.body.isLotControl;
+  let isExpiredControl: any = req.body.isExpiredControl;
+  let description: any = req.body.description;
+  let purchaseUnitId: any = req.body.purchaseUnitId;
+  let issueUnitId: any = req.body.issueUnitId;
+  let primaryUnitId: any = req.body.primaryUnitId;
+  // let workingCode: any = req.body.workingCode;
+  let reg_no: any = req.body.reg_no;
+  let purchasePrice: any = req.body.purchasePrice;
+  let keywords: any = req.body.keywords;
   let productGroupId = +req.body.productGroupId;
   // let productGroupOldId = +req.body.productGroupOldId;
 
@@ -355,6 +350,7 @@ router.put('/:productId', warp(async (req, res, next) => {
       picking_rule_id: pickingRuleId,
       is_active: isActive,
       is_lot_control: isLotControl,
+      is_expired_control: isExpiredControl,
       description: description,
       purchase_unit_id: purchaseUnitId,
       purchase_cost: purchasePrice,
@@ -424,16 +420,16 @@ router.delete('/:productId', warp(async (req, res, next) => {
 
 router.post('/planning/:productId', warp(async (req, res, next) => {
   const db = req.db;
-  const minQty = req.body.minQty;
-  const maxQty = req.body.maxQty;
+  const minQty: any = req.body.minQty;
+  const maxQty: any = req.body.maxQty;
   const productId = req.params.productId;
-  const warehouseId = req.body.warehouseId;
+  const warehouseId: any = req.body.warehouseId;
   const minModifier = +req.body.minModifier;
   // const maxModifier = +req.body.maxModifier;
-  const primaryUnitId = req.body.primaryUnitId;
-  const isActive = req.body.isActive;
-  const sourceWarehouseId = req.body.sourceWarehouseId;
-  const requisitionQuotaQty = req.body.requisitionQuotaQty;
+  const primaryUnitId: any = req.body.primaryUnitId;
+  const isActive: any = req.body.isActive;
+  const sourceWarehouseId: any = req.body.sourceWarehouseId;
+  const requisitionQuotaQty: any = req.body.requisitionQuotaQty;
 
   try {
     const data = {
@@ -475,12 +471,12 @@ router.put('/planning/:productPlanningId', warp(async (req, res, next) => {
   const minQty = +req.body.minQty;
   const maxQty = +req.body.maxQty;
   const productPlanningId = req.params.productPlanningId;
-  const unitId = req.body.unitId;
-  const minModifier = req.body.minModifier;
-  // const maxModifier = req.body.maxModifier;
-  const primaryUnitId = req.body.primaryUnitId;
-  const sourceWarehouseId = req.body.sourceWarehouseId;
-  const isActive = req.body.isActive;
+  const unitId: any = req.body.unitId;
+  const minModifier: any = req.body.minModifier;
+  // const maxModifier: any = req.body.maxModifier;
+  const primaryUnitId: any = req.body.primaryUnitId;
+  const sourceWarehouseId: any = req.body.sourceWarehouseId;
+  const isActive: any = req.body.isActive;
   const requisitionQuotaQty = +req.body.requisitionQuotaQty;
 
   try {

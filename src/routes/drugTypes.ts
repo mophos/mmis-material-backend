@@ -9,7 +9,7 @@ const router = express.Router();
 const drugTypeModel = new DrugTypeModel();
 
 router.get('/', (req, res, next) => {
-  let deleted = req.query.deleted == 'false' ? false : true;
+  let deleted: any = req.query.deleted == 'false' ? false : true;
   let db = req.db;
 
   drugTypeModel.list(db, deleted)
@@ -24,7 +24,7 @@ router.get('/', (req, res, next) => {
     });
 });
 router.post('/return', (req, res, next) => {
-  let typeId = req.body.id;
+  let typeId: any = req.body.id;
   let db = req.db;
 
   drugTypeModel.returnRemove(db, typeId)
@@ -39,7 +39,7 @@ router.post('/return', (req, res, next) => {
     });
 });
 router.post('/', (req, res, next) => {
-  let typeName = req.body.typeName;
+  let typeName: any = req.body.typeName;
 
   let db = req.db;
 
@@ -65,7 +65,7 @@ router.post('/', (req, res, next) => {
 
 router.put('/:typeId', (req, res, next) => {
   let typeId = req.params.typeId;
-  let typeName = req.body.typeName;
+  let typeName: any = req.body.typeName;
 
   let db = req.db;
 

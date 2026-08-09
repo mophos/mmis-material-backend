@@ -40,6 +40,22 @@ export class StandardCodeModel {
       .orderBy('status_name');
   }
 
+  getGenericTypeLV1(knex: Knex) {
+    return knex('mm_generic_types')
+      .where('is_deleted', 'N')
+  }
+  getGenericTypeLV2(knex: Knex, genericTypeLv1Id) {
+    return knex('mm_generic_types_lv2')
+      .where('is_deleted', 'N')
+      .where('generic_type_lv1_id', genericTypeLv1Id)
+  }
+  getGenericTypeLV3(knex: Knex, genericTypeLv1Id, genericTypeLv2Id) {
+    return knex('mm_generic_types_lv3')
+      .where('is_deleted', 'N')
+      .where('generic_type_lv1_id', genericTypeLv1Id)
+      .where('generic_type_lv2_id', genericTypeLv2Id)
+  }
+
   getGenericGroups1(knex: Knex) {
     return knex('mm_generic_group_1')
       .where('is_deleted', 'N')
@@ -93,12 +109,32 @@ export class StandardCodeModel {
       .orderBy('dosage_name');
   }
 
-
   getWarehouseList(knex: Knex) {
     return knex('wm_warehouses')
       .where('is_deleted', 'N')
       .where('is_actived', 'Y')
       .orderBy('warehouse_name');
+  }
+
+  getWarehouseSearch(knex: Knex, query: any) {
+    let _query = '%' + query + '%';
+    return knex('wm_warehouses')
+      .where('is_deleted', 'N')
+      .where('is_actived', 'Y')
+      .whereRaw(`warehouse_name LIKE '${_query}'`)
+      .orderBy('warehouse_name');
+  }
+
+  searchPlanningByWarehouse(knex: Knex, warehouseId: any, query: any) {
+    let _query = '%' + query + '%';
+    return knex('mm_generic_planning as gp')
+      .select('gp.*', 'u.unit_name', 'u.unit_code', 'w.warehouse_name', 'mg.working_code', 'mg.generic_name')
+      .join('mm_generics as mg', 'gp.generic_id', 'mg.generic_id')
+      .leftJoin('mm_units as u', 'u.unit_id', 'gp.primary_unit_id')
+      .leftJoin('wm_warehouses as w', 'w.warehouse_id', 'gp.warehouse_id')
+      .where('w.warehouse_id', warehouseId)
+      .whereRaw(`mg.generic_name LIKE '${_query}'`)
+      .orderBy('mg.generic_name');
   }
 
   getProductGroups(knex: Knex) {
@@ -127,6 +163,51 @@ export class StandardCodeModel {
     return knex('mm_generic_hosp')
       .where('is_deleted', 'N');
 
+  }
+
+  getGenericTypesLV1(knex: Knex, _pgs: any[]) {
+    return knex('mm_generic_types')
+      .where('is_deleted', 'N')
+      .whereIn('generic_type_id', _pgs)
+      .orderBy('generic_type_name');
+  }
+
+  getGenericTypesLV2(knex: Knex, genericTypeLV1Id, v1, v2) {
+    let sql = knex('mm_generic_types_lv2')
+      .where('is_deleted', 'N')
+    if (genericTypeLV1Id) {
+      sql.where('generic_type_lv1_id', genericTypeLV1Id)
+    }
+    if (v1.length) {
+      sql.whereIn('generic_type_lv1_id', v1)
+    }
+    if (v2.length) {
+      sql.whereIn('generic_type_lv2_id', v2)
+    }
+    sql.orderBy('generic_type_lv2_name');
+    return sql;
+  }
+
+  getGenericTypesLV3(knex: Knex, genericTypeLV1Id, genericTypeLV2Id, v1, v2, v3) {
+    let sql = knex('mm_generic_types_lv3')
+      .where('is_deleted', 'N')
+    if (genericTypeLV1Id) {
+      sql.where('generic_type_lv1_id', genericTypeLV1Id)
+    }
+    if (genericTypeLV2Id) {
+      sql.where('generic_type_lv2_id', genericTypeLV2Id)
+    }
+    if (v1.length) {
+      sql.whereIn('generic_type_lv1_id', v1)
+    }
+    if (v2.length) {
+      sql.whereIn('generic_type_lv2_id', v2)
+    }
+    if (v3.length) {
+      sql.whereIn('generic_type_lv3_id', v3)
+    }
+    sql.orderBy('generic_type_lv3_name');
+    return sql;
   }
 
 }

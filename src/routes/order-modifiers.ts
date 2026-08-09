@@ -9,12 +9,12 @@ const modifierModel = new OrderModifierModel();
 
 router.post('/:productId', wrap(async (req, res, next) => {
   const db = req.db;
-  const minQty = req.body.minQty;
-  const maxQty = req.body.maxQty;
+  const minQty: any = req.body.minQty;
+  const maxQty: any = req.body.maxQty;
   const productId = req.params.productId;
-  const warehouseId = req.body.warehouseId;
-  const unitId = req.body.unitId;
-  const isActive = req.body.isActive;
+  const warehouseId: any = req.body.warehouseId;
+  const unitId: any = req.body.unitId;
+  const isActive: any = req.body.isActive;
   try {
     const data = {
       product_id: productId,
@@ -50,8 +50,8 @@ router.put('/:productOrderModifierId', wrap(async (req, res, next) => {
   const minQty = +req.body.minQty;
   const maxQty = +req.body.maxQty;
   const productOrderModifierId = req.params.productOrderModifierId;
-  const unitId = req.body.unitId;
-  const isActive = req.body.isActive;
+  const unitId: any = req.body.unitId;
+  const isActive: any = req.body.isActive;
   try {
     const data = {
       min_qty: +minQty,

@@ -10,8 +10,8 @@ const router = express.Router();
 const typeModel = new TypeModel();
 
 router.get('/', (req, res, next) => {
-  let limit = req.body.limit || 10;
-  let offset = req.body.offset || 0;
+  let limit: any = req.body.limit || 10;
+  let offset: any = req.body.offset || 0;
 
   let db = req.db;
 
@@ -28,7 +28,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  let typeName = req.body.typeName;
+  let typeName: any = req.body.typeName;
 
   let db = req.db;
 
@@ -55,7 +55,7 @@ router.post('/', (req, res, next) => {
 
 router.put('/:typeId', (req, res, next) => {
   let typeId = req.params.typeId;
-  let typeName = req.body.typeName;
+  let typeName: any = req.body.typeName;
 
   let db = req.db;
 

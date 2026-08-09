@@ -41,8 +41,8 @@ router.get('/', (req, res, next) => {
 // ############## GROUP 1 #####################
 router.get('/group/1', (req, res, next) => {
   let db = req.db;
-  let isActived = req.query.isActived;
-  let isDeleted = req.query.isDeleted;  
+  let isActived: any = req.query.isActived;
+  let isDeleted: any = req.query.isDeleted;  
   groupModel.group1(db, isActived, isDeleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -56,8 +56,8 @@ router.get('/group/1', (req, res, next) => {
 });
 
 router.post('/group1', (req, res, next) => {
-  let groupName1 = req.body.groupName1;
-  let groupCode1 = req.body.groupCode1;
+  let groupName1: any = req.body.groupName1;
+  let groupCode1: any = req.body.groupCode1;
 
   let db = req.db;
 
@@ -83,8 +83,8 @@ router.post('/group1', (req, res, next) => {
 });
 
 router.put('/group1', (req, res, next) => {
-  let groupCode1 = req.body.groupCode1;
-  let groupName1 = req.body.groupName1;
+  let groupCode1: any = req.body.groupCode1;
+  let groupName1: any = req.body.groupName1;
   console.log(groupCode1);
 
   let db = req.db;
@@ -102,8 +102,8 @@ router.put('/group1', (req, res, next) => {
 });
 
 router.put('/active/group1', (req, res, next) => {
-  let groupId = req.query.groupId;
-  let status = req.body.status;
+  let groupId: any = req.query.groupId;
+  let status: any = req.body.status;
   let db = req.db;
   groupModel.activeGroup1(db, groupId, status)
     .then((results: any) => {
@@ -118,7 +118,7 @@ router.put('/active/group1', (req, res, next) => {
 });
 
 router.delete('/group1', (req, res, next) => {
-  let groupCode1 = req.query.groupCode1;
+  let groupCode1: any = req.query.groupCode1;
   let db = req.db;
 
   groupModel.removeGroup1(db, groupCode1)
@@ -133,7 +133,7 @@ router.delete('/group1', (req, res, next) => {
     });
 });
 router.post('/return1', (req, res, next) => {
-  let id = req.body.id;
+  let id: any = req.body.id;
   let db = req.db;
 
   groupModel.returnRemove1(db, id.group_code_1)
@@ -151,8 +151,8 @@ router.post('/return1', (req, res, next) => {
 // ############## GROUP 2 #####################
 router.get('/group/2', (req, res, next) => {
   let db = req.db;
-  let isActived = req.query.isActived;
-  let isDeleted = req.query.isDeleted;  
+  let isActived: any = req.query.isActived;
+  let isDeleted: any = req.query.isDeleted;  
   groupModel.group2(db, isActived, isDeleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -166,9 +166,9 @@ router.get('/group/2', (req, res, next) => {
 });
 
 router.post('/group2', (req, res, next) => {
-  let groupName2 = req.body.groupName2;
-  let groupCode2 = req.body.groupCode2;
-  let groupCode1 = req.body.groupCode1;
+  let groupName2: any = req.body.groupName2;
+  let groupCode2: any = req.body.groupCode2;
+  let groupCode1: any = req.body.groupCode1;
 
   let db = req.db;
 
@@ -195,9 +195,9 @@ router.post('/group2', (req, res, next) => {
 });
 
 router.put('/group2', (req, res, next) => {
-  let groupCode1 = req.body.groupCode1;
-  let groupCode2 = req.body.groupCode2;
-  let groupName2 = req.body.groupName2;
+  let groupCode1: any = req.body.groupCode1;
+  let groupCode2: any = req.body.groupCode2;
+  let groupName2: any = req.body.groupName2;
   console.log(groupCode2);
 
   let db = req.db;
@@ -215,9 +215,9 @@ router.put('/group2', (req, res, next) => {
 });
 
 router.put('/active/group2', (req, res, next) => {
-  let groupCode1 = req.query.groupCode1;
-  let groupCode2 = req.query.groupCode2;
-  let status = req.body.status;
+  let groupCode1: any = req.query.groupCode1;
+  let groupCode2: any = req.query.groupCode2;
+  let status: any = req.body.status;
   let db = req.db;
   groupModel.activeGroup2(db, groupCode1, groupCode2, status)
     .then((results: any) => {
@@ -232,8 +232,8 @@ router.put('/active/group2', (req, res, next) => {
 });
 
 router.delete('/group2', (req, res, next) => {
-  let groupCode1 = req.query.groupCode1;
-  let groupCode2 = req.query.groupCode2;
+  let groupCode1: any = req.query.groupCode1;
+  let groupCode2: any = req.query.groupCode2;
   let db = req.db;
 
   groupModel.removeGroup2(db, groupCode1, groupCode2)
@@ -248,7 +248,7 @@ router.delete('/group2', (req, res, next) => {
     });
 });
 router.post('/return2', (req, res, next) => {
-  let id = req.body.id;
+  let id: any = req.body.id;
   let db = req.db;
 
   groupModel.returnRemove2(db, id.group_code_1, id.group_code_2)
@@ -266,8 +266,8 @@ router.post('/return2', (req, res, next) => {
 // ############## GROUP 3 #####################
 router.get('/group/3', (req, res, next) => {
   let db = req.db;
-  let isActived = req.query.isActived;
-  let isDeleted = req.query.isDeleted;  
+  let isActived: any = req.query.isActived;
+  let isDeleted: any = req.query.isDeleted;  
   groupModel.group3(db, isActived, isDeleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -281,10 +281,10 @@ router.get('/group/3', (req, res, next) => {
 });
 
 router.post('/group3', (req, res, next) => {
-  let groupName3 = req.body.groupName3;
-  let groupCode3 = req.body.groupCode3;
-  let groupCode2 = req.body.groupCode2;
-  let groupCode1 = req.body.groupCode1;
+  let groupName3: any = req.body.groupName3;
+  let groupCode3: any = req.body.groupCode3;
+  let groupCode2: any = req.body.groupCode2;
+  let groupCode1: any = req.body.groupCode1;
 
   let db = req.db;
 
@@ -312,10 +312,10 @@ router.post('/group3', (req, res, next) => {
 });
 
 router.put('/group3', (req, res, next) => {
-  let groupCode1 = req.body.groupCode1;
-  let groupCode2 = req.body.groupCode2;
-  let groupCode3 = req.body.groupCode3;
-  let groupName3 = req.body.groupName3;
+  let groupCode1: any = req.body.groupCode1;
+  let groupCode2: any = req.body.groupCode2;
+  let groupCode3: any = req.body.groupCode3;
+  let groupName3: any = req.body.groupName3;
 
   let db = req.db;
 
@@ -332,10 +332,10 @@ router.put('/group3', (req, res, next) => {
 });
 
 router.put('/active/group3', (req, res, next) => {
-  let groupCode1 = req.query.groupCode1;
-  let groupCode2 = req.query.groupCode2;
-  let groupCode3 = req.query.groupCode3;
-  let status = req.body.status;
+  let groupCode1: any = req.query.groupCode1;
+  let groupCode2: any = req.query.groupCode2;
+  let groupCode3: any = req.query.groupCode3;
+  let status: any = req.body.status;
   let db = req.db;
   groupModel.activeGroup3(db, groupCode1, groupCode2, groupCode3, status)
     .then((results: any) => {
@@ -350,9 +350,9 @@ router.put('/active/group3', (req, res, next) => {
 });
 
 router.delete('/group3', (req, res, next) => {
-  let groupCode1 = req.query.groupCode1;
-  let groupCode2 = req.query.groupCode2;
-  let groupCode3 = req.query.groupCode3;
+  let groupCode1: any = req.query.groupCode1;
+  let groupCode2: any = req.query.groupCode2;
+  let groupCode3: any = req.query.groupCode3;
   let db = req.db;
 
   groupModel.removeGroup3(db, groupCode1, groupCode2, groupCode3)
@@ -367,7 +367,7 @@ router.delete('/group3', (req, res, next) => {
     });
 });
 router.post('/return3', (req, res, next) => {
-  let id = req.body.id;
+  let id: any = req.body.id;
   let db = req.db;
 
   groupModel.returnRemove3(db, id.group_code_1, id.group_code_2, id.group_code_3)
@@ -385,8 +385,8 @@ router.post('/return3', (req, res, next) => {
 // ############## GROUP 4 #####################
 router.get('/group/4', (req, res, next) => {
   let db = req.db;
-  let isActived = req.query.isActived;
-  let isDeleted = req.query.isDeleted;  
+  let isActived: any = req.query.isActived;
+  let isDeleted: any = req.query.isDeleted;  
   groupModel.group4(db, isActived, isDeleted)
     .then((results: any) => {
       res.send({ ok: true, rows: results });
@@ -400,11 +400,11 @@ router.get('/group/4', (req, res, next) => {
 });
 
 router.post('/group4', (req, res, next) => {
-  let groupName4 = req.body.groupName4;
-  let groupCode4 = req.body.groupCode4;
-  let groupCode3 = req.body.groupCode3;
-  let groupCode2 = req.body.groupCode2;
-  let groupCode1 = req.body.groupCode1;
+  let groupName4: any = req.body.groupName4;
+  let groupCode4: any = req.body.groupCode4;
+  let groupCode3: any = req.body.groupCode3;
+  let groupCode2: any = req.body.groupCode2;
+  let groupCode1: any = req.body.groupCode1;
 
   let db = req.db;
 
@@ -433,11 +433,11 @@ router.post('/group4', (req, res, next) => {
 });
 
 router.put('/group4', (req, res, next) => {
-  let groupCode1 = req.body.groupCode1;
-  let groupCode2 = req.body.groupCode2;
-  let groupCode3 = req.body.groupCode3;
-  let groupCode4 = req.body.groupCode4;
-  let groupName4 = req.body.groupName4;
+  let groupCode1: any = req.body.groupCode1;
+  let groupCode2: any = req.body.groupCode2;
+  let groupCode3: any = req.body.groupCode3;
+  let groupCode4: any = req.body.groupCode4;
+  let groupName4: any = req.body.groupName4;
 
   let db = req.db;
 
@@ -454,11 +454,11 @@ router.put('/group4', (req, res, next) => {
 });
 
 router.put('/active/group4', (req, res, next) => {
-  let groupCode1 = req.query.groupCode1;
-  let groupCode2 = req.query.groupCode2;
-  let groupCode3 = req.query.groupCode3;
-  let groupCode4 = req.query.groupCode4;
-  let status = req.body.status;
+  let groupCode1: any = req.query.groupCode1;
+  let groupCode2: any = req.query.groupCode2;
+  let groupCode3: any = req.query.groupCode3;
+  let groupCode4: any = req.query.groupCode4;
+  let status: any = req.body.status;
   let db = req.db;
   groupModel.activeGroup4(db, groupCode1, groupCode2, groupCode3, groupCode4, status)
     .then((results: any) => {
@@ -473,10 +473,10 @@ router.put('/active/group4', (req, res, next) => {
 });
 
 router.delete('/group4', (req, res, next) => {
-  let groupCode1 = req.query.groupCode1;
-  let groupCode2 = req.query.groupCode2;
-  let groupCode3 = req.query.groupCode3;
-  let groupCode4 = req.query.groupCode4;
+  let groupCode1: any = req.query.groupCode1;
+  let groupCode2: any = req.query.groupCode2;
+  let groupCode3: any = req.query.groupCode3;
+  let groupCode4: any = req.query.groupCode4;
   let db = req.db;
 
   groupModel.removeGroup4(db, groupCode1, groupCode2, groupCode3, groupCode4)
@@ -491,7 +491,7 @@ router.delete('/group4', (req, res, next) => {
     });
 });
 router.post('/return4', (req, res, next) => {
-  let id = req.body.id;
+  let id: any = req.body.id;
   let db = req.db;
 
   groupModel.returnRemove4(db, id.group_code_1, id.group_code_2, id.group_code_3, id.group_code_4)

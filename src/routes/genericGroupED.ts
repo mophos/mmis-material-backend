@@ -12,7 +12,7 @@ const genericGroupEDRouteModel = new GenericGroupEDRouteModel();
 
 router.delete('/', warp(async (req, res, next) => {
   let db = req.db;
-  const genericGroupEDId = req.query.genericGroupEDId;
+  const genericGroupEDId: any = req.query.genericGroupEDId;
   try {
     const rs = await genericGroupEDRouteModel.remove(db, genericGroupEDId);
     if (rs) {
@@ -29,7 +29,7 @@ router.delete('/', warp(async (req, res, next) => {
 
 router.post('/return', warp(async (req, res, next) => {
   let db = req.db;
-  const genericGroupEDId = req.body.genericGroupEDId;
+  const genericGroupEDId: any = req.body.genericGroupEDId;
   try {
     const rs = await genericGroupEDRouteModel.returnRemove(db, genericGroupEDId);
     if (rs) {
@@ -46,7 +46,7 @@ router.post('/return', warp(async (req, res, next) => {
 
 router.get('/', warp(async (req, res, next) => {
   let db = req.db;
-  const deleted = req.query.deleted == 'false' ? false : true;
+  const deleted: any = req.query.deleted == 'false' ? false : true;
   try {
     const rs = await genericGroupEDRouteModel.list(db, deleted);
     res.send({ ok: true, rows: rs });
@@ -59,7 +59,7 @@ router.get('/', warp(async (req, res, next) => {
 
 router.post('/', warp(async (req, res, next) => {
   let db = req.db;
-  let genericGroupEDName = req.body.genericGroupEDName;
+  let genericGroupEDName: any = req.body.genericGroupEDName;
   try {
     const rs = await genericGroupEDRouteModel.save(db, genericGroupEDName);
     res.send({ ok: true });
@@ -72,8 +72,8 @@ router.post('/', warp(async (req, res, next) => {
 
 router.put('/', warp(async (req, res, next) => {
   let db = req.db;
-  let genericGroupEDId = req.body.genericGroupEDId;
-  let genericGroupEDName = req.body.genericGroupEDName;
+  let genericGroupEDId: any = req.body.genericGroupEDId;
+  let genericGroupEDName: any = req.body.genericGroupEDName;
   try {
     const rs = await genericGroupEDRouteModel.update(db, genericGroupEDId, genericGroupEDName);
     res.send({ ok: true });

@@ -39,6 +39,8 @@ import receivePlanningRoute from './routes/receivePlanning';
 import productGroups from './routes/productGroups'
 import stdRoute from './routes/standardCode';
 import genericGroupEDRoute from './routes/genericGroupED';
+import minMaxGroups from './routes/minmax-groups';
+import mappingsRoute from './routes/mappings';
 
 const app: express.Express = express();
 
@@ -54,8 +56,16 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use(cors());
 
 let checkAuth = (req, res, next) => {
-  let token: string = null;
 
+  const url = decodeURI(req.url).substring(_.indexOf(req.url, '?') + 1, decodeURI(req.url).length).split('&');
+  let query = {};
+  for (const u of url) {
+    const up = u.split('=');
+    query[up[0]] = up[1]
+  }
+  req.query2 = query;
+
+  let token: string = null;
   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
     token = req.headers.authorization.split(' ')[1];
   } else if (req.query && req.query.token) {
@@ -90,7 +100,7 @@ let checkAuth = (req, res, next) => {
 
 let dbConnection: MySqlConnectionConfig = {
   host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
+  port: +process.env.DB_PORT,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME
@@ -103,7 +113,7 @@ app.use((req, res, next) => {
     pool: {
       min: 0,
       max: 7,
-      afterCreate: (conn, done) => {
+      create: (conn, done) => {
         conn.query('SET NAMES utf8', (err) => {
           done(err, conn);
         });
@@ -136,6 +146,8 @@ app.use('/lots', checkAuth, lotRoute);
 app.use('/users', checkAuth, userRoute);
 app.use('/product-groups', checkAuth, productGroups);
 app.use('/generic-group-ed', checkAuth, genericGroupEDRoute);
+app.use('/minmax-groups', checkAuth, minMaxGroups);
+app.use('/mappings', checkAuth, mappingsRoute);
 
 app.use('/', indexRoute);
 
