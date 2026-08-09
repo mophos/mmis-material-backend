@@ -30,7 +30,6 @@ import dosageRoute from './routes/drugDosages';
 import drugTypeRoute from './routes/drugTypes';
 import drugGroupRoute from './routes/drugGroups';
 import suppliesTypeRoute from './routes/suppliesTypes';
-import loginRoute from './routes/login';
 import drugAccountRoute from './routes/drugAccounts';
 import typeProduct from './routes/typeProduct';
 import unitRoute from './routes/units';
@@ -115,7 +114,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/login', loginRoute);
+// /login ถูกถอดออกแล้ว — เคยอ่านจากตาราง users (legacy) แล้วออก JWT ด้วย SECRET_KEY
+// ตัวเดียวกับทั้งระบบ ซึ่งเป็นช่องทางเลี่ยงขั้นตอน 2FA
+// การเข้าสู่ระบบทั้งหมดต้องผ่าน mmis-management-backend (/api/um/login) ที่เดียว
 app.use('/generics', checkAuth, genericRoute);
 app.use('/generics-medical-supplies', checkAuth, genericMedicalSuppliesRoute);
 app.use('/labelers', checkAuth, labelerRoute);
